@@ -365,3 +365,10 @@ summary:has(.menu-active) {
   }
 }
 
+.ai-response a {
+  @apply text-primary font-medium transition-colors;
+}
+
+.ai-response a:hover {
+  @apply text-primary underline cursor-pointer;
+}
