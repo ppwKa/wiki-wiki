@@ -92,7 +92,7 @@
                   <ul class="space-y-3">
                     {% if search.page_number == 1 and extends_size > 0 %}
                       {% for link in search.extends %}
-                        <li class="p-3 rounded-lg bg-primary-50 hover:bg-primary-100">
+                        <li class="p-3 rounded-lg bg-primary-50 hover:bg-primary-100 dark:bg-primary-800 dark:hover:bg-primary-700">
                           <div>
                             <a class="text-lg text-slate-800 search-highlight-block" href="{{ link.url }}" data-turbo-frame="_top">{{ link.link_text }}</a>
                           </div>

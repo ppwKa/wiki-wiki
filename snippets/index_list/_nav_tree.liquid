@@ -8,9 +8,9 @@
   <template data-turbo-nav-tree-target="itemTemplate">
     {% raw %}
       {{#hasChildren}}
-        <div class="flex items-center p-2 hover:bg-accent-50 rounded-sm w-full break-all" data-action="click->turbo-nav-tree#toggle">
+        <div class="flex items-center p-2 w-full break-all rounded-sm hover:bg-accent-50 dark:hover:bg-accent-800" data-action="click->turbo-nav-tree#toggle">
           <svg
-            class="shrink-0 cursor-pointer mr-2"
+            class="mr-2 cursor-pointer shrink-0"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -35,9 +35,9 @@
         </div>
       {{/hasChildren}}
       {{^hasChildren}}
-        <div class="flex items-center p-2 hover:bg-accent-50 rounded-sm w-full break-all">
+        <div class="flex items-center p-2 w-full break-all rounded-sm hover:bg-accent-50 dark:hover:bg-accent-800">
           <svg
-            class="shrink-0 mr-2"
+            class="mr-2 shrink-0"
             width="24"
             height="24"
             viewBox="0 0 24 24"
