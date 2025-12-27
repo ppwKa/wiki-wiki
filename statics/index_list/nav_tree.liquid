@@ -6,6 +6,7 @@
   {% assign nav_tree = page1 | nav_tree: 2 %}
   {% assign depth = params.depth | presence | default: page1.depth %}
 
+  <div>hello</div>
   <div
     data-controller="turbo-nav-tree"
     data-turbo-nav-tree-nav-tree-value='{{ nav_tree | to_json | escape }}'
