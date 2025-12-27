@@ -2,12 +2,4 @@
 {% set_meta_description '这是一个Test静态页面样例' %}
 {% set_meta_keywords 'Test' %}
 
-{% assign version_count = page.versions | size %}
-{% if version_count > 0 %}
-  <ul class="flex space-x-1">
-    <li class="px-2"><a href="{{ page.url }}">当前版本</a></li>
-    {% for version_page in page.versions %}
-      <li class="px-2"><a href="{{ version_page.url }}">{{ version_page.name }}</a></li>
-    {% endfor %}
-  </ul>
-{% endif %}
+<div>hello</div>
