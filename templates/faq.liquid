@@ -1,0 +1,20 @@
+{% comment %}
+  templates/faq.liquid
+{% endcomment %}
+
+<div class="faq-container">
+  <h1>FAQ</h1>
+
+  <div class="category-list">
+    {% if page.children.size > 0 %}
+      {% for category_page in page.children %}
+        <div class="category-card">
+          <h2><a href="{{ category_page.url }}">{{ category_page.link_text }}</a></h2>
+          <p>{{ category_page.seo_description | default: category_page.link_text | append: " error" }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>error</p>
+    {% endif %}
+  </div>
+</div>
