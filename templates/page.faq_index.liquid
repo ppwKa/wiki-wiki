@@ -1,82 +1,81 @@
 {%- comment -%}
-  page.faq_index.liquid (Baklib Template - Tailwind CSS v4.1.4 Corrected)
-  - 集成了修复后的 HTML/Tailwind v4 结构与响应式筛选器逻辑
-  - 保持原有的 Liquid 数据获取方式：site.pages / faq_root.children
-  - JS 负责 UI 交互：下拉菜单、移动端底部弹窗、折叠面板、URL 参数同步
+  page.faq_index.liquid
+  - Liquid 负责将数据输出为 JS 变量（productData / faqData / guideData）
+  - JS 负责全部渲染与交互，结构与 faq_page_v4_optimized.html 对齐
+  - 不含 <html>/<head>/<body> 外壳，适配 Baklib 模板注入环境
 {%- endcomment -%}
 
 {%- assign faq_root = page -%}
 {%- assign all_pages = faq_root.pages -%}
 
 <style>
-  /* FAQ Index 页面样式 - 仅在此容器内生效 */
+  /* FAQ Index 页面样式 - 仅在 .faq-index-page 容器内生效 */
   .faq-index-page * {
     box-sizing: border-box;
   }
-  
+
   .faq-index-page {
     margin: 0;
     padding: 0;
   }
-  
-  /* Quick Answer 折叠面板优化 - 支持多开 */
+
+  /* Quick Answer 折叠面板 */
   .faq-index-page .faq-accordion-content {
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
   }
-  
+
   .faq-index-page .faq-accordion-content.open {
     opacity: 1;
   }
-  
+
   .faq-index-page .faq-accordion-icon {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .faq-index-page .faq-accordion-icon.rotated {
     transform: rotate(180deg);
   }
-  
-  /* 移动端弹窗样式 */
+
+  /* 移动端分类折叠 */
   .faq-index-page .accordion-content {
     transition: max-height 0.3s ease-out;
     max-height: 0;
     overflow: hidden;
   }
-  
+
   .faq-index-page .accordion-content.open {
     max-height: 1000px;
   }
-  
+
+  /* 移动端底部弹窗 */
   .faq-index-page .mobile-sheet {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(100%);
   }
-  
+
   .faq-index-page .mobile-sheet.open {
     transform: translateY(0);
   }
-  
+
   .faq-index-page .mobile-overlay {
     transition: opacity 0.3s ease;
     opacity: 0;
     pointer-events: none;
   }
-  
+
   .faq-index-page .mobile-overlay.open {
     opacity: 1;
     pointer-events: auto;
   }
-  
-  /* 弹窗打开时禁止 body 滚动（需作用于 body） */
+
   body.faq-index-modal-open {
     overflow: hidden;
   }
-  
-  /* 筛选器下拉 hidden 类 */
-  .faq-index-page #filterContainer .hidden {
+
+  .faq-index-page .hidden {
     display: none !important;
   }
 </style>
@@ -87,7 +86,7 @@
     <!-- 面包屑导航 -->
     <nav class="mb-8 flex items-center text-sm text-gray-500">
       <a href="/" class="hover:text-gray-800">{{ site.name }}</a>
-      <span class="mx-2">&gt;</span>
+      <span class="mx-2">></span>
       <span class="text-gray-800">{{ page.link_text }}</span>
     </nav>
 
@@ -98,310 +97,236 @@
       <!-- 产品筛选器 -->
       <div class="mb-12">
         <p class="mb-3 text-sm font-medium text-gray-500">Choose Product Model</p>
-
         <div class="relative w-full max-w-md" id="filterContainer">
           <div id="filterHeader" class="flex cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-gray-300">
             <div class="flex items-center gap-3">
-              <!-- 缩略图容器 (JS 将在有图片时替换 svg) -->
               <div id="thumbBox" class="flex h-10 w-10 items-center justify-center overflow-hidden rounded bg-gray-100">
-                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
+                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
               </div>
-
-              <!-- 选中的产品名称 (由 JS 设置) -->
               <span id="selectedName" class="font-medium text-gray-800">Choose Product Model</span>
             </div>
-
-            <svg class="h-5 w-5 transform text-gray-400 transition-transform" id="arrowIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
+            <svg class="h-5 w-5 transform text-gray-400 transition-transform" id="arrowIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
           </div>
 
-          <!-- PC 端下拉菜单 -->
+          <!-- PC 端下拉菜单（由 JS 渲染） -->
           <div id="pcDropdown" class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
-            <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2">
-              {%- for cat in faq_root.children -%}
-                <div
-                  class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
-                  data-cat="{{ cat.slug }}"
-                >
-                  {{ cat.link_text }}
-                  <span class="text-[12px] text-gray-300">›</span>
-                </div>
-              {%- endfor -%}
-            </div>
-
-            <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2">
-              {%- for cat in faq_root.children -%}
-                {%- for prod in cat.children -%}
-                  <div
-                    class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
-                    data-cat="{{ cat.slug }}"
-                    data-product="{{ prod.slug }}"
-                    data-name="{{ prod.link_text | escape }}"
-                    data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
-                  >
-                    {{ prod.link_text }}
-                  </div>
-                {%- endfor -%}
-              {%- endfor -%}
-            </div>
+            <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2"></div>
+            <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2"></div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Answer (FAQ 列表) -->
+      <!-- Quick Answer（由 JS 渲染） -->
       <div class="mb-12">
         <h2 class="mb-6 text-xl font-bold">Quick Answer</h2>
-
-        <div class="space-y-3" id="quickAnswerContainer">
-          {%- for p in all_pages -%}
-            {%- if p.template_name == 'faq_qna' -%}
-              {%- assign prod = p.parent -%}
-              {%- assign cat = prod.parent -%}
-
-              <div
-                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
-                data-type="qna"
-                data-cat="{{ cat.slug }}"
-                data-product="{{ prod.slug }}"
-                data-q="{{ p.slug }}"
-              >
-                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
-                  <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
-                  <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </button>
-
-                <div class="faq-accordion-content overflow-hidden bg-white">
-                  <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
-                    {{ p.body }}
-                  </div>
-                </div>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+        <div class="space-y-3" id="quickAnswerContainer"></div>
       </div>
 
-      <!-- Visual Guides (指南列表) -->
+      <!-- Visual Guides（由 JS 渲染） -->
       <div>
         <h2 class="mb-6 text-xl font-bold">Visual Guides</h2>
-
-        <div class="space-y-3" id="visualGuidesContainer">
-          {%- for p in all_pages -%}
-            {%- if p.template_name == 'faq_detail' -%}
-              {%- assign prod = p.parent -%}
-              {%- assign cat = prod.parent -%}
-
-              <a
-                href="{{ p.url }}"
-                class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
-                data-type="guide"
-                data-cat="{{ cat.slug }}"
-                data-product="{{ prod.slug }}"
-              >
-                <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
-                <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </a>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+        <div class="space-y-3" id="visualGuidesContainer"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- 移动端底部弹窗 (修正版) -->
+  <!-- 移动端底部弹窗 -->
   <div id="mobileOverlay" class="fixed inset-0 z-[100] bg-black/50 mobile-overlay"></div>
-
   <div id="mobileSheet" class="fixed bottom-0 left-0 right-0 z-[101] flex max-h-[80vh] flex-col rounded-t-2xl bg-white mobile-sheet">
     <div class="sticky top-0 z-10 flex items-center justify-between border-b border-gray-100 bg-white px-5 py-4">
       <span class="text-[17px] font-bold">Choose Product Model</span>
       <button id="closeSheet" class="p-1 text-gray-400 hover:text-gray-600">
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
     </div>
-
     <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
-      {%- for cat in faq_root.children -%}
-        <div class="border-b border-gray-50" data-cat="{{ cat.slug }}">
-          <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
-            <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
-            <svg class="h-4 w-4 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
-
-          <div class="accordion-content overflow-hidden">
-            <div class="pb-2">
-              {%- for prod in cat.children -%}
-                <div
-                  class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
-                  data-cat="{{ cat.slug }}"
-                  data-product="{{ prod.slug }}"
-                  data-name="{{ prod.link_text | escape }}"
-                  data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
-                  onclick="selectProductFromEl(this)"
-                >
-                  {{ prod.link_text }}
-                </div>
-              {%- endfor -%}
-            </div>
-          </div>
-        </div>
-      {%- endfor -%}
+      <!-- 由 JS 渲染 -->
     </div>
   </div>
 </div>
 
 <script>
-  // --- DOM 元素获取 ---
-  const filterHeader = document.getElementById('filterHeader');
-  const pcDropdown = document.getElementById('pcDropdown');
-  const pcCategoryList = document.getElementById('pcCategoryList');
-  const pcProductList = document.getElementById('pcProductList');
-  const selectedNameDisplay = document.getElementById('selectedName');
-  const arrowIcon = document.getElementById('arrowIcon');
-  const thumbBox = document.getElementById('thumbBox');
-  const mobileOverlay = document.getElementById('mobileOverlay');
-  const mobileSheet = document.getElementById('mobileSheet');
-  const closeSheet = document.getElementById('closeSheet');
+  // ─── Liquid 输出数据 ───────────────────────────────────────────────────────
 
-  // --- 状态管理 (从 URL 同步) ---
-  const params = new URLSearchParams(location.search);
-  let currentCategoryId = params.get('cat') || '';
-  let selectedProductId = params.get('product') || '';
-  let openQId = params.get('q') || '';
+  const productData = [];
+  {%- for cat in faq_root.children -%}
+  productData.push({
+    id: {{ cat.slug | json }},
+    name: {{ cat.link_text | json }},
+    products: [
+      {%- for prod in cat.children -%}
+      { id: {{ prod.slug | json }}, name: {{ prod.link_text | json }}, thumb: {{ prod.settings.thumbnail | default: '' | json }} }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  });
+  {%- endfor -%}
 
-  // PC 端分类悬停状态 (不改变全局选择)
-  let hoverCategoryId = currentCategoryId || '';
+  const faqData = [];
+  {%- for p in all_pages -%}
+  {%- if p.template_name == 'faq_qna' -%}
+  {%- assign faq_prod = p.parent -%}
+  {%- assign faq_cat = faq_prod.parent -%}
+  faqData.push({ q: {{ p.link_text | json }}, answer: {{ p.body | json }}, cat: {{ faq_cat.slug | json }}, product: {{ faq_prod.slug | json }} });
+  {%- endif -%}
+  {%- endfor -%}
+
+  const guideData = [];
+  {%- for p in all_pages -%}
+  {%- if p.template_name == 'faq_detail' -%}
+  {%- assign guide_prod = p.parent -%}
+  {%- assign guide_cat = guide_prod.parent -%}
+  guideData.push({ title: {{ p.link_text | json }}, url: {{ p.url | json }}, cat: {{ guide_cat.slug | json }}, product: {{ guide_prod.slug | json }} });
+  {%- endif -%}
+  {%- endfor -%}
+
+  // ─── 状态（URL 参数同步）─────────────────────────────────────────────────
+
+  const _params = new URLSearchParams(location.search);
+  let currentCategoryId = _params.get('cat') || '';
+  let selectedProductId  = _params.get('product') || '';
+  let hoverCategoryId    = currentCategoryId;
+
+  // ─── DOM 引用 ─────────────────────────────────────────────────────────────
+
+  const filterHeader      = document.getElementById('filterHeader');
+  const pcDropdown        = document.getElementById('pcDropdown');
+  const pcCategoryList    = document.getElementById('pcCategoryList');
+  const pcProductList     = document.getElementById('pcProductList');
+  const selectedNameEl    = document.getElementById('selectedName');
+  const arrowIcon         = document.getElementById('arrowIcon');
+  const thumbBox          = document.getElementById('thumbBox');
+  const mobileOverlay     = document.getElementById('mobileOverlay');
+  const mobileSheet       = document.getElementById('mobileSheet');
+  const closeSheet        = document.getElementById('closeSheet');
+  const mobileAccordion   = document.getElementById('mobileAccordion');
 
   function isMobile() { return window.innerWidth < 768; }
 
-  // 更新 URL 参数 (无刷新)
   function updateUrl(cat, product) {
     const url = new URL(location.href);
-    if (cat) url.searchParams.set('cat', cat); else url.searchParams.delete('cat');
-    if (product) url.searchParams.set('product', product); else url.searchParams.delete('product');
+    cat     ? url.searchParams.set('cat', cat)         : url.searchParams.delete('cat');
+    product ? url.searchParams.set('product', product) : url.searchParams.delete('product');
     history.replaceState(null, '', url.toString());
   }
 
-  // 设置筛选器头部显示
-  function setHeaderDisplay(name, thumbUrl) {
-    selectedNameDisplay.textContent = name || 'Choose Product Model';
-    if (thumbUrl) {
-      thumbBox.innerHTML = '<img src="' + thumbUrl + '" alt="" class="h-full w-full object-cover">';
-    } else {
-      thumbBox.innerHTML = '<svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+  function setHeaderDisplay(name, thumb) {
+    selectedNameEl.textContent = name || 'Choose Product Model';
+    thumbBox.innerHTML = thumb
+      ? `<img src="${thumb}" alt="" class="h-full w-full object-cover">`
+      : `<svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
+  }
+
+  // ─── PC 筛选器渲染 ────────────────────────────────────────────────────────
+
+  function renderPCFilter() {
+    pcCategoryList.innerHTML = productData.map(cat => `
+      <div
+        class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors ${cat.id === currentCategoryId ? 'bg-white text-gray-900 font-bold' : 'text-gray-500 hover:bg-white/80'}"
+        onmouseenter="hoverCategory('${cat.id}')"
+      >
+        ${cat.name}
+        <span class="text-[12px] text-gray-300">›</span>
+      </div>
+    `).join('');
+
+    const catData = productData.find(c => c.id === hoverCategoryId) || productData[0];
+    if (catData) {
+      pcProductList.innerHTML = catData.products.map(prod => `
+        <div
+          class="cursor-pointer px-8 py-3 text-[14px] transition-colors hover:bg-gray-50 ${prod.id === selectedProductId && catData.id === currentCategoryId ? 'text-gray-900 font-bold' : 'text-gray-600'}"
+          onclick="selectProduct('${catData.id}', '${prod.id}', this)"
+          data-name="${prod.name.replace(/"/g, '&quot;')}"
+          data-thumb="${prod.thumb.replace(/"/g, '&quot;')}"
+        >
+          ${prod.name}
+        </div>
+      `).join('');
     }
   }
 
-  // 根据分类显示产品列表 (PC)
-  function showProductsForCategory(catId) {
-    document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
-      el.classList.toggle('hidden', el.dataset.cat !== catId);
-    });
+  window.hoverCategory = (id) => {
+    hoverCategoryId = id;
+    renderPCFilter();
+  };
 
-    // 高亮当前选中的分类 (非悬停分类)
-    document.querySelectorAll('#pcCategoryList [data-cat]').forEach(el => {
-      const active = el.dataset.cat === currentCategoryId;
-      el.classList.toggle('bg-white', active);
-      el.classList.toggle('text-gray-900', active);
-      el.classList.toggle('font-bold', active);
-      el.classList.toggle('text-gray-500', !active);
-    });
-  }
+  window.selectProduct = (catId, prodId, el) => {
+    const name  = el ? el.dataset.name  : '';
+    const thumb = el ? el.dataset.thumb : '';
+    currentCategoryId = catId;
+    selectedProductId  = prodId;
+    hoverCategoryId    = catId;
+    setHeaderDisplay(name, thumb);
+    updateUrl(catId, prodId);
+    applyContentFilter();
+    renderPCFilter();
+    pcDropdown.classList.add('hidden');
+    arrowIcon.style.transform = 'rotate(0deg)';
+    closeMobileSheet();
+  };
 
-  // 高亮选中的产品 (PC & Mobile)
-  function highlightSelectedProduct() {
-    document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
-      const active = (el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId);
-      el.classList.toggle('text-gray-900', active);
-      el.classList.toggle('font-bold', active);
-      el.classList.toggle('text-gray-600', !active);
-    });
+  // ─── 内容筛选 ─────────────────────────────────────────────────────────────
 
-    document.querySelectorAll('#mobileAccordion [data-product]').forEach(el => {
-      const active = (el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId);
-      el.classList.toggle('text-blue-500', active);
-      el.classList.toggle('font-medium', active);
-      el.classList.toggle('text-gray-500', !active);
-    });
-  }
-
-  // 过滤内容区域 (FAQ & Guides)
   function applyContentFilter() {
     document.querySelectorAll('[data-type="qna"], [data-type="guide"]').forEach(el => {
-      const okCat = !currentCategoryId || el.dataset.cat === currentCategoryId;
-      const okProd = !selectedProductId || el.dataset.product === selectedProductId;
+      const okCat  = !currentCategoryId || el.dataset.cat     === currentCategoryId;
+      const okProd = !selectedProductId  || el.dataset.product === selectedProductId;
       el.style.display = (okCat && okProd) ? '' : 'none';
     });
   }
 
-  // --- PC 端交互逻辑 ---
+  // ─── Quick Answer 渲染 ────────────────────────────────────────────────────
+
+  function renderFAQ() {
+    document.getElementById('quickAnswerContainer').innerHTML = faqData.map(item => `
+      <div class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item" data-type="qna" data-cat="${item.cat}" data-product="${item.product}">
+        <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
+          <span class="text-[15px] font-medium text-gray-700">${item.q}</span>
+          <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div class="faq-accordion-content overflow-hidden bg-white">
+          <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">${item.answer}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ─── Visual Guides 渲染 ───────────────────────────────────────────────────
+
+  function renderGuides() {
+    document.getElementById('visualGuidesContainer').innerHTML = guideData.map(item => `
+      <a href="${item.url}" class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50" data-type="guide" data-cat="${item.cat}" data-product="${item.product}">
+        <span class="text-[15px] text-gray-700">${item.title}</span>
+        <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+      </a>
+    `).join('');
+  }
+
+  // ─── PC 下拉开关 ──────────────────────────────────────────────────────────
+
   filterHeader.onclick = (e) => {
     if (isMobile()) {
       openMobileSheet();
     } else {
       pcDropdown.classList.toggle('hidden');
       arrowIcon.style.transform = pcDropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-      if (!pcDropdown.classList.contains('hidden')) {
-        hoverCategoryId = currentCategoryId || hoverCategoryId;
-        if (hoverCategoryId) showProductsForCategory(hoverCategoryId);
-      }
     }
     e.stopPropagation();
   };
 
-  document.addEventListener('click', (e) => {
+  document.onclick = (e) => {
     if (!document.getElementById('filterContainer').contains(e.target)) {
       pcDropdown.classList.add('hidden');
       arrowIcon.style.transform = 'rotate(0deg)';
     }
-  });
+  };
 
-  // PC 端分类悬停
-  document.querySelectorAll('#pcCategoryList [data-cat]').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      hoverCategoryId = el.dataset.cat;
-      showProductsForCategory(hoverCategoryId);
-      highlightSelectedProduct();
-    });
-  });
+  // ─── 移动端弹窗 ───────────────────────────────────────────────────────────
 
-  // PC 端产品选择
-  document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
-    el.addEventListener('click', () => {
-      currentCategoryId = el.dataset.cat;
-      selectedProductId = el.dataset.product;
-      hoverCategoryId = currentCategoryId;
-
-      setHeaderDisplay(el.dataset.name, el.dataset.thumb);
-      updateUrl(currentCategoryId, selectedProductId);
-      applyContentFilter();
-      highlightSelectedProduct();
-      showProductsForCategory(currentCategoryId);
-
-      pcDropdown.classList.add('hidden');
-      arrowIcon.style.transform = 'rotate(0deg)';
-    });
-  });
-
-  // --- 移动端弹窗交互逻辑 ---
   function openMobileSheet() {
     mobileOverlay.classList.add('open');
     mobileSheet.classList.add('open');
     document.body.classList.add('faq-index-modal-open');
-    openMobileCategory(currentCategoryId);
-    highlightSelectedProduct();
+    renderMobileAccordion();
   }
 
   function closeMobileSheet() {
@@ -410,101 +335,102 @@
     document.body.classList.remove('faq-index-modal-open');
   }
 
-  closeSheet.onclick = closeMobileSheet;
+  closeSheet.onclick   = closeMobileSheet;
   mobileOverlay.onclick = closeMobileSheet;
 
-  // 移动端展开指定分类
-  function openMobileCategory(catId) {
-    if (!catId) return;
-    const wrapper = document.querySelector('#mobileAccordion [data-cat="' + CSS.escape(catId) + '"]');
-    if (!wrapper) return;
-    document.querySelectorAll('#mobileAccordion .accordion-content').forEach(c => {
-      c.classList.remove('open');
-      const icon = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
-      if (icon) icon.classList.remove('rotate-180');
-    });
-    const content = wrapper.querySelector('.accordion-content');
-    const header = content && content.previousElementSibling;
-    const icon = header && header.querySelector('svg');
-    if (content) content.classList.add('open');
-    if (icon) icon.classList.add('rotate-180');
+  function renderMobileAccordion() {
+    mobileAccordion.innerHTML = productData.map(cat => {
+      const isSelected = cat.id === currentCategoryId;
+      return `
+        <div class="border-b border-gray-50">
+          <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
+            <span class="text-[15px] text-gray-800 ${isSelected ? 'font-medium' : ''}">${cat.name}</span>
+            <svg class="h-4 w-4 transition-transform text-gray-400 ${isSelected ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div class="accordion-content overflow-hidden ${isSelected ? 'open' : ''}">
+            <div class="pb-2">
+              ${cat.products.map(prod => `
+                <div
+                  class="cursor-pointer px-10 py-3.5 text-[14px] ${prod.id === selectedProductId && isSelected ? 'text-blue-500 font-medium' : 'text-gray-500'}"
+                  onclick="selectProduct('${cat.id}', '${prod.id}', this)"
+                  data-name="${prod.name.replace(/"/g, '&quot;')}"
+                  data-thumb="${prod.thumb.replace(/"/g, '&quot;')}"
+                >
+                  ${prod.name}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   window.toggleMobileCategory = (header) => {
     const content = header.nextElementSibling;
-    const icon = header.querySelector('svg');
+    const icon    = header.querySelector('svg');
     document.querySelectorAll('#mobileAccordion .accordion-content').forEach(c => {
       if (c !== content) {
         c.classList.remove('open');
-        const i = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
-        if (i) i.classList.remove('rotate-180');
+        c.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
       }
     });
     content.classList.toggle('open');
     icon.classList.toggle('rotate-180');
   };
 
-  window.selectProductFromEl = (el) => {
-    currentCategoryId = el.dataset.cat;
-    selectedProductId = el.dataset.product;
-    hoverCategoryId = currentCategoryId;
-    setHeaderDisplay(el.dataset.name, el.dataset.thumb);
-    updateUrl(currentCategoryId, selectedProductId);
-    applyContentFilter();
-    highlightSelectedProduct();
-    showProductsForCategory(currentCategoryId);
-    closeMobileSheet();
-  };
+  // ─── FAQ 折叠面板（动态高度动画）─────────────────────────────────────────
 
-  // --- Quick Answer 折叠面板 (支持多开，动态高度动画) ---
   window.toggleFAQ = (btn) => {
-    const item = btn.closest('.faq-item');
+    const item    = btn.closest('.faq-item');
     const content = item.querySelector('.faq-accordion-content');
-    const icon = item.querySelector('.faq-accordion-icon');
-    const isOpen = content.classList.contains('open');
+    const icon    = item.querySelector('.faq-accordion-icon');
+    const isOpen  = content.classList.contains('open');
 
     if (isOpen) {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      content.offsetHeight; // force reflow
       content.style.maxHeight = '0px';
       content.classList.remove('open');
       icon.classList.remove('rotated');
     } else {
-      const scrollHeight = content.scrollHeight;
-      content.style.maxHeight = scrollHeight + 'px';
+      content.style.maxHeight = 'none';
+      const h = content.scrollHeight;
+      content.style.maxHeight = '0px';
+      content.offsetHeight; // force reflow
       content.classList.add('open');
       icon.classList.add('rotated');
-
-      const observer = new ResizeObserver(() => {
-        if (content.classList.contains('open')) {
-          content.style.maxHeight = content.scrollHeight + 'px';
-        }
-      });
-      observer.observe(content);
+      content.style.maxHeight = h + 'px';
+      new ResizeObserver(() => {
+        if (content.classList.contains('open')) content.style.maxHeight = content.scrollHeight + 'px';
+      }).observe(content);
     }
   };
 
-  // --- 初始化状态 ---
-  function initDefaultSelection() {
-    let match = null;
+  // ─── 初始化 ──────────────────────────────────────────────────────────────
+
+  function init() {
     if (currentCategoryId && selectedProductId) {
-      match = document.querySelector('#pcProductList [data-cat="' + CSS.escape(currentCategoryId) + '"][data-product="' + CSS.escape(selectedProductId) + '"]');
-    }
-    if (!match) {
-      match = document.querySelector('#pcProductList [data-product]');
-      if (match) {
-        currentCategoryId = match.dataset.cat;
-        selectedProductId = match.dataset.product;
+      const cat  = productData.find(c => c.id === currentCategoryId);
+      const prod = cat && cat.products.find(p => p.id === selectedProductId);
+      if (prod) {
         hoverCategoryId = currentCategoryId;
+        setHeaderDisplay(prod.name, prod.thumb);
       }
+    } else if (productData.length > 0 && productData[0].products.length > 0) {
+      currentCategoryId = productData[0].id;
+      selectedProductId  = productData[0].products[0].id;
+      hoverCategoryId    = currentCategoryId;
+      setHeaderDisplay(productData[0].products[0].name, productData[0].products[0].thumb);
     }
-    if (match) {
-      setHeaderDisplay(match.dataset.name, match.dataset.thumb);
-    }
-    showProductsForCategory(currentCategoryId || hoverCategoryId);
-    highlightSelectedProduct();
+
+    renderPCFilter();
+    renderFAQ();
+    renderGuides();
     applyContentFilter();
   }
 
-  initDefaultSelection();
+  init();
 </script>
 
 {% schema %}
