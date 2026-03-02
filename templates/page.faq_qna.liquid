@@ -1,0 +1,17 @@
+{%- assign product_page = page.parent -%}
+{%- assign cat_page = product_page.parent -%}
+
+{%- assign cat = cat_page.slug -%}
+{%- assign product = product_page.slug -%}
+{%- assign q = page.slug -%}
+
+<script>
+  (function () {
+    var target = "/faq?cat={{ cat | url_encode }}&product={{ product | url_encode }}&q={{ q | url_encode }}";
+    window.location.replace(target);
+  })();
+</script>
+
+<noscript>
+  <meta http-equiv="refresh" content="0;url=/faq?cat={{ cat | url_encode }}&product={{ product | url_encode }}&q={{ q | url_encode }}">
+</noscript>

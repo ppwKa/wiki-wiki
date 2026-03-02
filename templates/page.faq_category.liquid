@@ -1,0 +1,11 @@
+{%- assign cat = page.slug -%}
+<script>
+  (function () {
+    var target = "/faq?cat={{ cat | url_encode }}";
+    window.location.replace(target);
+  })();
+</script>
+
+<noscript>
+  <meta http-equiv="refresh" content="0;url=/faq?cat={{ cat | url_encode }}">
+</noscript>

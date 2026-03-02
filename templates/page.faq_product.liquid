@@ -1,0 +1,32 @@
+{%- comment -%}
+  FAQ Product Container Page
+  This page does not render content.
+  When accessed directly, it redirects to:
+  /faq?cat=...&product=...
+{%- endcomment -%}
+
+{%- assign cat_page = page.parent -%}
+
+<script>
+  (function () {
+    var target = "/faq?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}";
+    window.location.replace(target);
+  })();
+</script>
+
+<noscript>
+  <meta http-equiv="refresh" content="0;url=/faq?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}">
+</noscript>
+
+{% schema %}
+{
+  "name": "FAQ Product Container",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "thumbnail",
+      "label": "Product Thumbnail"
+    }
+  ]
+}
+{% endschema %}
