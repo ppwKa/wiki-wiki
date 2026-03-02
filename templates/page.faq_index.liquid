@@ -80,9 +80,9 @@
   }
 </style>
 
-<script>
-  console.log('cat count:', {{ faq_root.children.size | default: 0 }});
-</script>
+<p>Current page: {{ page.url }}</p>
+<p>Children count: {{ page.children.size }}</p>
+<p>Parent: {{ page.parent.url }}</p>
 
 <div class="faq-index-page min-h-screen bg-gray-50 font-sans text-gray-900">
   <div class="mx-auto max-w-4xl px-4 py-8">
@@ -160,9 +160,9 @@
         <h2 class="mb-6 text-xl font-bold">Quick Answer</h2>
 
         <div class="space-y-3" id="quickAnswerContainer">
-          {%- for cat in faq_root.children_in_list -%}
-            {%- for prod in cat.children_in_list -%}
-              {%- for p in prod.children_in_list -%}
+          {%- for cat in faq_root.children -%}
+            {%- for prod in cat.children -%}
+              {%- for p in prod.children -%}
                 {%- if p.template_name == 'faq_qna' -%}
                   <div
                     class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
@@ -195,9 +195,9 @@
         <h2 class="mb-6 text-xl font-bold">Visual Guides</h2>
 
         <div class="space-y-3" id="visualGuidesContainer">
-          {%- for cat in faq_root.children_in_list -%}
-            {%- for prod in cat.children_in_list -%}
-              {%- for p in prod.children_in_list -%}
+          {%- for cat in faq_root.children -%}
+            {%- for prod in cat.children -%}
+              {%- for p in prod.children -%}
                 {%- if p.template_name == 'faq_detail' -%}
                   <a
                     href="{{ p.url }}"
