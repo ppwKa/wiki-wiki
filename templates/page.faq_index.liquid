@@ -9,58 +9,85 @@
 {%- assign all_pages = faq_root.pages -%}
 
 <style>
-  /* 补充 CSS 动画和基础样式 */
-  * {
+  /* FAQ Index 页面样式 - 仅在此容器内生效 */
+  .faq-index-page * {
     box-sizing: border-box;
   }
   
-  .accordion-content {
+  .faq-index-page {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Quick Answer 折叠面板优化 - 支持多开 */
+  .faq-index-page .faq-accordion-content {
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+  
+  .faq-index-page .faq-accordion-content.open {
+    opacity: 1;
+  }
+  
+  .faq-index-page .faq-accordion-icon {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .faq-index-page .faq-accordion-icon.rotated {
+    transform: rotate(180deg);
+  }
+  
+  /* 移动端弹窗样式 */
+  .faq-index-page .accordion-content {
     transition: max-height 0.3s ease-out;
     max-height: 0;
     overflow: hidden;
   }
   
-  .accordion-content.open {
+  .faq-index-page .accordion-content.open {
     max-height: 1000px;
   }
   
-  .mobile-sheet {
+  .faq-index-page .mobile-sheet {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(100%);
   }
   
-  .mobile-sheet.open {
+  .faq-index-page .mobile-sheet.open {
     transform: translateY(0);
   }
   
-  .mobile-overlay {
+  .faq-index-page .mobile-overlay {
     transition: opacity 0.3s ease;
     opacity: 0;
     pointer-events: none;
   }
   
-  .mobile-overlay.open {
+  .faq-index-page .mobile-overlay.open {
     opacity: 1;
     pointer-events: auto;
   }
   
-  body.modal-open {
+  /* 弹窗打开时禁止 body 滚动（需作用于 body） */
+  body.faq-index-modal-open {
     overflow: hidden;
   }
   
-  /* 确保 hidden 类正常工作 */
-  .hidden {
+  /* 筛选器下拉 hidden 类 */
+  .faq-index-page #filterContainer .hidden {
     display: none !important;
   }
 </style>
 
-<div class="min-h-screen bg-gray-50 font-sans text-gray-900">
+<div class="faq-index-page min-h-screen bg-gray-50 font-sans text-gray-900">
   <div class="mx-auto max-w-4xl px-4 py-8">
 
     <!-- 面包屑导航 -->
     <nav class="mb-8 flex items-center text-sm text-gray-500">
       <a href="/" class="hover:text-gray-800">{{ site.name }}</a>
-      <span class="mx-2">></span>
+      <span class="mx-2">&gt;</span>
       <span class="text-gray-800">{{ page.link_text }}</span>
     </nav>
 
@@ -136,20 +163,20 @@
               {%- assign cat = prod.parent -%}
 
               <div
-                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30"
+                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
                 data-type="qna"
                 data-cat="{{ cat.slug }}"
                 data-product="{{ prod.slug }}"
                 data-q="{{ p.slug }}"
               >
-                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50" onclick="toggleFAQ(this)">
+                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
                   <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
-                  <svg class="h-4 w-4 transform text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </button>
 
-                <div class="accordion-content overflow-hidden bg-white">
+                <div class="faq-accordion-content overflow-hidden bg-white">
                   <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
                     {{ p.body }}
                   </div>
@@ -206,18 +233,18 @@
     <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
       {%- for cat in faq_root.children -%}
         <div class="border-b border-gray-50" data-cat="{{ cat.slug }}">
-          <div class="flex cursor-pointer items-center justify-between px-5 py-5 mobile-cat-header" onclick="toggleMobileCategory(this)">
+          <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
             <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
             <svg class="h-4 w-4 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
 
-          <div class="accordion-content overflow-hidden mobile-cat-content">
+          <div class="accordion-content overflow-hidden">
             <div class="pb-2">
               {%- for prod in cat.children -%}
                 <div
-                  class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500 mobile-product-item"
+                  class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
                   data-cat="{{ cat.slug }}"
                   data-product="{{ prod.slug }}"
                   data-name="{{ prod.link_text | escape }}"
@@ -302,7 +329,7 @@
       el.classList.toggle('text-gray-600', !active);
     });
 
-    document.querySelectorAll('#mobileAccordion .mobile-product-item').forEach(el => {
+    document.querySelectorAll('#mobileAccordion [data-product]').forEach(el => {
       const active = (el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId);
       el.classList.toggle('text-blue-500', active);
       el.classList.toggle('font-medium', active);
@@ -372,7 +399,7 @@
   function openMobileSheet() {
     mobileOverlay.classList.add('open');
     mobileSheet.classList.add('open');
-    document.body.classList.add('modal-open');
+    document.body.classList.add('faq-index-modal-open');
     openMobileCategory(currentCategoryId);
     highlightSelectedProduct();
   }
@@ -380,7 +407,7 @@
   function closeMobileSheet() {
     mobileOverlay.classList.remove('open');
     mobileSheet.classList.remove('open');
-    document.body.classList.remove('modal-open');
+    document.body.classList.remove('faq-index-modal-open');
   }
 
   closeSheet.onclick = closeMobileSheet;
@@ -391,13 +418,13 @@
     if (!catId) return;
     const wrapper = document.querySelector('#mobileAccordion [data-cat="' + CSS.escape(catId) + '"]');
     if (!wrapper) return;
-    document.querySelectorAll('#mobileAccordion .mobile-cat-content').forEach(c => {
+    document.querySelectorAll('#mobileAccordion .accordion-content').forEach(c => {
       c.classList.remove('open');
       const icon = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
       if (icon) icon.classList.remove('rotate-180');
     });
-    const header = wrapper.querySelector('.mobile-cat-header');
-    const content = wrapper.querySelector('.mobile-cat-content');
+    const content = wrapper.querySelector('.accordion-content');
+    const header = content && content.previousElementSibling;
     const icon = header && header.querySelector('svg');
     if (content) content.classList.add('open');
     if (icon) icon.classList.add('rotate-180');
@@ -406,7 +433,7 @@
   window.toggleMobileCategory = (header) => {
     const content = header.nextElementSibling;
     const icon = header.querySelector('svg');
-    document.querySelectorAll('#mobileAccordion .mobile-cat-content').forEach(c => {
+    document.querySelectorAll('#mobileAccordion .accordion-content').forEach(c => {
       if (c !== content) {
         c.classList.remove('open');
         const i = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
@@ -429,19 +456,30 @@
     closeMobileSheet();
   };
 
-  // --- Quick Answer 折叠面板 ---
+  // --- Quick Answer 折叠面板 (支持多开，动态高度动画) ---
   window.toggleFAQ = (btn) => {
-    const content = btn.nextElementSibling;
-    const icon = btn.querySelector('svg');
-    document.querySelectorAll('#quickAnswerContainer .accordion-content').forEach(el => {
-      if (el !== content) {
-        el.classList.remove('open');
-        const b = el.parentElement && el.parentElement.querySelector('button svg');
-        if (b) b.style.transform = 'rotate(0deg)';
-      }
-    });
-    content.classList.toggle('open');
-    icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    const item = btn.closest('.faq-item');
+    const content = item.querySelector('.faq-accordion-content');
+    const icon = item.querySelector('.faq-accordion-icon');
+    const isOpen = content.classList.contains('open');
+
+    if (isOpen) {
+      content.style.maxHeight = '0px';
+      content.classList.remove('open');
+      icon.classList.remove('rotated');
+    } else {
+      const scrollHeight = content.scrollHeight;
+      content.style.maxHeight = scrollHeight + 'px';
+      content.classList.add('open');
+      icon.classList.add('rotated');
+
+      const observer = new ResizeObserver(() => {
+        if (content.classList.contains('open')) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
+      });
+      observer.observe(content);
+    }
   };
 
   // --- 初始化状态 ---
