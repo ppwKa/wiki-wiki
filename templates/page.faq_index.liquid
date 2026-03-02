@@ -1,6 +1,6 @@
 {%- comment -%}
-  page.faq_index.liquid (Baklib Template)
-  - 集成了最新的 HTML/Tailwind 结构与响应式筛选器逻辑
+  page.faq_index.liquid (Baklib Template - Tailwind CSS v4.1.4 Corrected)
+  - 集成了修复后的 HTML/Tailwind v4 结构与响应式筛选器逻辑
   - 保持原有的 Liquid 数据获取方式：site.pages / faq_root.children
   - JS 负责 UI 交互：下拉菜单、移动端底部弹窗、折叠面板、URL 参数同步
 {%- endcomment -%}
@@ -9,37 +9,75 @@
 {%- assign all_pages = faq_root.pages -%}
 
 <style>
-  /* 补充 CSS 动画 */
-  .accordion-content { transition: max-height 0.3s ease-out; }
-  .mobile-sheet { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .mobile-overlay { transition: opacity 0.3s ease; }
-  body.modal-open { overflow: hidden; }
+  /* 补充 CSS 动画和基础样式 */
+  * {
+    box-sizing: border-box;
+  }
+  
+  .accordion-content {
+    transition: max-height 0.3s ease-out;
+    max-height: 0;
+    overflow: hidden;
+  }
+  
+  .accordion-content.open {
+    max-height: 1000px;
+  }
+  
+  .mobile-sheet {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(100%);
+  }
+  
+  .mobile-sheet.open {
+    transform: translateY(0);
+  }
+  
+  .mobile-overlay {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .mobile-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  body.modal-open {
+    overflow: hidden;
+  }
+  
+  /* 确保 hidden 类正常工作 */
+  .hidden {
+    display: none !important;
+  }
 </style>
 
-<div class="bg-gray-50 min-h-screen font-sans text-gray-900">
-  <div class="max-w-4xl mx-auto px-4 py-8">
+<div class="min-h-screen bg-gray-50 font-sans text-gray-900">
+  <div class="mx-auto max-w-4xl px-4 py-8">
 
     <!-- 面包屑导航 -->
-    <nav class="flex items-center text-sm text-gray-500 mb-8">
+    <nav class="mb-8 flex items-center text-sm text-gray-500">
       <a href="/" class="hover:text-gray-800">{{ site.name }}</a>
       <span class="mx-2">></span>
       <span class="text-gray-800">{{ page.link_text }}</span>
     </nav>
 
     <!-- 主内容卡片 -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-12">
-      <h1 class="text-3xl font-bold mb-8">{{ page.link_text }}</h1>
+    <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm md:p-12">
+      <h1 class="mb-8 text-3xl font-bold">{{ page.link_text }}</h1>
 
       <!-- 产品筛选器 -->
       <div class="mb-12">
-        <p class="text-sm font-medium text-gray-500 mb-3">Choose Product Model</p>
+        <p class="mb-3 text-sm font-medium text-gray-500">Choose Product Model</p>
 
         <div class="relative w-full max-w-md" id="filterContainer">
-          <div id="filterHeader" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors bg-white">
+          <div id="filterHeader" class="flex cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-gray-300">
             <div class="flex items-center gap-3">
               <!-- 缩略图容器 (JS 将在有图片时替换 svg) -->
-              <div id="thumbBox" class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center overflow-hidden">
-                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div id="thumbBox" class="flex h-10 w-10 items-center justify-center overflow-hidden rounded bg-gray-100">
+                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
@@ -49,17 +87,17 @@
               <span id="selectedName" class="font-medium text-gray-800">Choose Product Model</span>
             </div>
 
-            <svg class="w-5 h-5 text-gray-400 transform transition-transform" id="arrowIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-5 w-5 transform text-gray-400 transition-transform" id="arrowIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
 
           <!-- PC 端下拉菜单 -->
-          <div id="pcDropdown" class="hidden absolute top-full left-0 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex overflow-hidden">
-            <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 py-2 bg-gray-50/50">
+          <div id="pcDropdown" class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
+            <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2">
               {%- for cat in faq_root.children -%}
                 <div
-                  class="px-5 py-3 text-[14px] cursor-pointer flex justify-between items-center transition-colors text-gray-500 hover:bg-white/80"
+                  class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
                   data-cat="{{ cat.slug }}"
                 >
                   {{ cat.link_text }}
@@ -68,11 +106,11 @@
               {%- endfor -%}
             </div>
 
-            <div id="pcProductList" class="flex-1 py-2 max-h-80 overflow-y-auto">
+            <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2">
               {%- for cat in faq_root.children -%}
                 {%- for prod in cat.children -%}
                   <div
-                    class="px-8 py-3 text-[14px] cursor-pointer hover:bg-gray-50 transition-colors text-gray-600 hidden"
+                    class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
                     data-cat="{{ cat.slug }}"
                     data-product="{{ prod.slug }}"
                     data-name="{{ prod.link_text | escape }}"
@@ -89,7 +127,7 @@
 
       <!-- Quick Answer (FAQ 列表) -->
       <div class="mb-12">
-        <h2 class="text-xl font-bold mb-6">Quick Answer</h2>
+        <h2 class="mb-6 text-xl font-bold">Quick Answer</h2>
 
         <div class="space-y-3" id="quickAnswerContainer">
           {%- for p in all_pages -%}
@@ -98,21 +136,21 @@
               {%- assign cat = prod.parent -%}
 
               <div
-                class="border border-gray-100 bg-gray-50/30 rounded-lg overflow-hidden"
+                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30"
                 data-type="qna"
                 data-cat="{{ cat.slug }}"
                 data-product="{{ prod.slug }}"
                 data-q="{{ p.slug }}"
               >
-                <button class="w-full px-5 py-4 flex justify-between items-center text-left hover:bg-gray-50 transition-colors" onclick="toggleFAQ(this)">
-                  <span class="text-[15px] text-gray-700 font-medium">{{ p.link_text }}</span>
-                  <svg class="w-4 h-4 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50" onclick="toggleFAQ(this)">
+                  <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
+                  <svg class="h-4 w-4 transform text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </button>
 
-                <div class="accordion-content max-h-0 overflow-hidden bg-white" data-open="0">
-                  <div class="px-5 py-4 text-sm text-gray-600 leading-relaxed">
+                <div class="accordion-content overflow-hidden bg-white">
+                  <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
                     {{ p.body }}
                   </div>
                 </div>
@@ -124,7 +162,7 @@
 
       <!-- Visual Guides (指南列表) -->
       <div>
-        <h2 class="text-xl font-bold mb-6">Visual Guides</h2>
+        <h2 class="mb-6 text-xl font-bold">Visual Guides</h2>
 
         <div class="space-y-3" id="visualGuidesContainer">
           {%- for p in all_pages -%}
@@ -134,13 +172,13 @@
 
               <a
                 href="{{ p.url }}"
-                class="flex items-center justify-between p-4 border border-gray-100 bg-gray-50/30 rounded-lg hover:bg-gray-50 transition-colors group"
+                class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
                 data-type="guide"
                 data-cat="{{ cat.slug }}"
                 data-product="{{ prod.slug }}"
               >
                 <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
-                <svg class="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
@@ -153,33 +191,33 @@
   </div>
 
   <!-- 移动端底部弹窗 (修正版) -->
-  <div id="mobileOverlay" class="hidden fixed inset-0 bg-black/50 z-[100] mobile-overlay opacity-0"></div>
+  <div id="mobileOverlay" class="fixed inset-0 z-[100] bg-black/50 mobile-overlay"></div>
 
-  <div id="mobileSheet" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-[101] mobile-sheet transform translate-y-full max-h-[80vh] flex flex-col">
-    <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
-      <span class="font-bold text-[17px]">Choose Product Model</span>
-      <button id="closeSheet" class="p-1 text-gray-400">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div id="mobileSheet" class="fixed bottom-0 left-0 right-0 z-[101] flex max-h-[80vh] flex-col rounded-t-2xl bg-white mobile-sheet">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-gray-100 bg-white px-5 py-4">
+      <span class="text-[17px] font-bold">Choose Product Model</span>
+      <button id="closeSheet" class="p-1 text-gray-400 hover:text-gray-600">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
 
-    <div id="mobileAccordion" class="overflow-y-auto flex-1 pb-12">
+    <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
       {%- for cat in faq_root.children -%}
         <div class="border-b border-gray-50" data-cat="{{ cat.slug }}">
-          <div class="px-5 py-5 flex justify-between items-center cursor-pointer group mobile-cat-header" onclick="toggleMobileCategory(this)">
+          <div class="flex cursor-pointer items-center justify-between px-5 py-5 mobile-cat-header" onclick="toggleMobileCategory(this)">
             <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
-            <svg class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
 
-          <div class="accordion-content overflow-hidden mobile-cat-content" style="max-height: 0px">
+          <div class="accordion-content overflow-hidden mobile-cat-content">
             <div class="pb-2">
               {%- for prod in cat.children -%}
                 <div
-                  class="px-10 py-3.5 text-[14px] text-gray-500 mobile-product-item cursor-pointer"
+                  class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500 mobile-product-item"
                   data-cat="{{ cat.slug }}"
                   data-product="{{ prod.slug }}"
                   data-name="{{ prod.link_text | escape }}"
@@ -233,9 +271,9 @@
   function setHeaderDisplay(name, thumbUrl) {
     selectedNameDisplay.textContent = name || 'Choose Product Model';
     if (thumbUrl) {
-      thumbBox.innerHTML = '<img src="' + thumbUrl + '" alt="" class="w-full h-full object-cover">';
+      thumbBox.innerHTML = '<img src="' + thumbUrl + '" alt="" class="h-full w-full object-cover">';
     } else {
-      thumbBox.innerHTML = '<svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+      thumbBox.innerHTML = '<svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
     }
   }
 
@@ -332,21 +370,17 @@
 
   // --- 移动端弹窗交互逻辑 ---
   function openMobileSheet() {
-    mobileOverlay.classList.remove('hidden');
-    setTimeout(() => {
-      mobileOverlay.classList.add('opacity-100');
-      mobileSheet.style.transform = 'translateY(0)';
-      document.body.classList.add('modal-open');
-    }, 10);
+    mobileOverlay.classList.add('open');
+    mobileSheet.classList.add('open');
+    document.body.classList.add('modal-open');
     openMobileCategory(currentCategoryId);
     highlightSelectedProduct();
   }
 
   function closeMobileSheet() {
-    mobileOverlay.classList.remove('opacity-100');
-    mobileSheet.style.transform = 'translateY(100%)';
+    mobileOverlay.classList.remove('open');
+    mobileSheet.classList.remove('open');
     document.body.classList.remove('modal-open');
-    setTimeout(() => { mobileOverlay.classList.add('hidden'); }, 300);
   }
 
   closeSheet.onclick = closeMobileSheet;
@@ -358,35 +392,29 @@
     const wrapper = document.querySelector('#mobileAccordion [data-cat="' + CSS.escape(catId) + '"]');
     if (!wrapper) return;
     document.querySelectorAll('#mobileAccordion .mobile-cat-content').forEach(c => {
-      c.style.maxHeight = '0px';
+      c.classList.remove('open');
       const icon = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
       if (icon) icon.classList.remove('rotate-180');
     });
     const header = wrapper.querySelector('.mobile-cat-header');
     const content = wrapper.querySelector('.mobile-cat-content');
     const icon = header && header.querySelector('svg');
-    if (content) content.style.maxHeight = '1000px';
+    if (content) content.classList.add('open');
     if (icon) icon.classList.add('rotate-180');
   }
 
   window.toggleMobileCategory = (header) => {
     const content = header.nextElementSibling;
     const icon = header.querySelector('svg');
-    const isOpen = content.style.maxHeight !== '0px';
     document.querySelectorAll('#mobileAccordion .mobile-cat-content').forEach(c => {
       if (c !== content) {
-        c.style.maxHeight = '0px';
+        c.classList.remove('open');
         const i = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
         if (i) i.classList.remove('rotate-180');
       }
     });
-    if (isOpen) {
-      content.style.maxHeight = '0px';
-      icon.classList.remove('rotate-180');
-    } else {
-      content.style.maxHeight = '1000px';
-      icon.classList.add('rotate-180');
-    }
+    content.classList.toggle('open');
+    icon.classList.toggle('rotate-180');
   };
 
   window.selectProductFromEl = (el) => {
@@ -405,24 +433,15 @@
   window.toggleFAQ = (btn) => {
     const content = btn.nextElementSibling;
     const icon = btn.querySelector('svg');
-    const isOpen = content.dataset.open === '1';
-    if (isOpen) {
-      content.style.maxHeight = '0px';
-      content.dataset.open = '0';
-      icon.style.transform = 'rotate(0deg)';
-    } else {
-      document.querySelectorAll('#quickAnswerContainer .accordion-content[data-open="1"]').forEach(el => {
-        if (el !== content) {
-          el.style.maxHeight = '0px';
-          el.dataset.open = '0';
-          const b = el.parentElement && el.parentElement.querySelector('button svg');
-          if (b) b.style.transform = 'rotate(0deg)';
-        }
-      });
-      content.style.maxHeight = content.scrollHeight + 'px';
-      content.dataset.open = '1';
-      icon.style.transform = 'rotate(180deg)';
-    }
+    document.querySelectorAll('#quickAnswerContainer .accordion-content').forEach(el => {
+      if (el !== content) {
+        el.classList.remove('open');
+        const b = el.parentElement && el.parentElement.querySelector('button svg');
+        if (b) b.style.transform = 'rotate(0deg)';
+      }
+    });
+    content.classList.toggle('open');
+    icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
   };
 
   // --- 初始化状态 ---
