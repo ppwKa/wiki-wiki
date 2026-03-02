@@ -81,7 +81,7 @@
 </style>
 
 <script>
-  console.log('{{ faq_root.children_in_list }}');
+  console.log('cat count:', {{ faq_root.children.size | default: 0 }});
 </script>
 
 <div class="faq-index-page min-h-screen bg-gray-50 font-sans text-gray-900">
@@ -125,7 +125,7 @@
           <!-- PC 端下拉菜单 -->
           <div id="pcDropdown" class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
             <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2">
-              {%- for cat in faq_root.children_in_list -%}
+              {%- for cat in faq_root.children -%}
                 <div
                   class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
                   data-cat="{{ cat.slug }}"
@@ -137,8 +137,8 @@
             </div>
 
             <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2">
-              {%- for cat in faq_root.children_in_list -%}
-                {%- for prod in cat.children_in_list -%}
+              {%- for cat in faq_root.children -%}
+                {%- for prod in cat.children -%}
                   <div
                     class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
                     data-cat="{{ cat.slug }}"
@@ -235,7 +235,7 @@
     </div>
 
     <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
-      {%- for cat in faq_root.children_in_list -%}
+      {%- for cat in faq_root.children -%}
         <div class="border-b border-gray-50" data-cat="{{ cat.slug }}">
           <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
             <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
@@ -246,7 +246,7 @@
 
           <div class="accordion-content overflow-hidden">
             <div class="pb-2">
-              {%- for prod in cat.children_in_list -%}
+              {%- for prod in cat.children -%}
                 <div
                   class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
                   data-cat="{{ cat.slug }}"
