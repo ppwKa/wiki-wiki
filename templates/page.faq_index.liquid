@@ -80,8 +80,6 @@
   }
 </style>
 
-<p>Children count: {{ page.children }}</p>
-
 <div class="faq-index-page min-h-screen bg-gray-50 font-sans text-gray-900">
   <div class="mx-auto max-w-4xl px-4 py-8">
 
@@ -161,27 +159,26 @@
           {%- for cat in faq_root.children -%}
             {%- for prod in cat.children -%}
               {%- for p in prod.children -%}
-                {%- if p.template_name == 'faq_qna' -%}
-                  <div
-                    class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
-                    data-type="qna"
-                    data-cat="{{ cat.slug }}"
-                    data-product="{{ prod.slug }}"
-                    data-q="{{ p.slug }}"
-                  >
-                    <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
-                      <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
-                      <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </button>
-                    <div class="faq-accordion-content overflow-hidden bg-white">
-                      <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
-                        {{ p.body }}
-                      </div>
-                    </div>
+                <div
+                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
+                data-type="qna"
+                data-cat="{{ cat.slug }}"
+                data-product="{{ prod.slug }}"
+                data-q="{{ p.slug }}"
+                data-template-name="{{ p.template_name }}"
+              >
+                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
+                  <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
+                  <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="faq-accordion-content overflow-hidden bg-white">
+                  <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
+                    {{ p.body }}
                   </div>
-                {%- endif -%}
+                </div>
+              </div>
               {%- endfor -%}
             {%- endfor -%}
           {%- endfor -%}
