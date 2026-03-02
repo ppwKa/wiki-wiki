@@ -6,7 +6,6 @@
 {%- endcomment -%}
 
 {%- assign faq_root = page -%}
-{%- assign all_pages = faq_root.pages -%}
 
 <style>
   /* FAQ Index 页面样式 - 仅在此容器内生效 */
@@ -82,7 +81,7 @@
 </style>
 
 <script>
-  console.log('{{ faq_root.children }}');
+  console.log('{{ faq_root.children_in_list }}');
 </script>
 
 <div class="faq-index-page min-h-screen bg-gray-50 font-sans text-gray-900">
@@ -126,7 +125,7 @@
           <!-- PC 端下拉菜单 -->
           <div id="pcDropdown" class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
             <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2">
-              {%- for cat in faq_root.children -%}
+              {%- for cat in faq_root.children_in_list -%}
                 <div
                   class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
                   data-cat="{{ cat.slug }}"
@@ -138,8 +137,8 @@
             </div>
 
             <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2">
-              {%- for cat in faq_root.children -%}
-                {%- for prod in cat.children -%}
+              {%- for cat in faq_root.children_in_list -%}
+                {%- for prod in cat.children_in_list -%}
                   <div
                     class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
                     data-cat="{{ cat.slug }}"
@@ -161,32 +160,32 @@
         <h2 class="mb-6 text-xl font-bold">Quick Answer</h2>
 
         <div class="space-y-3" id="quickAnswerContainer">
-          {%- for p in all_pages -%}
-            {%- if p.template_name == 'faq_qna' -%}
-              {%- assign prod = p.parent -%}
-              {%- assign cat = prod.parent -%}
-
-              <div
-                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
-                data-type="qna"
-                data-cat="{{ cat.slug }}"
-                data-product="{{ prod.slug }}"
-                data-q="{{ p.slug }}"
-              >
-                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
-                  <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
-                  <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </button>
-
-                <div class="faq-accordion-content overflow-hidden bg-white">
-                  <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
-                    {{ p.body }}
+          {%- for cat in faq_root.children_in_list -%}
+            {%- for prod in cat.children_in_list -%}
+              {%- for p in prod.children_in_list -%}
+                {%- if p.template_name == 'faq_qna' -%}
+                  <div
+                    class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
+                    data-type="qna"
+                    data-cat="{{ cat.slug }}"
+                    data-product="{{ prod.slug }}"
+                    data-q="{{ p.slug }}"
+                  >
+                    <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
+                      <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
+                      <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
+                    <div class="faq-accordion-content overflow-hidden bg-white">
+                      <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
+                        {{ p.body }}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
           {%- endfor -%}
         </div>
       </div>
@@ -196,24 +195,25 @@
         <h2 class="mb-6 text-xl font-bold">Visual Guides</h2>
 
         <div class="space-y-3" id="visualGuidesContainer">
-          {%- for p in all_pages -%}
-            {%- if p.template_name == 'faq_detail' -%}
-              {%- assign prod = p.parent -%}
-              {%- assign cat = prod.parent -%}
-
-              <a
-                href="{{ p.url }}"
-                class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
-                data-type="guide"
-                data-cat="{{ cat.slug }}"
-                data-product="{{ prod.slug }}"
-              >
-                <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
-                <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </a>
-            {%- endif -%}
+          {%- for cat in faq_root.children_in_list -%}
+            {%- for prod in cat.children_in_list -%}
+              {%- for p in prod.children_in_list -%}
+                {%- if p.template_name == 'faq_detail' -%}
+                  <a
+                    href="{{ p.url }}"
+                    class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
+                    data-type="guide"
+                    data-cat="{{ cat.slug }}"
+                    data-product="{{ prod.slug }}"
+                  >
+                    <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
+                    <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
           {%- endfor -%}
         </div>
       </div>
@@ -235,7 +235,7 @@
     </div>
 
     <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
-      {%- for cat in faq_root.children -%}
+      {%- for cat in faq_root.children_in_list -%}
         <div class="border-b border-gray-50" data-cat="{{ cat.slug }}">
           <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
             <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
@@ -246,7 +246,7 @@
 
           <div class="accordion-content overflow-hidden">
             <div class="pb-2">
-              {%- for prod in cat.children -%}
+              {%- for prod in cat.children_in_list -%}
                 <div
                   class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
                   data-cat="{{ cat.slug }}"
