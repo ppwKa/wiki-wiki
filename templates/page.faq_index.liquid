@@ -1,16 +1,15 @@
 {%- comment -%}
-  page.faq_index.liquid (content only, no <head>/<body>)
-  - Keep structure consistent with faq_page_tailwind_fixed.html
-  - Use Liquid to render categories/products/qna/guides directly (no JSON)
-  - JS only handles UI behaviors: dropdown/mobile sheet, filtering, URL sync, accordion
+  page.faq_index.liquid (Baklib Template)
+  - 集成了最新的 HTML/Tailwind 结构与响应式筛选器逻辑
+  - 保持原有的 Liquid 数据获取方式：site.pages / faq_root.children
+  - JS 负责 UI 交互：下拉菜单、移动端底部弹窗、折叠面板、URL 参数同步
 {%- endcomment -%}
 
-{%- comment -%} Use current page as FAQ root (works when faq_index template is applied to any path) {%- endcomment -%}
 {%- assign faq_root = page -%}
 {%- assign all_pages = faq_root.pages -%}
 
 <style>
-  /* Supplementary animations (safe even if Tailwind exists) */
+  /* 补充 CSS 动画 */
   .accordion-content { transition: max-height 0.3s ease-out; }
   .mobile-sheet { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .mobile-overlay { transition: opacity 0.3s ease; }
@@ -20,25 +19,25 @@
 <div class="bg-gray-50 min-h-screen font-sans text-gray-900">
   <div class="max-w-4xl mx-auto px-4 py-8">
 
-    <!-- Breadcrumb -->
+    <!-- 面包屑导航 -->
     <nav class="flex items-center text-sm text-gray-500 mb-8">
-      <a href="#" class="hover:text-gray-800">Product Support Hub</a>
+      <a href="/" class="hover:text-gray-800">{{ site.name }}</a>
       <span class="mx-2">></span>
-      <span class="text-gray-800">FAQ</span>
+      <span class="text-gray-800">{{ page.link_text }}</span>
     </nav>
 
-    <!-- Main card -->
+    <!-- 主内容卡片 -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-12">
-      <h1 class="text-3xl font-bold mb-8">FAQ</h1>
+      <h1 class="text-3xl font-bold mb-8">{{ page.link_text }}</h1>
 
-      <!-- Product filter -->
+      <!-- 产品筛选器 -->
       <div class="mb-12">
         <p class="text-sm font-medium text-gray-500 mb-3">Choose Product Model</p>
 
         <div class="relative w-full max-w-md" id="filterContainer">
           <div id="filterHeader" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors bg-white">
             <div class="flex items-center gap-3">
-              <!-- Thumbnail box (JS will replace svg with img if available) -->
+              <!-- 缩略图容器 (JS 将在有图片时替换 svg) -->
               <div id="thumbBox" class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center overflow-hidden">
                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -46,7 +45,7 @@
                 </svg>
               </div>
 
-              <!-- Selected product name (JS will set) -->
+              <!-- 选中的产品名称 (由 JS 设置) -->
               <span id="selectedName" class="font-medium text-gray-800">Choose Product Model</span>
             </div>
 
@@ -55,7 +54,7 @@
             </svg>
           </div>
 
-          <!-- PC dropdown -->
+          <!-- PC 端下拉菜单 -->
           <div id="pcDropdown" class="hidden absolute top-full left-0 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex overflow-hidden">
             <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 py-2 bg-gray-50/50">
               {%- for cat in faq_root.children -%}
@@ -88,7 +87,7 @@
         </div>
       </div>
 
-      <!-- Quick Answer -->
+      <!-- Quick Answer (FAQ 列表) -->
       <div class="mb-12">
         <h2 class="text-xl font-bold mb-6">Quick Answer</h2>
 
@@ -123,7 +122,7 @@
         </div>
       </div>
 
-      <!-- Visual Guides -->
+      <!-- Visual Guides (指南列表) -->
       <div>
         <h2 class="text-xl font-bold mb-6">Visual Guides</h2>
 
@@ -153,7 +152,7 @@
     </div>
   </div>
 
-  <!-- Mobile sheet -->
+  <!-- 移动端底部弹窗 (修正版) -->
   <div id="mobileOverlay" class="hidden fixed inset-0 bg-black/50 z-[100] mobile-overlay opacity-0"></div>
 
   <div id="mobileSheet" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-[101] mobile-sheet transform translate-y-full max-h-[80vh] flex flex-col">
@@ -199,7 +198,7 @@
 </div>
 
 <script>
-  // --- DOM ---
+  // --- DOM 元素获取 ---
   const filterHeader = document.getElementById('filterHeader');
   const pcDropdown = document.getElementById('pcDropdown');
   const pcCategoryList = document.getElementById('pcCategoryList');
@@ -207,33 +206,32 @@
   const selectedNameDisplay = document.getElementById('selectedName');
   const arrowIcon = document.getElementById('arrowIcon');
   const thumbBox = document.getElementById('thumbBox');
-
   const mobileOverlay = document.getElementById('mobileOverlay');
   const mobileSheet = document.getElementById('mobileSheet');
   const closeSheet = document.getElementById('closeSheet');
 
-  // --- State from URL ---
+  // --- 状态管理 (从 URL 同步) ---
   const params = new URLSearchParams(location.search);
   let currentCategoryId = params.get('cat') || '';
   let selectedProductId = params.get('product') || '';
   let openQId = params.get('q') || '';
 
-  // Hover state for PC category list (do NOT mutate currentCategoryId on hover)
+  // PC 端分类悬停状态 (不改变全局选择)
   let hoverCategoryId = currentCategoryId || '';
 
   function isMobile() { return window.innerWidth < 768; }
 
+  // 更新 URL 参数 (无刷新)
   function updateUrl(cat, product) {
     const url = new URL(location.href);
     if (cat) url.searchParams.set('cat', cat); else url.searchParams.delete('cat');
     if (product) url.searchParams.set('product', product); else url.searchParams.delete('product');
-    url.searchParams.delete('q');
     history.replaceState(null, '', url.toString());
   }
 
+  // 设置筛选器头部显示
   function setHeaderDisplay(name, thumbUrl) {
     selectedNameDisplay.textContent = name || 'Choose Product Model';
-
     if (thumbUrl) {
       thumbBox.innerHTML = '<img src="' + thumbUrl + '" alt="" class="w-full h-full object-cover">';
     } else {
@@ -241,12 +239,13 @@
     }
   }
 
+  // 根据分类显示产品列表 (PC)
   function showProductsForCategory(catId) {
     document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
       el.classList.toggle('hidden', el.dataset.cat !== catId);
     });
 
-    // Active style uses currentCategoryId (selected), not hoverCategoryId
+    // 高亮当前选中的分类 (非悬停分类)
     document.querySelectorAll('#pcCategoryList [data-cat]').forEach(el => {
       const active = el.dataset.cat === currentCategoryId;
       el.classList.toggle('bg-white', active);
@@ -256,6 +255,7 @@
     });
   }
 
+  // 高亮选中的产品 (PC & Mobile)
   function highlightSelectedProduct() {
     document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
       const active = (el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId);
@@ -272,6 +272,7 @@
     });
   }
 
+  // 过滤内容区域 (FAQ & Guides)
   function applyContentFilter() {
     document.querySelectorAll('[data-type="qna"], [data-type="guide"]').forEach(el => {
       const okCat = !currentCategoryId || el.dataset.cat === currentCategoryId;
@@ -280,15 +281,13 @@
     });
   }
 
-  // --- PC interactions ---
+  // --- PC 端交互逻辑 ---
   filterHeader.onclick = (e) => {
     if (isMobile()) {
       openMobileSheet();
     } else {
       pcDropdown.classList.toggle('hidden');
       arrowIcon.style.transform = pcDropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-
-      // When opening dropdown, ensure product list aligns with hoverCategoryId/current selection
       if (!pcDropdown.classList.contains('hidden')) {
         hoverCategoryId = currentCategoryId || hoverCategoryId;
         if (hoverCategoryId) showProductsForCategory(hoverCategoryId);
@@ -298,14 +297,13 @@
   };
 
   document.addEventListener('click', (e) => {
-    const container = document.getElementById('filterContainer');
-    if (!container.contains(e.target)) {
+    if (!document.getElementById('filterContainer').contains(e.target)) {
       pcDropdown.classList.add('hidden');
       arrowIcon.style.transform = 'rotate(0deg)';
     }
   });
 
-  // Hover categories: only affects right product list
+  // PC 端分类悬停
   document.querySelectorAll('#pcCategoryList [data-cat]').forEach(el => {
     el.addEventListener('mouseenter', () => {
       hoverCategoryId = el.dataset.cat;
@@ -314,7 +312,7 @@
     });
   });
 
-  // Select product (PC)
+  // PC 端产品选择
   document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
     el.addEventListener('click', () => {
       currentCategoryId = el.dataset.cat;
@@ -329,11 +327,10 @@
 
       pcDropdown.classList.add('hidden');
       arrowIcon.style.transform = 'rotate(0deg)';
-      closeMobileSheet();
     });
   });
 
-  // --- Mobile sheet interactions ---
+  // --- 移动端弹窗交互逻辑 ---
   function openMobileSheet() {
     mobileOverlay.classList.remove('hidden');
     setTimeout(() => {
@@ -341,7 +338,6 @@
       mobileSheet.style.transform = 'translateY(0)';
       document.body.classList.add('modal-open');
     }, 10);
-
     openMobileCategory(currentCategoryId);
     highlightSelectedProduct();
   }
@@ -356,17 +352,16 @@
   closeSheet.onclick = closeMobileSheet;
   mobileOverlay.onclick = closeMobileSheet;
 
+  // 移动端展开指定分类
   function openMobileCategory(catId) {
     if (!catId) return;
     const wrapper = document.querySelector('#mobileAccordion [data-cat="' + CSS.escape(catId) + '"]');
     if (!wrapper) return;
-
     document.querySelectorAll('#mobileAccordion .mobile-cat-content').forEach(c => {
       c.style.maxHeight = '0px';
       const icon = c.previousElementSibling && c.previousElementSibling.querySelector('svg');
       if (icon) icon.classList.remove('rotate-180');
     });
-
     const header = wrapper.querySelector('.mobile-cat-header');
     const content = wrapper.querySelector('.mobile-cat-content');
     const icon = header && header.querySelector('svg');
@@ -378,7 +373,6 @@
     const content = header.nextElementSibling;
     const icon = header.querySelector('svg');
     const isOpen = content.style.maxHeight !== '0px';
-
     document.querySelectorAll('#mobileAccordion .mobile-cat-content').forEach(c => {
       if (c !== content) {
         c.style.maxHeight = '0px';
@@ -386,7 +380,6 @@
         if (i) i.classList.remove('rotate-180');
       }
     });
-
     if (isOpen) {
       content.style.maxHeight = '0px';
       icon.classList.remove('rotate-180');
@@ -400,28 +393,24 @@
     currentCategoryId = el.dataset.cat;
     selectedProductId = el.dataset.product;
     hoverCategoryId = currentCategoryId;
-
     setHeaderDisplay(el.dataset.name, el.dataset.thumb);
     updateUrl(currentCategoryId, selectedProductId);
     applyContentFilter();
     highlightSelectedProduct();
     showProductsForCategory(currentCategoryId);
-
     closeMobileSheet();
   };
 
-  // --- Quick Answer accordion ---
+  // --- Quick Answer 折叠面板 ---
   window.toggleFAQ = (btn) => {
     const content = btn.nextElementSibling;
     const icon = btn.querySelector('svg');
     const isOpen = content.dataset.open === '1';
-
     if (isOpen) {
       content.style.maxHeight = '0px';
       content.dataset.open = '0';
       icon.style.transform = 'rotate(0deg)';
     } else {
-      // Close other open items within the same list (accordion behavior)
       document.querySelectorAll('#quickAnswerContainer .accordion-content[data-open="1"]').forEach(el => {
         if (el !== content) {
           el.style.maxHeight = '0px';
@@ -430,27 +419,18 @@
           if (b) b.style.transform = 'rotate(0deg)';
         }
       });
-
       content.style.maxHeight = content.scrollHeight + 'px';
       content.dataset.open = '1';
       icon.style.transform = 'rotate(180deg)';
     }
   };
 
-  function initAccordionState() {
-    document.querySelectorAll('#quickAnswerContainer .accordion-content').forEach(el => {
-      el.style.maxHeight = '0px';
-      el.dataset.open = '0';
-    });
-  }
-
+  // --- 初始化状态 ---
   function initDefaultSelection() {
     let match = null;
-
     if (currentCategoryId && selectedProductId) {
       match = document.querySelector('#pcProductList [data-cat="' + CSS.escape(currentCategoryId) + '"][data-product="' + CSS.escape(selectedProductId) + '"]');
     }
-
     if (!match) {
       match = document.querySelector('#pcProductList [data-product]');
       if (match) {
@@ -459,29 +439,15 @@
         hoverCategoryId = currentCategoryId;
       }
     }
-
     if (match) {
       setHeaderDisplay(match.dataset.name, match.dataset.thumb);
     }
-
-    // Ensure product list shows the selected category on init
     showProductsForCategory(currentCategoryId || hoverCategoryId);
     highlightSelectedProduct();
     applyContentFilter();
   }
 
-  function openQnaIfNeeded() {
-    if (!openQId) return;
-    const target = document.querySelector('[data-type="qna"][data-q="' + CSS.escape(openQId) + '"]');
-    if (!target || target.style.display === 'none') return;
-    const btn = target.querySelector('button');
-    if (btn) window.toggleFAQ(btn);
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  initAccordionState();
   initDefaultSelection();
-  openQnaIfNeeded();
 </script>
 
 {% schema %}
