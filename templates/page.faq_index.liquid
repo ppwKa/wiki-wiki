@@ -6,7 +6,6 @@
 {%- endcomment -%}
 
 {%- assign faq_root = page -%}
-{%- assign all_pages = faq_root.pages -%}
 
 <style>
   /* FAQ Index 页面样式 - 仅在 .faq-index-page 容器内生效 */
@@ -162,21 +161,25 @@
   {%- endfor -%}
 
   const faqData = [];
-  {%- for p in all_pages -%}
+  {%- for cat in faq_root.children -%}
+  {%- for prod in cat.children -%}
+  {%- for p in prod.children -%}
   {%- if p.template_name == 'faq_qna' -%}
-  {%- assign faq_prod = p.parent -%}
-  {%- assign faq_cat = faq_prod.parent -%}
-  faqData.push({ q: {{ p.link_text | json }}, answer: {{ p.body | json }}, cat: {{ faq_cat.slug | json }}, product: {{ faq_prod.slug | json }} });
+  faqData.push({ q: {{ p.link_text | json }}, answer: {{ p.body | json | replace: '</script>', '<\/script>' }}, cat: {{ cat.slug | json }}, product: {{ prod.slug | json }} });
   {%- endif -%}
+  {%- endfor -%}
+  {%- endfor -%}
   {%- endfor -%}
 
   const guideData = [];
-  {%- for p in all_pages -%}
+  {%- for cat in faq_root.children -%}
+  {%- for prod in cat.children -%}
+  {%- for p in prod.children -%}
   {%- if p.template_name == 'faq_detail' -%}
-  {%- assign guide_prod = p.parent -%}
-  {%- assign guide_cat = guide_prod.parent -%}
-  guideData.push({ title: {{ p.link_text | json }}, url: {{ p.url | json }}, cat: {{ guide_cat.slug | json }}, product: {{ guide_prod.slug | json }} });
+  guideData.push({ title: {{ p.link_text | json }}, url: {{ p.url | json }}, cat: {{ cat.slug | json }}, product: {{ prod.slug | json }} });
   {%- endif -%}
+  {%- endfor -%}
+  {%- endfor -%}
   {%- endfor -%}
 
   // ─── 状态（URL 参数同步）─────────────────────────────────────────────────
