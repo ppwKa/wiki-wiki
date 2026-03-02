@@ -6,21 +6,25 @@
 {%- endcomment -%}
 
 {%- assign cat_page = page.parent -%}
+{%- assign faq_path = cat_page.parent.path | default: '/faq' -%}
 
 <script>
   (function () {
-    var target = "/faq?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}";
+    var target = "{{ faq_path }}?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}";
     window.location.replace(target);
   })();
 </script>
 
 <noscript>
-  <meta http-equiv="refresh" content="0;url=/faq?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}">
+  <p>Please <a href="{{ faq_path }}?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}">click here</a> to continue.</p>
 </noscript>
 
 {% schema %}
 {
   "name": "FAQ Product Container",
+  "description": "FAQ product container, redirects to FAQ index with product filter",
+  "thumb_url": "images/schema/page.png",
+  "sub_page_templates": ["faq_qna", "faq_detail"],
   "settings": [
     {
       "type": "image_picker",

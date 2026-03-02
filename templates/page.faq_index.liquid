@@ -5,7 +5,8 @@
   - JS only handles UI behaviors: dropdown/mobile sheet, filtering, URL sync, accordion
 {%- endcomment -%}
 
-{%- assign faq_root = site.pages['/faq'] -%}
+{%- comment -%} Use current page as FAQ root (works when faq_index template is applied to any path) {%- endcomment -%}
+{%- assign faq_root = page -%}
 {%- assign all_pages = faq_root.pages -%}
 
 <style>
@@ -111,7 +112,7 @@
                   </svg>
                 </button>
 
-                <div class="accordion-content max-h-0 overflow-hidden bg-white">
+                <div class="accordion-content max-h-0 overflow-hidden bg-white" data-open="0">
                   <div class="px-5 py-4 text-sm text-gray-600 leading-relaxed">
                     {{ p.body }}
                   </div>
@@ -217,6 +218,9 @@
   let selectedProductId = params.get('product') || '';
   let openQId = params.get('q') || '';
 
+  // Hover state for PC category list (do NOT mutate currentCategoryId on hover)
+  let hoverCategoryId = currentCategoryId || '';
+
   function isMobile() { return window.innerWidth < 768; }
 
   function updateUrl(cat, product) {
@@ -242,8 +246,9 @@
       el.classList.toggle('hidden', el.dataset.cat !== catId);
     });
 
+    // Active style uses currentCategoryId (selected), not hoverCategoryId
     document.querySelectorAll('#pcCategoryList [data-cat]').forEach(el => {
-      const active = el.dataset.cat === catId;
+      const active = el.dataset.cat === currentCategoryId;
       el.classList.toggle('bg-white', active);
       el.classList.toggle('text-gray-900', active);
       el.classList.toggle('font-bold', active);
@@ -282,6 +287,12 @@
     } else {
       pcDropdown.classList.toggle('hidden');
       arrowIcon.style.transform = pcDropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+
+      // When opening dropdown, ensure product list aligns with hoverCategoryId/current selection
+      if (!pcDropdown.classList.contains('hidden')) {
+        hoverCategoryId = currentCategoryId || hoverCategoryId;
+        if (hoverCategoryId) showProductsForCategory(hoverCategoryId);
+      }
     }
     e.stopPropagation();
   };
@@ -294,24 +305,27 @@
     }
   });
 
+  // Hover categories: only affects right product list
   document.querySelectorAll('#pcCategoryList [data-cat]').forEach(el => {
     el.addEventListener('mouseenter', () => {
-      const catId = el.dataset.cat;
-      currentCategoryId = catId;
-      showProductsForCategory(catId);
+      hoverCategoryId = el.dataset.cat;
+      showProductsForCategory(hoverCategoryId);
       highlightSelectedProduct();
     });
   });
 
+  // Select product (PC)
   document.querySelectorAll('#pcProductList [data-product]').forEach(el => {
     el.addEventListener('click', () => {
       currentCategoryId = el.dataset.cat;
       selectedProductId = el.dataset.product;
+      hoverCategoryId = currentCategoryId;
 
       setHeaderDisplay(el.dataset.name, el.dataset.thumb);
       updateUrl(currentCategoryId, selectedProductId);
       applyContentFilter();
       highlightSelectedProduct();
+      showProductsForCategory(currentCategoryId);
 
       pcDropdown.classList.add('hidden');
       arrowIcon.style.transform = 'rotate(0deg)';
@@ -385,11 +399,13 @@
   window.selectProductFromEl = (el) => {
     currentCategoryId = el.dataset.cat;
     selectedProductId = el.dataset.product;
+    hoverCategoryId = currentCategoryId;
 
     setHeaderDisplay(el.dataset.name, el.dataset.thumb);
     updateUrl(currentCategoryId, selectedProductId);
     applyContentFilter();
     highlightSelectedProduct();
+    showProductsForCategory(currentCategoryId);
 
     closeMobileSheet();
   };
@@ -398,16 +414,35 @@
   window.toggleFAQ = (btn) => {
     const content = btn.nextElementSibling;
     const icon = btn.querySelector('svg');
-    const isOpen = content.style.maxHeight !== '0px';
+    const isOpen = content.dataset.open === '1';
 
     if (isOpen) {
       content.style.maxHeight = '0px';
+      content.dataset.open = '0';
       icon.style.transform = 'rotate(0deg)';
     } else {
+      // Close other open items within the same list (accordion behavior)
+      document.querySelectorAll('#quickAnswerContainer .accordion-content[data-open="1"]').forEach(el => {
+        if (el !== content) {
+          el.style.maxHeight = '0px';
+          el.dataset.open = '0';
+          const b = el.parentElement && el.parentElement.querySelector('button svg');
+          if (b) b.style.transform = 'rotate(0deg)';
+        }
+      });
+
       content.style.maxHeight = content.scrollHeight + 'px';
+      content.dataset.open = '1';
       icon.style.transform = 'rotate(180deg)';
     }
   };
+
+  function initAccordionState() {
+    document.querySelectorAll('#quickAnswerContainer .accordion-content').forEach(el => {
+      el.style.maxHeight = '0px';
+      el.dataset.open = '0';
+    });
+  }
 
   function initDefaultSelection() {
     let match = null;
@@ -421,6 +456,7 @@
       if (match) {
         currentCategoryId = match.dataset.cat;
         selectedProductId = match.dataset.product;
+        hoverCategoryId = currentCategoryId;
       }
     }
 
@@ -428,7 +464,8 @@
       setHeaderDisplay(match.dataset.name, match.dataset.thumb);
     }
 
-    showProductsForCategory(currentCategoryId);
+    // Ensure product list shows the selected category on init
+    showProductsForCategory(currentCategoryId || hoverCategoryId);
     highlightSelectedProduct();
     applyContentFilter();
   }
@@ -442,6 +479,16 @@
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  initAccordionState();
   initDefaultSelection();
   openQnaIfNeeded();
 </script>
+
+{% schema %}
+{
+  "name": "FAQ Index",
+  "description": "FAQ aggregation page with category/product filter, Quick Answer accordion, and Visual Guides",
+  "thumb_url": "images/schema/page.png",
+  "sub_page_templates": ["faq_category"]
+}
+{% endschema %}
