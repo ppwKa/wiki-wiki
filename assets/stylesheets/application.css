@@ -102,45 +102,19 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --color-primary-50: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 97%
-  );
-    --color-primary-100: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 92%
-  );
-    --color-primary-200: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 85%
-  );
-    --color-primary-300: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 75%
-  );
-    --color-primary-400: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 65%
-  );
-    --color-primary-600: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 45%
-  );
-    --color-primary-700: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 35%
-  );
-    --color-primary-800: hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 25%
-  );
-    --color-secondary-100: hsl(
-    var(--theme-color-secondary-hsl-h) var(--theme-color-secondary-hsl-s) 92%
-  );
-    --color-secondary-500: hsl(
-    var(--theme-color-secondary-hsl-h) var(--theme-color-secondary-hsl-s) 55%
-  );
-    --color-accent-50: hsl(
-    var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 97%
-  );
-    --color-accent-100: hsl(
-    var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 92%
-  );
-    --color-accent-800: hsl(
-    var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 25%
-  );
+    --color-primary-50: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 97%);
+    --color-primary-100: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 92%);
+    --color-primary-200: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 85%);
+    --color-primary-300: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 75%);
+    --color-primary-400: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 65%);
+    --color-primary-600: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 45%);
+    --color-primary-700: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 35%);
+    --color-primary-800: hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 25%);
+    --color-secondary-100: hsl(var(--theme-color-secondary-hsl-h) var(--theme-color-secondary-hsl-s) 92%);
+    --color-secondary-500: hsl(var(--theme-color-secondary-hsl-h) var(--theme-color-secondary-hsl-s) 55%);
+    --color-accent-50: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 97%);
+    --color-accent-100: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 92%);
+    --color-accent-800: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 25%);
   }
 }
 @layer base {
@@ -3475,9 +3449,7 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .to-primary-50\/80 {
-    --tw-gradient-to: color-mix(in srgb, hsl(
-    var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 97%
-  ) 80%, transparent);
+    --tw-gradient-to: color-mix(in srgb, hsl(var(--theme-color-primary-hsl-h) var(--theme-color-primary-hsl-s) 97%) 80%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       --tw-gradient-to: color-mix(in oklab, var(--color-primary-50) 80%, transparent);
     }
@@ -5771,7 +5743,7 @@
       color: var(--color-primary);
     }
   }
-  li[active] > [turbo-nav-tree-item][active] {
+  li[active]>[turbo-nav-tree-item][active] {
     background-color: var(--color-primary);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-primary) 80%, transparent);
@@ -6382,6 +6354,10 @@ summary.menu-active, summary:has(.menu-active) {
   cursor: pointer;
   color: var(--color-primary);
   text-decoration-line: underline;
+}
+* {
+  box-sizing: border-box;
+  font-family: 'HarmonyOS Sans', sans-serif;
 }
 @font-face {
   font-family: 'HarmonyOS Sans';

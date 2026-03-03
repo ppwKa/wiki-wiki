@@ -1,24 +1,4 @@
-{%- comment -%}
-  page.faq_index.liquid (Baklib Template - Tailwind CSS v4.1.4 Corrected)
-  - 集成了修复后的 HTML/Tailwind v4 结构与响应式筛选器逻辑
-  - 保持原有的 Liquid 数据获取方式：site.pages / faq_root.children
-  - JS 负责 UI 交互：下拉菜单、移动端底部弹窗、折叠面板、URL 参数同步
-{%- endcomment -%}
-
-{%- assign faq_root = page -%}
-
 <style>
-  /* FAQ Index 页面样式 - 仅在此容器内生效 */
-  .faq-index-page * {
-    box-sizing: border-box;
-    font-family: 'HarmonyOS Sans', sans-serif;
-  }
-  
-  .faq-index-page {
-    margin: 0;
-    padding: 0;
-  }
-  
   /* Quick Answer 折叠面板优化 - 支持多开 */
   .faq-index-page .faq-accordion-content {
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
@@ -122,10 +102,10 @@
           <!-- PC 端下拉菜单 -->
           <div id="pcDropdown" class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
             <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2">
-              {%- for cat in faq_root.children -%}
+              {%- for cat in page.children -%}
                 <div
                   class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
-                  data-cat="{{ cat.slug }}"
+                  data-cat="{{ cat.link_text | handleize }}"
                 >
                   {{ cat.link_text }}
                   <span class="text-[12px] text-gray-300">›</span>
@@ -134,12 +114,12 @@
             </div>
 
             <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2">
-              {%- for cat in faq_root.children -%}
+              {%- for cat in page.children -%}
                 {%- for prod in cat.children -%}
                   <div
                     class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
-                    data-cat="{{ cat.slug }}"
-                    data-product="{{ prod.slug }}"
+                    data-cat="{{ cat.link_text | handleize }}"
+                    data-product="{{ prod.link_text | handleize }}"
                     data-name="{{ prod.link_text | escape }}"
                     data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
                   >
@@ -157,29 +137,30 @@
         <h2 class="mb-6 text-xl font-bold">Quick Answer</h2>
 
         <div class="space-y-3" id="quickAnswerContainer">
-          {%- for cat in faq_root.children -%}
+          {%- for cat in page.children -%}
             {%- for prod in cat.children -%}
               {%- for p in prod.children -%}
-                <div
-                class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
-                data-type="qna"
-                data-cat="{{ cat.slug }}"
-                data-product="{{ prod.slug }}"
-                data-q="{{ p.slug }}"
-                data-template-name="{{ p.template_name }}"
-              >
-                <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
-                  <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
-                  <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </button>
-                <div class="faq-accordion-content overflow-hidden bg-white">
-                  <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
-                    {{ p.settings.content }}
+                {%- if p.settings.is_quick_answer -%}
+                  <div
+                  class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
+                  data-type="qna"
+                  data-cat="{{ cat.link_text | handleize }}"
+                  data-product="{{ prod.link_text | handleize }}"
+                  data-q="{{ p.link_text | handleize }}"
+                >
+                  <button class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn" onclick="toggleFAQ(this)">
+                    <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
+                    <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                  <div class="faq-accordion-content overflow-hidden bg-white">
+                    <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
+                      {{ p.settings.content }}
+                    </div>
                   </div>
                 </div>
-              </div>
+                {%- endif -%}
               {%- endfor -%}
             {%- endfor -%}
           {%- endfor -%}
@@ -191,16 +172,16 @@
         <h2 class="mb-6 text-xl font-bold">Visual Guides</h2>
 
         <div class="space-y-3" id="visualGuidesContainer">
-          {%- for cat in faq_root.children -%}
+          {%- for cat in page.children -%}
             {%- for prod in cat.children -%}
               {%- for p in prod.children -%}
-                {%- if p.template_name == 'faq_detail' -%}
+                {%- if p.settings.is_quick_answer == false -%}
                   <a
                     href="{{ p.url }}"
                     class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
                     data-type="guide"
-                    data-cat="{{ cat.slug }}"
-                    data-product="{{ prod.slug }}"
+                    data-cat="{{ cat.link_text | handleize }}"
+                    data-product="{{ prod.link_text | handleize }}"
                   >
                     <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
                     <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,8 +212,8 @@
     </div>
 
     <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
-      {%- for cat in faq_root.children -%}
-        <div class="border-b border-gray-50" data-cat="{{ cat.slug }}">
+      {%- for cat in page.children -%}
+        <div class="border-b border-gray-50" data-cat="{{ cat.link_text | handleize }}">
           <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
             <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
             <svg class="h-4 w-4 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,8 +226,8 @@
               {%- for prod in cat.children -%}
                 <div
                   class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
-                  data-cat="{{ cat.slug }}"
-                  data-product="{{ prod.slug }}"
+                  data-cat="{{ cat.link_text | handleize }}"
+                  data-product="{{ prod.link_text | handleize }}"
                   data-name="{{ prod.link_text | escape }}"
                   data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
                   onclick="selectProductFromEl(this)"
