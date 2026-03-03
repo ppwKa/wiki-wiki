@@ -1,14 +1,14 @@
-{%- assign cat = page.slug -%}
+{%- assign cat = page.link_text | handleize | url_encode -%}
 {%- assign faq_path = page.parent.path | default: '/faq' -%}
 <script>
   (function () {
-    var target = "{{ faq_path }}?cat={{ cat | url_encode }}";
+    var target = "{{ faq_path }}?cat={{ cat }}";
     window.location.replace(target);
   })();
 </script>
 
 <noscript>
-  <p>Please <a href="{{ faq_path }}?cat={{ cat | url_encode }}">click here</a> to continue.</p>
+  <p>Please <a href="{{ faq_path }}?cat={{ cat }}">click here</a> to continue.</p>
 </noscript>
 
 {% schema %}

@@ -1,22 +1,17 @@
-{%- comment -%}
-  FAQ Product Container Page
-  This page does not render content.
-  When accessed directly, it redirects to:
-  /faq?cat=...&product=...
-{%- endcomment -%}
-
 {%- assign cat_page = page.parent -%}
 {%- assign faq_path = cat_page.parent.path | default: '/faq' -%}
+{%- assign cat = cat_page.link_text | handleize | url_encode -%}
+{%- assign product = page.link_text | handleize | url_encode -%}
 
 <script>
   (function () {
-    var target = "{{ faq_path }}?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}";
+    var target = "{{ faq_path }}?cat={{ cat }}&product={{ product }}";
     window.location.replace(target);
   })();
 </script>
 
 <noscript>
-  <p>Please <a href="{{ faq_path }}?cat={{ cat_page.slug | url_encode }}&product={{ page.slug | url_encode }}">click here</a> to continue.</p>
+  <p>Please <a href="{{ faq_path }}?cat={{ cat }}&product={{ product }}">click here</a> to continue.</p>
 </noscript>
 
 {% schema %}
