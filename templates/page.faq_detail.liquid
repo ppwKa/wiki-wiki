@@ -1,7 +1,36 @@
 <main class="container mx-auto py-8">
-  <h1 class="text-2xl font-semibold">{{ page.link_text }}</h1>
+  <h1 class="text-2xl font-semibold">{{ page.settings.title }}</h1>
 
   <div class="prose max-w-none mt-6">
-    {{ page.body }}
+    {{ page.settings.content }}
   </div>
 </main>
+
+{% schema %}
+  {
+    "name": "FAQ Detail",
+    "description": "FAQ detail page",
+    "thumb_url": "images/schema/page.png",
+    "settings": [
+      {
+        "id": "title",
+        "type": "text",
+        "readonly": true,
+        "label": "t:schema.templates.page.settings.title.label",
+        "info": "t:schema.templates.page.settings.title.info"
+      },
+      {
+        "id": "description",
+        "type": "textarea",
+        "label": "t:schema.templates.page.settings.description.label"
+      },
+      {
+        "id": "content",
+        "type": "richtext",
+        "label": "t:schema.templates.page.settings.content.label",
+        "readonly": true,
+        "info": "t:schema.templates.page.settings.content.info"
+      }
+    ]
+  }
+  {% endschema %}
