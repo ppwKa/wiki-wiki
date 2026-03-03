@@ -451,7 +451,7 @@ summary:has(.menu-active) {
 /* 定义 Normal 权重字体 */
 @font-face {
   font-family: 'HarmonyOS Sans';
-  src: url('https://faq.hollyland.com/assets/fonts/HarmonyOS_Sans_Regular.ttf') format('truetype');
+  src: url('../fonts/HarmonyOS_Sans_Regular.ttf') format('truetype');
   font-weight: normal; /* 适用于 font-weight: normal */
   font-style: normal;
 }
@@ -459,7 +459,7 @@ summary:has(.menu-active) {
 /* 定义 500 权重字体 */
 @font-face {
   font-family: 'HarmonyOS Sans';
-  src: url('https://faq.hollyland.com/assets/fonts/HarmonyOS_Sans_Medium.ttf') format('truetype');
+  src: url('../fonts/HarmonyOS_Sans_Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
@@ -467,7 +467,7 @@ summary:has(.menu-active) {
 /* 定义 Bold 权重字体 */
 @font-face {
   font-family: 'HarmonyOS Sans';
-  src: url('https://faq.hollyland.com/assets/fonts/HarmonyOS_Sans_Bold.ttf') format('truetype');
+  src: url('../fonts/HarmonyOS_Sans_Bold.ttf') format('truetype');
   font-weight: bold; /* 适用于 font-weight: bold */
   font-style: normal;
 }
