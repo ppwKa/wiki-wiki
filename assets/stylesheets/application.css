@@ -115,6 +115,8 @@
     --color-accent-50: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 97%);
     --color-accent-100: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 92%);
     --color-accent-800: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 25%);
+    --color-hl-grey-100: #F5F5F7;
+    --color-hl-grey-200: #6E6E73;
   }
 }
 @layer base {
@@ -3372,6 +3374,9 @@
   .bg-green-500 {
     background-color: var(--color-green-500);
   }
+  .bg-hl-grey-100 {
+    background-color: var(--color-hl-grey-100);
+  }
   .bg-indigo-500 {
     background-color: var(--color-indigo-500);
   }
@@ -3859,6 +3864,9 @@
   }
   .text-gray-900 {
     color: var(--color-gray-900);
+  }
+  .text-hl-grey-200 {
+    color: var(--color-hl-grey-200);
   }
   .text-indigo-100 {
     color: var(--color-indigo-100);
