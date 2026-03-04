@@ -8,12 +8,12 @@
           <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </span>
-      <span class="breadcrumb-current">{{ page.link_text }}</span>
+      <span class="breadcrumb-current">{{ page.settings.title }}</span>
     </nav>
 
     <!-- 主内容卡片 -->
     <div class="main-card">
-      <h1 class="page-title">{{ page.link_text }}</h1>
+      <h1 class="page-title">{{ page.settings.title }}</h1>
 
       <!-- 产品筛选器 -->
       <div class="filter-section">
@@ -52,8 +52,8 @@
           <div class="pc-dropdown-menu hidden" id="pcDropdown">
             <div class="pc-category-list" id="pcCategoryList">
               {%- for cat in page.children -%}
-                <div class="pc-category-item" data-cat="{{ cat.link_text | handleize }}">
-                  {{ cat.link_text }}
+                <div class="pc-category-item" data-cat="{{ cat.settings.title | handleize }}">
+                  {{ cat.settings.title }}
                   <span class="pc-category-arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                       <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
@@ -68,12 +68,12 @@
                 {%- for prod in cat.children -%}
                   <div
                     class="pc-product-item"
-                    data-cat="{{ cat.link_text | handleize }}"
-                    data-product="{{ prod.link_text | handleize }}"
-                    data-name="{{ prod.link_text | escape }}"
+                    data-cat="{{ cat.settings.title | handleize }}"
+                    data-product="{{ prod.settings.title | handleize }}"
+                    data-name="{{ prod.settings.title | escape }}"
                     data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
                   >
-                    {{ prod.link_text }}
+                    {{ prod.settings.title }}
                   </div>
                 {%- endfor -%}
               {%- endfor -%}
@@ -93,14 +93,14 @@
                   <div
                     class="faq-item"
                     data-type="qna"
-                    data-cat="{{ cat.link_text | handleize }}"
-                    data-product="{{ prod.link_text | handleize }}"
-                    data-q="{{ p.link_text | handleize }}"
+                    data-cat="{{ cat.settings.title | handleize }}"
+                    data-product="{{ prod.settings.title | handleize }}"
+                    data-q="{{ p.settings.title | handleize }}"
                   >
                     <button class="faq-trigger-btn">
                       <div class="faq-question">
                         <span>{{ forloop.index }}.</span>
-                        <span>{{ p.settings.title | default: p.link_text }}</span>
+                        <span>{{ p.settings.title}}</span>
                       </div>
                       <svg
                         class="faq-trigger-icon"
@@ -138,12 +138,12 @@
                     href="{{ p.url }}"
                     class="guide-card"
                     data-type="guide"
-                    data-cat="{{ cat.link_text | handleize }}"
-                    data-product="{{ prod.link_text | handleize }}"
+                    data-cat="{{ cat.settings.title | handleize }}"
+                    data-product="{{ prod.settings.title | handleize }}"
                   >
                     <div class="guide-title">
                       <span>{{ forloop.index }}.</span>
-                      <span>{{ p.settings.title | default: p.link_text }}</span>
+                      <span>{{ p.settings.title}}</span>
                     </div>
                     <svg
                       class="guide-arrow"
@@ -180,9 +180,9 @@
 
     <div class="mobile-sheet-content" id="mobileAccordion">
       {%- for cat in page.children -%}
-        <div class="mobile-accordion-item" data-cat="{{ cat.link_text | handleize }}">
+        <div class="mobile-accordion-item" data-cat="{{ cat.settings.title | handleize }}">
           <div class="mobile-accordion-header">
-            <span class="mobile-accordion-title">{{ cat.link_text }}</span>
+            <span class="mobile-accordion-title">{{ cat.settings.title }}</span>
             <svg
               class="mobile-accordion-arrow"
               xmlns="http://www.w3.org/2000/svg"
@@ -200,12 +200,12 @@
               {%- for prod in cat.children -%}
                 <div
                   class="mobile-accordion-product"
-                  data-cat="{{ cat.link_text | handleize }}"
-                  data-product="{{ prod.link_text | handleize }}"
-                  data-name="{{ prod.link_text | escape }}"
+                  data-cat="{{ cat.settings.title | handleize }}"
+                  data-product="{{ prod.settings.title | handleize }}"
+                  data-name="{{ prod.settings.title | escape }}"
                   data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
                 >
-                  {{ prod.link_text }}
+                  {{ prod.settings.title }}
                 </div>
               {%- endfor -%}
             </div>
@@ -221,7 +221,7 @@
    * FAQ 页面交互管理器
    * 负责产品筛选、FAQ 折叠、移动端弹窗、URL 状态同步、内容筛选
    */
-  (function () {
+  document.addEventListener('DOMContentLoaded', function init() {
     const MOBILE_BREAKPOINT = 768;
     const DEFAULT_PLACEHOLDER = 'Choose Product Model';
     const PLACEHOLDER_SVG =
@@ -242,8 +242,18 @@
     const quickAnswerContainer = document.getElementById('quickAnswerContainer');
 
     const params = new URLSearchParams(location.search);
-    let currentCategoryId = params.get('cat') || '';
-    let selectedProductId = params.get('product') || '';
+
+    function handleize(str) {
+      if (!str || typeof str !== 'string') return '';
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+
+    let currentCategoryId = handleize(params.get('cat') || '');
+    let selectedProductId = handleize(params.get('product') || '');
     let hoverCategoryId = currentCategoryId || '';
 
     function isMobile() {
@@ -272,10 +282,10 @@
     }
 
     function showProductsForCategory(catId) {
-      pcProductList?.querySelectorAll('[data-product]').forEach((el) => {
+      pcProductList?.querySelectorAll('.pc-product-item').forEach((el) => {
         el.style.display = el.dataset.cat === catId ? '' : 'none';
       });
-      pcCategoryList?.querySelectorAll('[data-cat]').forEach((el) => {
+      pcCategoryList?.querySelectorAll('.pc-category-item').forEach((el) => {
         const active = el.dataset.cat === currentCategoryId;
         el.classList.toggle('active', active);
         el.classList.toggle('inactive', !active);
@@ -283,16 +293,13 @@
     }
 
     function highlightSelectedProduct() {
-      const selector = '[data-cat][data-product]';
-      pcProductList?.querySelectorAll(selector).forEach((el) => {
-        const active =
-          el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId;
+      pcProductList?.querySelectorAll('.pc-product-item').forEach((el) => {
+        const active = el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId;
         el.classList.toggle('active', active);
         el.classList.toggle('inactive', !active);
       });
-      mobileAccordion?.querySelectorAll(selector).forEach((el) => {
-        const active =
-          el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId;
+      mobileAccordion?.querySelectorAll('.mobile-accordion-product').forEach((el) => {
+        const active = el.dataset.cat === currentCategoryId && el.dataset.product === selectedProductId;
         el.classList.toggle('active', active);
         el.classList.toggle('inactive', !active);
       });
@@ -308,9 +315,7 @@
 
     function openMobileCategory(catId) {
       if (!catId) return;
-      const wrapper = mobileAccordion?.querySelector(
-        '[data-cat="' + CSS.escape(catId) + '"]'
-      );
+      const wrapper = mobileAccordion?.querySelector('.mobile-accordion-item[data-cat="' + CSS.escape(catId) + '"]');
       if (!wrapper) return;
       mobileAccordion?.querySelectorAll('.mobile-accordion-content').forEach((c) => {
         c.classList.remove('open');
@@ -327,7 +332,7 @@
       mobileOverlay?.classList.add('open');
       mobileSheet?.classList.add('open');
       document.body.classList.add('faq-index-modal-open');
-      openMobileCategory(currentCategoryId);
+      if (currentCategoryId) openMobileCategory(currentCategoryId);
       highlightSelectedProduct();
     }
 
@@ -339,7 +344,7 @@
 
     function getThumbForProduct(cat, product) {
       const el = pcProductList?.querySelector(
-        '[data-cat="' + CSS.escape(cat) + '"][data-product="' + CSS.escape(product) + '"]'
+        '.pc-product-item[data-cat="' + CSS.escape(cat) + '"][data-product="' + CSS.escape(product) + '"]'
       );
       return el?.dataset.thumb || '';
     }
@@ -384,9 +389,7 @@
       } else {
         pcDropdown?.classList.toggle('hidden');
         if (arrowIcon) {
-          arrowIcon.style.transform = pcDropdown?.classList.contains('hidden')
-            ? 'rotate(0deg)'
-            : 'rotate(180deg)';
+          arrowIcon.style.transform = pcDropdown?.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
         }
         if (!pcDropdown?.classList.contains('hidden')) {
           hoverCategoryId = currentCategoryId || hoverCategoryId;
@@ -399,7 +402,7 @@
       if (!filterContainer.contains(e.target)) closePcDropdown();
     });
 
-    pcCategoryList?.querySelectorAll('[data-cat]').forEach((el) => {
+    pcCategoryList?.querySelectorAll('.pc-category-item').forEach((el) => {
       el.addEventListener('mouseenter', () => {
         hoverCategoryId = el.dataset.cat;
         showProductsForCategory(hoverCategoryId);
@@ -407,7 +410,7 @@
       });
     });
 
-    pcProductList?.querySelectorAll('[data-product]').forEach((el) => {
+    pcProductList?.querySelectorAll('.pc-product-item').forEach((el) => {
       el.addEventListener('click', () => {
         selectProduct(el.dataset.name, el.dataset.cat, el.dataset.product, el.dataset.thumb);
         closePcDropdown();
@@ -423,12 +426,7 @@
       if (header) {
         toggleMobileCategoryContent(header);
       } else if (product) {
-        selectProduct(
-          product.dataset.name,
-          product.dataset.cat,
-          product.dataset.product,
-          product.dataset.thumb
-        );
+        selectProduct(product.dataset.name, product.dataset.cat, product.dataset.product, product.dataset.thumb);
         closeMobileSheet();
       }
     });
@@ -482,7 +480,7 @@
       let match = null;
       if (currentCategoryId && selectedProductId) {
         match = pcProductList?.querySelector(
-          '[data-cat="' +
+          '.pc-product-item[data-cat="' +
             CSS.escape(currentCategoryId) +
             '"][data-product="' +
             CSS.escape(selectedProductId) +
@@ -490,7 +488,7 @@
         );
       }
       if (!match) {
-        match = pcProductList?.querySelector('[data-product]');
+        match = pcProductList?.querySelector('.pc-product-item');
         if (match) {
           currentCategoryId = match.dataset.cat;
           selectedProductId = match.dataset.product;
@@ -504,13 +502,34 @@
     }
 
     initDefaultSelection();
-  })();
+  });
 </script>
 
 {% schema %}
 {
   "name": "FAQ Index",
   "description": "FAQ aggregation page with category/product filter, Quick Answer accordion, and Visual Guides",
-  "sub_page_templates": ["faq_category"]
+  "sub_page_templates": ["faq_category"],
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
 }
 {% endschema %}

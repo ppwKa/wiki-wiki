@@ -1,17 +1,22 @@
 {%- assign cat_page = page.parent -%}
 {%- assign faq_path = cat_page.parent.path | default: '/faq' -%}
-{%- assign cat = cat_page.link_text | handleize | url_encode -%}
-{%- assign product = page.link_text | handleize | url_encode -%}
+{%- assign cat = cat_page.settings.title | handleize | url_encode -%}
 
 <script>
   (function () {
-    var target = "{{ faq_path }}?cat={{ cat }}&product={{ product }}";
+    var target = '{{ faq_path }}?cat={{ cat }}&product={{ page.settings.title | handleize | url_encode }}';
     window.location.replace(target);
   })();
 </script>
 
 <noscript>
-  <p>Please <a href="{{ faq_path }}?cat={{ cat }}&product={{ product }}">click here</a> to continue.</p>
+  <p>
+    Please
+    <a href="{{ faq_path }}?cat={{ cat }}&product={{ page.settings.title | handleize | url_encode }}">
+      {{- page.settings.title -}}
+    </a>
+    to continue.
+  </p>
 </noscript>
 
 {% schema %}
@@ -21,9 +26,31 @@
   "sub_page_templates": ["faq_detail"],
   "settings": [
     {
-      "type": "image_picker",
       "id": "thumbnail",
-      "label": "Product Thumbnail"
+      "type": "image_picker",
+      "ratio": "1:1",
+			"width": 100,
+			"label": "t:schema.templates.page.settings.icon.label",
+			"info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
     }
   ]
 }
