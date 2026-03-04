@@ -58,6 +58,7 @@
     --container-2xl: 42rem;
     --container-3xl: 48rem;
     --container-4xl: 56rem;
+    --container-5xl: 64rem;
     --container-7xl: 80rem;
     --text-xs: 0.75rem;
     --text-xs--line-height: calc(1 / 0.75);
@@ -117,6 +118,7 @@
     --color-accent-800: hsl(var(--theme-color-accent-hsl-h) var(--theme-color-accent-hsl-s) 25%);
     --color-hl-grey-100: #F5F5F7;
     --color-hl-grey-200: #6E6E73;
+    --color-hl-black-100: #343436;
   }
 }
 @layer base {
@@ -2115,8 +2117,8 @@
       }
     }
   }
-  .mx-2 {
-    margin-inline: calc(var(--spacing) * 2);
+  .mx-1\.5 {
+    margin-inline: calc(var(--spacing) * 1.5);
   }
   .mx-4 {
     margin-inline: calc(var(--spacing) * 4);
@@ -2802,8 +2804,8 @@
   .max-w-3xl {
     max-width: var(--container-3xl);
   }
-  .max-w-4xl {
-    max-width: var(--container-4xl);
+  .max-w-5xl {
+    max-width: var(--container-5xl);
   }
   .max-w-7xl {
     max-width: var(--container-7xl);
@@ -4337,10 +4339,10 @@
       }
     }
   }
-  .hover\:text-gray-800 {
+  .hover\:text-hl-black-100 {
     &:hover {
       @media (hover: hover) {
-        color: var(--color-gray-800);
+        color: var(--color-hl-black-100);
       }
     }
   }
@@ -4878,6 +4880,11 @@
       align-self: center;
     }
   }
+  .md\:rounded-xl {
+    @media (width >= 48rem) {
+      border-radius: var(--radius-xl);
+    }
+  }
   .md\:border {
     @media (width >= 48rem) {
       border-style: var(--tw-border-style);
@@ -4922,14 +4929,14 @@
       padding: calc(var(--spacing) * 6);
     }
   }
-  .md\:p-12 {
-    @media (width >= 48rem) {
-      padding: calc(var(--spacing) * 12);
-    }
-  }
   .md\:px-3 {
     @media (width >= 48rem) {
       padding-inline: calc(var(--spacing) * 3);
+    }
+  }
+  .md\:px-3\.5 {
+    @media (width >= 48rem) {
+      padding-inline: calc(var(--spacing) * 3.5);
     }
   }
   .md\:px-4 {
@@ -4955,6 +4962,11 @@
   .md\:py-0 {
     @media (width >= 48rem) {
       padding-block: calc(var(--spacing) * 0);
+    }
+  }
+  .md\:py-5 {
+    @media (width >= 48rem) {
+      padding-block: calc(var(--spacing) * 5);
     }
   }
   .md\:py-8 {
@@ -5008,6 +5020,12 @@
     @media (width >= 48rem) {
       font-size: var(--text-4xl);
       line-height: var(--tw-leading, var(--text-4xl--line-height));
+    }
+  }
+  .md\:text-sm {
+    @media (width >= 48rem) {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
     }
   }
   .md\:text-xl {

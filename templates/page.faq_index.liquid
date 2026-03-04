@@ -62,16 +62,20 @@
 </style>
 
 <div class="faq-index-page min-h-screen text-hl-grey-200 bg-hl-grey-100">
-  <div class="mx-auto max-w-4xl px-4 py-8">
+  <div class="mx-auto max-w-5xl px-0 py-2 md:px-3.5 md:py-5">
     <!-- 面包屑导航 -->
-    <nav class="mb-8 flex items-center text-sm text-gray-500">
-      <a href="/" class="hover:text-gray-800">{{ site.name }}</a>
-      <span class="mx-2">&gt;</span>
-      <span class="text-gray-800">{{ page.link_text }}</span>
+    <nav class="flex items-center text-xs md:text-sm text-hl-grey-200">
+      <a href="/" class="hover:text-hl-black-100">{{ site.name }}</a>
+      <span class="mx-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <span class="text-hl-grey-200">{{ page.link_text }}</span>
     </nav>
 
     <!-- 主内容卡片 -->
-    <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm md:p-12">
+    <div class="rounded-lg bg-white p-6 md:rounded-xl">
       <h1 class="mb-8 text-3xl font-bold">{{ page.link_text }}</h1>
 
       <!-- 产品筛选器 -->
@@ -79,10 +83,8 @@
         <p class="mb-3 text-sm font-medium text-gray-500">Choose Product Model</p>
 
         <div class="relative w-full max-w-md" id="filterContainer">
-          <div
-            id="filterHeader"
-            class="flex cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-gray-300"
-          >
+          <div id="filterHeader"
+            class="flex cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-gray-300">
             <div class="flex items-center gap-3">
               <!-- 缩略图容器 (JS 将在有图片时替换 svg) -->
               <div id="thumbBox" class="flex h-10 w-10 items-center justify-center overflow-hidden rounded bg-gray-100">
@@ -97,47 +99,36 @@
               <span id="selectedName" class="font-medium text-gray-800">Choose Product Model</span>
             </div>
 
-            <svg
-              class="h-5 w-5 transform text-gray-400 transition-transform"
-              id="arrowIcon"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg class="h-5 w-5 transform text-gray-400 transition-transform" id="arrowIcon" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
 
           <!-- PC 端下拉菜单 -->
-          <div
-            id="pcDropdown"
-            class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl"
-          >
+          <div id="pcDropdown"
+            class="absolute left-0 top-full z-50 hidden mt-2 flex w-[500px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
             <div id="pcCategoryList" class="w-[200px] border-r border-gray-100 bg-gray-50/50 py-2">
               {%- for cat in page.children -%}
-                <div
-                  class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
-                  data-cat="{{ cat.link_text | handleize }}"
-                >
-                  {{ cat.link_text }}
-                  <span class="text-[12px] text-gray-300">›</span>
-                </div>
+              <div
+                class="flex cursor-pointer items-center justify-between px-5 py-3 text-[14px] transition-colors hover:bg-white/80"
+                data-cat="{{ cat.link_text | handleize }}">
+                {{ cat.link_text }}
+                <span class="text-[12px] text-gray-300">›</span>
+              </div>
               {%- endfor -%}
             </div>
 
             <div id="pcProductList" class="max-h-80 flex-1 overflow-y-auto py-2">
               {%- for cat in page.children -%}
-                {%- for prod in cat.children -%}
-                  <div
-                    class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
-                    data-cat="{{ cat.link_text | handleize }}"
-                    data-product="{{ prod.link_text | handleize }}"
-                    data-name="{{ prod.link_text | escape }}"
-                    data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
-                  >
-                    {{ prod.link_text }}
-                  </div>
-                {%- endfor -%}
+              {%- for prod in cat.children -%}
+              <div class="hidden cursor-pointer px-8 py-3 text-[14px] text-gray-600 transition-colors hover:bg-gray-50"
+                data-cat="{{ cat.link_text | handleize }}" data-product="{{ prod.link_text | handleize }}"
+                data-name="{{ prod.link_text | escape }}"
+                data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}">
+                {{ prod.link_text }}
+              </div>
+              {%- endfor -%}
               {%- endfor -%}
             </div>
           </div>
@@ -150,39 +141,30 @@
 
         <div class="space-y-3" id="quickAnswerContainer">
           {%- for cat in page.children -%}
-            {%- for prod in cat.children -%}
-              {%- for p in prod.children -%}
-                {%- if p.settings.is_quick_answer -%}
-                  <div
-                    class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item"
-                    data-type="qna"
-                    data-cat="{{ cat.link_text | handleize }}"
-                    data-product="{{ prod.link_text | handleize }}"
-                    data-q="{{ p.link_text | handleize }}"
-                  >
-                    <button
-                      class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn"
-                      onclick="toggleFAQ(this)"
-                    >
-                      <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
-                      <svg
-                        class="h-4 w-4 text-gray-400 faq-accordion-icon"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </button>
-                    <div class="faq-accordion-content overflow-hidden bg-white">
-                      <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
-                        {{ p.settings.content }}
-                      </div>
-                    </div>
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endfor -%}
+          {%- for prod in cat.children -%}
+          {%- for p in prod.children -%}
+          {%- if p.settings.is_quick_answer -%}
+          <div class="overflow-hidden rounded-lg border border-gray-100 bg-gray-50/30 faq-item" data-type="qna"
+            data-cat="{{ cat.link_text | handleize }}" data-product="{{ prod.link_text | handleize }}"
+            data-q="{{ p.link_text | handleize }}">
+            <button
+              class="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50 faq-accordion-btn"
+              onclick="toggleFAQ(this)">
+              <span class="text-[15px] font-medium text-gray-700">{{ p.link_text }}</span>
+              <svg class="h-4 w-4 text-gray-400 faq-accordion-icon" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div class="faq-accordion-content overflow-hidden bg-white">
+              <div class="px-5 py-4 text-sm leading-relaxed text-gray-600">
+                {{ p.settings.content }}
+              </div>
+            </div>
+          </div>
+          {%- endif -%}
+          {%- endfor -%}
+          {%- endfor -%}
           {%- endfor -%}
         </div>
       </div>
@@ -193,29 +175,22 @@
 
         <div class="space-y-3" id="visualGuidesContainer">
           {%- for cat in page.children -%}
-            {%- for prod in cat.children -%}
-              {%- for p in prod.children -%}
-                {%- if p.settings.is_quick_answer == false -%}
-                  <a
-                    href="{{ p.url }}"
-                    class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
-                    data-type="guide"
-                    data-cat="{{ cat.link_text | handleize }}"
-                    data-product="{{ prod.link_text | handleize }}"
-                  >
-                    <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
-                    <svg
-                      class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </a>
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endfor -%}
+          {%- for prod in cat.children -%}
+          {%- for p in prod.children -%}
+          {%- if p.settings.is_quick_answer == false -%}
+          <a href="{{ p.url }}"
+            class="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/30 p-4 transition-colors hover:bg-gray-50"
+            data-type="guide" data-cat="{{ cat.link_text | handleize }}"
+            data-product="{{ prod.link_text | handleize }}">
+            <span class="text-[15px] text-gray-700">{{ p.link_text }}</span>
+            <svg class="h-4 w-4 text-gray-300 transition-colors hover:text-gray-500" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+          {%- endif -%}
+          {%- endfor -%}
+          {%- endfor -%}
           {%- endfor -%}
         </div>
       </div>
@@ -225,10 +200,8 @@
   <!-- 移动端底部弹窗 (修正版) -->
   <div id="mobileOverlay" class="fixed inset-0 z-[100] bg-black/50 mobile-overlay"></div>
 
-  <div
-    id="mobileSheet"
-    class="fixed bottom-0 left-0 right-0 z-[101] flex max-h-[80vh] flex-col rounded-t-2xl bg-white mobile-sheet"
-  >
+  <div id="mobileSheet"
+    class="fixed bottom-0 left-0 right-0 z-[101] flex max-h-[80vh] flex-col rounded-t-2xl bg-white mobile-sheet">
     <div class="sticky top-0 z-10 flex items-center justify-between border-b border-gray-100 bg-white px-5 py-4">
       <span class="text-[17px] font-bold">Choose Product Model</span>
       <button id="closeSheet" class="p-1 text-gray-400 hover:text-gray-600">
@@ -240,36 +213,27 @@
 
     <div id="mobileAccordion" class="flex-1 overflow-y-auto pb-12">
       {%- for cat in page.children -%}
-        <div class="border-b border-gray-50" data-cat="{{ cat.link_text | handleize }}">
-          <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
-            <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
-            <svg
-              class="h-4 w-4 transition-transform text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
+      <div class="border-b border-gray-50" data-cat="{{ cat.link_text | handleize }}">
+        <div class="flex cursor-pointer items-center justify-between px-5 py-5" onclick="toggleMobileCategory(this)">
+          <span class="text-[15px] text-gray-800">{{ cat.link_text }}</span>
+          <svg class="h-4 w-4 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </div>
 
-          <div class="accordion-content overflow-hidden">
-            <div class="pb-2">
-              {%- for prod in cat.children -%}
-                <div
-                  class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
-                  data-cat="{{ cat.link_text | handleize }}"
-                  data-product="{{ prod.link_text | handleize }}"
-                  data-name="{{ prod.link_text | escape }}"
-                  data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}"
-                  onclick="selectProductFromEl(this)"
-                >
-                  {{ prod.link_text }}
-                </div>
-              {%- endfor -%}
+        <div class="accordion-content overflow-hidden">
+          <div class="pb-2">
+            {%- for prod in cat.children -%}
+            <div class="cursor-pointer px-10 py-3.5 text-[14px] text-gray-500"
+              data-cat="{{ cat.link_text | handleize }}" data-product="{{ prod.link_text | handleize }}"
+              data-name="{{ prod.link_text | escape }}"
+              data-thumb="{{ prod.settings.thumbnail | default: '' | escape }}" onclick="selectProductFromEl(this)">
+              {{ prod.link_text }}
             </div>
+            {%- endfor -%}
           </div>
         </div>
+      </div>
       {%- endfor -%}
     </div>
   </div>
@@ -512,10 +476,10 @@
       if (currentCategoryId && selectedProductId) {
         match = document.querySelector(
           '#pcProductList [data-cat="' +
-            CSS.escape(currentCategoryId) +
-            '"][data-product="' +
-            CSS.escape(selectedProductId) +
-            '"]'
+          CSS.escape(currentCategoryId) +
+          '"][data-product="' +
+          CSS.escape(selectedProductId) +
+          '"]'
         );
       }
       if (!match) {
@@ -540,8 +504,8 @@
 
 {% schema %}
 {
-  "name": "FAQ Index",
-  "description": "FAQ aggregation page with category/product filter, Quick Answer accordion, and Visual Guides",
-  "sub_page_templates": ["faq_category"]
+"name": "FAQ Index",
+"description": "FAQ aggregation page with category/product filter, Quick Answer accordion, and Visual Guides",
+"sub_page_templates": ["faq_category"]
 }
 {% endschema %}
