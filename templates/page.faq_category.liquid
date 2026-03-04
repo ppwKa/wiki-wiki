@@ -1,19 +1,29 @@
 {%- assign faq_path = page.parent.path | default: '/faq' -%}
 <script>
   (function () {
-    var target = '{{ faq_path }}?cat={{ page.settings.title | handleize | url_encode }}';
+    function handleize(str) {
+      if (!str || typeof str !== 'string') return '';
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    var title = '{{ page.settings.title }}';
+    var cat = handleize(title);
+    var target = cat ? '{{ faq_path }}?cat=' + encodeURIComponent(cat) : '{{ faq_path }}';
     window.location.replace(target);
   })();
 </script>
 
 <noscript>
-  <p>Please <a href="{{ faq_path }}?cat={{ page.settings.title | handleize | url_encode }}">{{ page.settings.title }}</a> to continue.</p>
+  <p>Please <a href="{{ faq_path }}">{{ page.settings.title }}</a> to continue.</p>
 </noscript>
 
 {% schema %}
 {
-  "name": "FAQ Category",
-  "description": "FAQ category container, redirects to FAQ index with category filter",
+  "name": "FAQ 分类",
+  "description": "FAQ 分类页模板",
   "sub_page_templates": ["faq_product"],
   "settings": [
     {

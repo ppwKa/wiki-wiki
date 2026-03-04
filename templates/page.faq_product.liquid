@@ -1,10 +1,23 @@
 {%- assign cat_page = page.parent -%}
 {%- assign faq_path = cat_page.parent.path | default: '/faq' -%}
-{%- assign cat = cat_page.settings.title | handleize | url_encode -%}
 
 <script>
   (function () {
-    var target = '{{ faq_path }}?cat={{ cat }}&product={{ page.settings.title | handleize | url_encode }}';
+    function handleize(str) {
+      if (!str || typeof str !== 'string') return '';
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    var catTitle = '{{ cat_page.settings.title | escape }}';
+    var productTitle = '{{ page.settings.title | escape }}';
+    var cat = handleize(catTitle);
+    var product = handleize(productTitle);
+    var target = (cat && product)
+      ? '{{ faq_path }}?cat=' + encodeURIComponent(cat) + '&product=' + encodeURIComponent(product)
+      : '{{ faq_path }}';
     window.location.replace(target);
   })();
 </script>
@@ -12,17 +25,15 @@
 <noscript>
   <p>
     Please
-    <a href="{{ faq_path }}?cat={{ cat }}&product={{ page.settings.title | handleize | url_encode }}">
-      {{- page.settings.title -}}
-    </a>
+    <a href="{{ faq_path }}">{{ cat_page.settings.title }} - {{ page.settings.title }}</a>
     to continue.
   </p>
 </noscript>
 
 {% schema %}
 {
-  "name": "FAQ Product",
-  "description": "FAQ product page",
+  "name": "FAQ 产品",
+  "description": "FAQ 产品页模板",
   "sub_page_templates": ["faq_detail"],
   "settings": [
     {
