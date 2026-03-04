@@ -72,12 +72,6 @@
   --color-warning-700: hsl(var(--theme-color-warning-hsl-h) var(--theme-color-warning-hsl-s) 35%);
   --color-warning-800: hsl(var(--theme-color-warning-hsl-h) var(--theme-color-warning-hsl-s) 25%);
   --color-warning-900: hsl(var(--theme-color-warning-hsl-h) var(--theme-color-warning-hsl-s) 15%);
-
-  /* 自定义色 */
-  --color-hl-grey-100: #F5F5F7;
-  --color-hl-grey-200: #6E6E73;
-  --color-hl-black-100: #343436;
-  --color-hl-black-200: #151413;
 }
 
 @plugin "daisyui";
@@ -346,6 +340,10 @@ summary:has(.menu-active) {
   font-family: 'HarmonyOS Sans', sans-serif;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 /* 定义 Normal 权重字体 */
 @font-face {
   font-family: 'HarmonyOS Sans';
@@ -371,3 +369,6 @@ summary:has(.menu-active) {
   /* 适用于 font-weight: bold */
   font-style: normal;
 }
+
+/* custom styles*/
+@import "./faq.css";
