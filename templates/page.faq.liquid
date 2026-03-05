@@ -131,7 +131,7 @@
             <div class="faq-list" id="quickAnswerContainer">
               {%- assign qa_index = 0 -%}
               {%- for p in init_prod.children -%}
-                {%- if p.settings.is_quick_answer -%}
+                {%- if p.settings.is_hide_as_article -%}
                   {%- assign qa_index = qa_index | plus: 1 -%}
                   <div
                     class="faq-item"
@@ -164,7 +164,7 @@
             <div class="guides-list" id="visualGuidesContainer">
               {%- assign guide_index = 0 -%}
               {%- for p in init_prod.children -%}
-                {%- unless p.settings.is_quick_answer -%}
+                {%- unless p.settings.is_hide_as_article -%}
                   {%- assign guide_index = guide_index | plus: 1 -%}
                   <a
                     href="{{ p.path }}"
@@ -288,7 +288,7 @@
     {
       "id": "is_hide_as_article",
       "type": "checkbox",
-      "label": "是否隐藏在文章列表中展示",
+      "label": "是否不作为完整文章页展示",
       "info": "勾选后在 FAQ 聚合页做为quick answer展示, 不勾选则作为visual guide展示",
       "default": false
     },
