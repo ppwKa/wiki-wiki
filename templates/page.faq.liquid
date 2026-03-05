@@ -1,0 +1,324 @@
+{%- comment -%}
+  FAQ 统一模板
+  通过 path segment 数判断深度：
+    /faq/category/product/article
+    depth < 4  → 目录节点（聚合页）：复用 faq_index 结构 + 服务端渲染产品内容
+    depth = 4  → 叶子节点（文章页）：复用 faq_detail 结构
+    depth > 4  → 非法，不渲染
+{%- endcomment -%}
+
+{%- assign _segs  = page.path | remove_first: '/' | split: '/' -%}
+{%- assign _depth = _segs.size -%}
+
+{%- comment -%} 上下文解析：faq_root / init_cat / init_prod {%- endcomment -%}
+{%- if _depth == 1 -%}
+  {%- assign faq_root  = page -%}
+  {%- assign init_cat  = page.children[0] -%}
+  {%- assign init_prod = init_cat.children[0] -%}
+{%- elsif _depth == 2 -%}
+  {%- assign faq_root  = page.parent -%}
+  {%- assign init_cat  = page -%}
+  {%- assign init_prod = page.children[0] -%}
+{%- elsif _depth == 3 -%}
+  {%- assign faq_root  = page.parent.parent -%}
+  {%- assign init_cat  = page.parent -%}
+  {%- assign init_prod = page -%}
+{%- elsif _depth == 4 -%}
+  {%- assign faq_root = page.parent.parent.parent -%}
+{%- endif -%}
+
+{%- if _depth < 4 -%}
+  {%- assign _init_cat_title  = init_cat.settings.title  | default: '' -%}
+  {%- assign _init_prod_title = init_prod.settings.title | default: '' -%}
+{%- endif -%}
+
+{%- comment -%} ─────────────── TURBO FRAME 外壳 ─────────────── {%- endcomment -%}
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  data-turbo-action="advance"
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'instant' }) })"
+>
+
+{%- if _depth < 4 -%}
+
+{%- comment -%} ═══════════════════════════════════════════════════
+    聚合页（depth 1 / 2 / 3）— faq_index 结构
+═══════════════════════════════════════════════════ {%- endcomment -%}
+<div
+  class="faq-index-page"
+  data-controller="faq-index"
+  data-faq-index-init-cat-value="{{ _init_cat_title | escape }}"
+  data-faq-index-init-product-value="{{ _init_prod_title | escape }}"
+>
+  <div class="page-wrapper">
+
+    {%- comment -%} 面包屑导航 {%- endcomment -%}
+    <nav class="breadcrumb-nav">
+      <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+
+      <span class="breadcrumb-separator">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="breadcrumb-current">{{faq_root.settings.title}}</span>
+    </nav>
+
+    {%- comment -%} 主内容卡片 {%- endcomment -%}
+    <div class="main-card">
+      <h1 class="page-title">{{ faq_root.settings.title }}</h1>
+
+      {%- comment -%} 产品筛选器 {%- endcomment -%}
+      <div class="filter-section">
+        <p class="filter-label">Choose Product Model</p>
+        <div class="filter-container" id="filterContainer">
+          <div class="filter-trigger-btn" id="filterHeader">
+            <div class="filter-trigger-content">
+              <div class="filter-trigger-icon" id="thumbBox">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <span class="filter-trigger-text" id="selectedName">Choose Product Model</span>
+            </div>
+            <svg class="filter-trigger-arrow" id="arrowIcon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <path d="M24.5455 14.7275L18 21.273L11.4546 14.7275" stroke="#343436" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          {%- comment -%} PC 端两列下拉 {%- endcomment -%}
+          <div class="pc-dropdown-menu hidden" id="pcDropdown">
+            <div class="pc-category-list" id="pcCategoryList">
+              {%- for cat in faq_root.children -%}
+                <div class="pc-category-item" data-cat="{{ cat.settings.title }}">
+                  {{ cat.settings.title }}
+                  <span class="pc-category-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                      <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </div>
+              {%- endfor -%}
+            </div>
+
+            <div class="pc-product-list" id="pcProductList">
+              {%- for cat in faq_root.children -%}
+                {%- for prod in cat.children -%}
+                  <div
+                    class="pc-product-item"
+                    data-cat="{{ cat.settings.title }}"
+                    data-product="{{ prod.settings.title }}"
+                    data-name="{{ prod.settings.title }}"
+                    data-thumb="{{ prod.settings.thumbnail | default: '' }}"
+                    data-path="{{ prod.path }}"
+                  >
+                    {{ prod.settings.title }}
+                  </div>
+                {%- endfor -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} FAQ 内容区：服务端直接渲染 init_prod 的文章 {%- endcomment -%}
+      <div id="faqContentWrapper">
+        {%- if init_prod -%}
+          {%- comment -%} Quick Answer {%- endcomment -%}
+          <div class="faq-section">
+            <h2 class="section-title">Quick Answer</h2>
+            <div class="faq-list" id="quickAnswerContainer">
+              {%- assign qa_index = 0 -%}
+              {%- for p in init_prod.children -%}
+                {%- if p.settings.is_quick_answer -%}
+                  {%- assign qa_index = qa_index | plus: 1 -%}
+                  <div
+                    class="faq-item"
+                    data-type="qna"
+                    data-cat="{{ init_cat.settings.title }}"
+                    data-product="{{ init_prod.settings.title }}"
+                    data-q="{{ p.settings.title }}"
+                  >
+                    <button class="faq-trigger-btn">
+                      <div class="faq-question">
+                        <span>{{ qa_index }}.</span>
+                        <span>{{ p.settings.title }}</span>
+                      </div>
+                      <svg class="faq-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                    <div class="faq-answer-container">
+                      <div class="faq-answer-content">{{ p.settings.content }}</div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          {%- comment -%} Visual Guides {%- endcomment -%}
+          <div class="guides-section">
+            <h2 class="section-title">Visual Guides</h2>
+            <div class="guides-list" id="visualGuidesContainer">
+              {%- assign guide_index = 0 -%}
+              {%- for p in init_prod.children -%}
+                {%- unless p.settings.is_quick_answer -%}
+                  {%- assign guide_index = guide_index | plus: 1 -%}
+                  <a
+                    href="{{ p.path }}"
+                    class="guide-card"
+                    data-turbo-frame="_top"
+                    data-type="guide"
+                    data-cat="{{ init_cat.settings.title }}"
+                    data-product="{{ init_prod.settings.title }}"
+                  >
+                    <div class="guide-title">
+                      <span>{{ guide_index }}.</span>
+                      <span>{{ p.settings.title }}</span>
+                    </div>
+                    <svg class="guide-arrow" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                      <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+        {%- else -%}
+          <div class="faq-content-placeholder">
+            <p class="faq-select-hint">Choose a product model to view Quick Answer and Visual Guides.</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%} 移动端遮罩 + 底部弹窗 {%- endcomment -%}
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <div class="mobile-sheet" id="mobileSheet">
+    <div class="mobile-sheet-header">
+      <span class="mobile-sheet-title">Choose Product Model</span>
+      <button class="mobile-sheet-close-btn" id="closeSheet">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M7.00049 7L15.0005 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7.00049 15L15.0005 7" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mobile-sheet-content" id="mobileAccordion">
+      {%- for cat in faq_root.children -%}
+        <div class="mobile-accordion-item" data-cat="{{ cat.settings.title }}">
+          <div class="mobile-accordion-header">
+            <span class="mobile-accordion-title">{{ cat.settings.title }}</span>
+            <svg class="mobile-accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="mobile-accordion-content">
+            <div class="mobile-accordion-list">
+              {%- for prod in cat.children -%}
+                <div
+                  class="mobile-accordion-product"
+                  data-cat="{{ cat.settings.title }}"
+                  data-product="{{ prod.settings.title }}"
+                  data-name="{{ prod.settings.title }}"
+                  data-thumb="{{ prod.settings.thumbnail | default: '' }}"
+                  data-path="{{ prod.path }}"
+                >
+                  {{ prod.settings.title }}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- elsif _depth == 4 -%}
+
+{%- comment -%} ═══════════════════════════════════════════════════
+    文章页（depth 4）— faq_detail 结构
+═══════════════════════════════════════════════════ {%- endcomment -%}
+<div class="faq-detail-page">
+
+  {%- comment -%} 面包屑：Site > FAQ Root > 文章标题 {%- endcomment -%}
+  <nav class="breadcrumb-nav">
+    <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+    <span class="breadcrumb-separator">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <a href="{{ faq_root.path }}" class="breadcrumb-link">{{ faq_root.settings.title }}</a>
+    <span class="breadcrumb-separator">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="breadcrumb-current">{{ page.settings.title }}</span>
+  </nav>
+
+  <main class="container mx-auto py-8">
+    <h1 class="text-2xl font-semibold">{{ page.settings.title }}</h1>
+    <div class="prose max-w-none mt-6">
+      {{ page.settings.content }}
+    </div>
+  </main>
+
+</div>
+
+{%- comment -%} depth > 4 → 非法，不渲染任何内容 {%- endcomment -%}
+{%- endif -%}
+
+</turbo-frame>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "description": "FAQ 统一模板，深度 <4 为聚合页，深度 =4 为文章页",
+  "sub_page_templates": ["faq"],
+  "settings": [
+    {
+      "id": "is_hide_as_article",
+      "type": "checkbox",
+      "label": "是否隐藏在文章列表中展示",
+      "info": "勾选后在 FAQ 聚合页做为quick answer展示, 不勾选则作为visual guide展示",
+      "default": false
+    },
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
+}
+{% endschema %}

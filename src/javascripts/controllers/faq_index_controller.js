@@ -1,12 +1,16 @@
 /**
  * FAQ 聚合页交互控制器
- * 负责产品筛选、FAQ 折叠、移动端弹窗、URL 状态同步、内容懒加载
- * 仅在 FAQ 聚合页生效（通过 data-controller="faq-index" 绑定）
+ * 负责产品筛选、FAQ 折叠、移动端弹窗
+ * 初始选中状态由服务端通过 data-faq-index-init-cat-value / data-faq-index-init-product-value 注入
+ * 产品切换通过 frame.src = path 驱动 main-content-frame 局部刷新并推入 URL 历史
  */
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = {}
+  static values = {
+    initCat: String,
+    initProduct: String,
+  }
 
   connect() {
     const MOBILE_BREAKPOINT = 768
@@ -15,25 +19,21 @@ export default class extends Controller {
       '<svg viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>'
 
     const filterContainer = this.element.querySelector("#filterContainer")
-    const filterHeader = this.element.querySelector("#filterHeader")
-    const pcDropdown = this.element.querySelector("#pcDropdown")
-    const pcCategoryList = this.element.querySelector("#pcCategoryList")
-    const pcProductList = this.element.querySelector("#pcProductList")
+    const filterHeader    = this.element.querySelector("#filterHeader")
+    const pcDropdown      = this.element.querySelector("#pcDropdown")
+    const pcCategoryList  = this.element.querySelector("#pcCategoryList")
+    const pcProductList   = this.element.querySelector("#pcProductList")
     const selectedNameDisplay = this.element.querySelector("#selectedName")
-    const arrowIcon = this.element.querySelector("#arrowIcon")
-    const thumbBox = this.element.querySelector("#thumbBox")
-    const mobileOverlay = this.element.querySelector("#mobileOverlay")
-    const mobileSheet = this.element.querySelector("#mobileSheet")
-    const closeSheet = this.element.querySelector("#closeSheet")
+    const arrowIcon       = this.element.querySelector("#arrowIcon")
+    const thumbBox        = this.element.querySelector("#thumbBox")
+    const mobileOverlay   = this.element.querySelector("#mobileOverlay")
+    const mobileSheet     = this.element.querySelector("#mobileSheet")
+    const closeSheet      = this.element.querySelector("#closeSheet")
     const mobileAccordion = this.element.querySelector("#mobileAccordion")
-    const faqContentFrame = this.element.querySelector("#faq-content-frame")
-    const faqContentPlaceholder = this.element.querySelector("#faqContentPlaceholder")
-    const faqSkeleton = this.element.querySelector("#faqSkeleton")
-    const faqSelectHint = this.element.querySelector("#faqSelectHint")
-    const faqContentWrapper = this.element.querySelector("#faqContentWrapper")
 
-    const params = new URLSearchParams(location.search)
-    const faqPath = faqContentWrapper?.dataset.faqPath || "/faq"
+    // 初始选中状态来自服务端注入的 Stimulus values
+    const initCatTitle     = this.initCatValue     || ""
+    const initProductTitle = this.initProductValue || ""
 
     const handleize = (str) => {
       if (!str || typeof str !== "string") return ""
@@ -44,22 +44,11 @@ export default class extends Controller {
         .replace(/(^-|-$)/g, "")
     }
 
-    let currentCategoryId = handleize(params.get("cat") || "")
-    let selectedProductId = handleize(params.get("product") || "")
-    let hoverCategoryId = currentCategoryId || ""
-    let currentCategoryTitle = ""
-    let currentProductTitle = ""
+    let currentCategoryId  = handleize(initCatTitle)
+    let selectedProductId  = handleize(initProductTitle)
+    let hoverCategoryId    = currentCategoryId
 
     const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT
-
-    const updateUrl = (cat, product) => {
-      const url = new URL(location.href)
-      if (cat) url.searchParams.set("cat", cat)
-      else url.searchParams.delete("cat")
-      if (product) url.searchParams.set("product", product)
-      else url.searchParams.delete("product")
-      history.replaceState(null, "", url.toString())
-    }
 
     const setHeaderDisplay = (name, thumbUrl) => {
       if (selectedNameDisplay) {
@@ -101,27 +90,41 @@ export default class extends Controller {
       })
     }
 
-    const showSkeleton = () => {
-      if (faqSkeleton) faqSkeleton.style.display = ""
-      if (faqSelectHint) faqSelectHint.style.display = "none"
+    const getThumbForProduct = (cat, product) => {
+      const el = [...(pcProductList?.querySelectorAll(".pc-product-item") || [])].find(
+        (e) => handleize(e.dataset.cat) === cat && handleize(e.dataset.product) === product
+      )
+      return el?.dataset.thumb || ""
     }
 
-    const showHint = () => {
-      if (faqSkeleton) faqSkeleton.style.display = "none"
-      if (faqSelectHint) faqSelectHint.style.display = ""
+    /**
+     * 通过 main-content-frame.src 跳转到目标产品页
+     * data-turbo-action="advance" 会把新 URL 推入浏览器历史
+     */
+    const navigateToProduct = (path) => {
+      if (!path) return
+      const frame = document.getElementById("main-content-frame")
+      if (frame) {
+        frame.src = path
+      } else {
+        window.location.href = path
+      }
     }
 
-    const loadContentForProduct = (catTitle, productTitle) => {
-      if (!faqContentFrame || !catTitle || !productTitle) return
-      showSkeleton()
-      const url =
-        "/s/faq/content?faq_path=" +
-        encodeURIComponent(faqPath) +
-        "&cat=" +
-        encodeURIComponent(catTitle) +
-        "&product=" +
-        encodeURIComponent(productTitle)
-      faqContentFrame.src = url
+    const selectProduct = (name, cat, product, thumb, path) => {
+      currentCategoryId = handleize(cat || "")
+      selectedProductId = handleize(product || "")
+      hoverCategoryId   = currentCategoryId
+      const thumbUrl    = thumb || getThumbForProduct(currentCategoryId, selectedProductId)
+      setHeaderDisplay(name, thumbUrl)
+      highlightSelectedProduct()
+      showProductsForCategory(currentCategoryId)
+      navigateToProduct(path)
+    }
+
+    const closePcDropdown = () => {
+      pcDropdown?.classList.add("hidden")
+      if (arrowIcon) arrowIcon.style.transform = "rotate(0deg)"
     }
 
     const openMobileCategory = (catId) => {
@@ -136,9 +139,9 @@ export default class extends Controller {
         if (icon) icon.classList.remove("rotated")
       })
       const content = wrapper.querySelector(".mobile-accordion-content")
-      const icon = content?.previousElementSibling?.querySelector(".mobile-accordion-arrow")
+      const icon    = content?.previousElementSibling?.querySelector(".mobile-accordion-arrow")
       if (content) content.classList.add("open")
-      if (icon) icon.classList.add("rotated")
+      if (icon)    icon.classList.add("rotated")
     }
 
     const openMobileSheet = () => {
@@ -155,35 +158,9 @@ export default class extends Controller {
       document.body.classList.remove("faq-index-modal-open")
     }
 
-    const getThumbForProduct = (cat, product) => {
-      const el = [...(pcProductList?.querySelectorAll(".pc-product-item") || [])].find(
-        (e) => handleize(e.dataset.cat) === cat && handleize(e.dataset.product) === product
-      )
-      return el?.dataset.thumb || ""
-    }
-
-    const selectProduct = (name, cat, product, thumb) => {
-      currentCategoryId = handleize(cat || "")
-      selectedProductId = handleize(product || "")
-      currentCategoryTitle = cat || ""
-      currentProductTitle = product || ""
-      hoverCategoryId = currentCategoryId
-      const thumbUrl = thumb || getThumbForProduct(currentCategoryId, selectedProductId)
-      setHeaderDisplay(name, thumbUrl)
-      updateUrl(currentCategoryId, selectedProductId)
-      highlightSelectedProduct()
-      showProductsForCategory(currentCategoryId)
-      loadContentForProduct(currentCategoryTitle, currentProductTitle)
-    }
-
-    const closePcDropdown = () => {
-      pcDropdown?.classList.add("hidden")
-      if (arrowIcon) arrowIcon.style.transform = "rotate(0deg)"
-    }
-
     const toggleMobileCategoryContent = (header) => {
       const content = header.nextElementSibling
-      const icon = header.querySelector(".mobile-accordion-arrow")
+      const icon    = header.querySelector(".mobile-accordion-arrow")
       mobileAccordion?.querySelectorAll(".mobile-accordion-content").forEach((c) => {
         if (c !== content) {
           c.classList.remove("open")
@@ -246,7 +223,7 @@ export default class extends Controller {
       el.addEventListener(
         "click",
         () => {
-          selectProduct(el.dataset.name, el.dataset.cat, el.dataset.product, el.dataset.thumb)
+          selectProduct(el.dataset.name, el.dataset.cat, el.dataset.product, el.dataset.thumb, el.dataset.path)
           closePcDropdown()
         },
         { signal: this.signal }
@@ -259,7 +236,7 @@ export default class extends Controller {
     mobileAccordion?.addEventListener(
       "click",
       (e) => {
-        const header = e.target.closest(".mobile-accordion-header")
+        const header  = e.target.closest(".mobile-accordion-header")
         const product = e.target.closest(".mobile-accordion-product")
         if (header) {
           toggleMobileCategoryContent(header)
@@ -268,7 +245,8 @@ export default class extends Controller {
             product.dataset.name,
             product.dataset.cat,
             product.dataset.product,
-            product.dataset.thumb
+            product.dataset.thumb,
+            product.dataset.path
           )
           closeMobileSheet()
         }
@@ -276,15 +254,15 @@ export default class extends Controller {
       { signal: this.signal }
     )
 
-    // FAQ 手风琴：使用事件委托，支持懒加载后的动态内容
+    // FAQ 手风琴：事件委托，支持 frame 刷新后的动态内容
     this.element.addEventListener(
       "click",
       (e) => {
         const btn = e.target.closest(".faq-trigger-btn")
         if (!btn) return
-        const item = btn.closest(".faq-item")
+        const item    = btn.closest(".faq-item")
         const content = item?.querySelector(".faq-answer-container")
-        const icon = item?.querySelector(".faq-trigger-icon")
+        const icon    = item?.querySelector(".faq-trigger-icon")
         if (!content) return
 
         const isOpen = content.classList.contains("open")
@@ -315,33 +293,33 @@ export default class extends Controller {
       { signal: this.signal }
     )
 
+    // 初始化：根据服务端注入的 init 值设置下拉头部显示和高亮
     const initDefaultSelection = () => {
       let match = null
-      if (currentCategoryId && selectedProductId) {
+
+      if (initCatTitle && initProductTitle) {
         match = [...(pcProductList?.querySelectorAll(".pc-product-item") || [])].find(
-          (el) =>
-            handleize(el.dataset.cat) === currentCategoryId &&
-            handleize(el.dataset.product) === selectedProductId
+          (el) => el.dataset.cat === initCatTitle && el.dataset.product === initProductTitle
         )
       }
+
+      // 兜底：取第一个产品项
       if (!match) {
         match = pcProductList?.querySelector(".pc-product-item")
         if (match) {
           currentCategoryId = handleize(match.dataset.cat)
           selectedProductId = handleize(match.dataset.product)
-          hoverCategoryId = currentCategoryId
+          hoverCategoryId   = currentCategoryId
         }
       }
+
       showProductsForCategory(currentCategoryId || hoverCategoryId)
       highlightSelectedProduct()
+
       if (match) {
         setHeaderDisplay(match.dataset.name, match.dataset.thumb)
-        currentCategoryTitle = match.dataset.cat
-        currentProductTitle = match.dataset.product
-        loadContentForProduct(currentCategoryTitle, currentProductTitle)
       } else {
         setHeaderDisplay(DEFAULT_PLACEHOLDER, "")
-        showHint()
       }
     }
 
