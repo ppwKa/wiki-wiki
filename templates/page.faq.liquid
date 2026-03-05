@@ -148,76 +148,70 @@
 
         {%- comment -%} 实际内容：初始隐藏，JS connect() 后揭开 {%- endcomment -%}
         <div id="faqContent" style="display:none">
-          {%- if init_prod -%}
 
-            {%- comment -%} Quick Answer {%- endcomment -%}
-            <div class="faq-section">
-              <h2 class="section-title">Quick Answer</h2>
-              <div class="faq-list" id="quickAnswerContainer">
-                {%- assign qa_index = 0 -%}
-                {%- for p in init_prod.children -%}
-                  {%- if p.settings.is_hide_as_article -%}
-                    {%- assign qa_index = qa_index | plus: 1 -%}
-                    <div
-                      class="faq-item"
-                      data-type="qna"
-                      data-cat="{{ init_cat.settings.title }}"
-                      data-product="{{ init_prod.settings.title }}"
-                      data-q="{{ p.settings.title }}"
-                    >
-                      <button class="faq-trigger-btn" type="button">
-                        <div class="faq-question">
-                          <span>{{ qa_index }}.</span>
-                          <span>{{ p.settings.title }}</span>
-                        </div>
-                        <svg class="faq-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                          <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                      </button>
-                      <div class="faq-answer-container">
-                        <div class="faq-answer-content">{{ p.settings.content }}</div>
-                      </div>
-                    </div>
-                  {%- endif -%}
-                {%- endfor -%}
-              </div>
-            </div>
-
-            {%- comment -%} Visual Guides {%- endcomment -%}
-            <div class="guides-section">
-              <h2 class="section-title">Visual Guides</h2>
-              <div class="guides-list" id="visualGuidesContainer">
-                {%- assign guide_index = 0 -%}
-                {%- for p in init_prod.children -%}
-                  {%- unless p.settings.is_hide_as_article -%}
-                    {%- assign guide_index = guide_index | plus: 1 -%}
-                    <a
-                      href="{{ p.path }}"
-                      class="guide-card"
-                      data-turbo-frame="main-content-frame"
-                      data-turbo-action="advance"
-                      data-type="guide"
-                      data-cat="{{ init_cat.settings.title }}"
-                      data-product="{{ init_prod.settings.title }}"
-                    >
-                      <div class="guide-title">
-                        <span>{{ guide_index }}.</span>
+          {%- comment -%} Quick Answer {%- endcomment -%}
+          <div class="faq-section">
+            <h2 class="section-title">Quick Answer</h2>
+            <div class="faq-list" id="quickAnswerContainer">
+              {%- assign qa_index = 0 -%}
+              {%- for p in init_prod.children -%}
+                {%- if p.settings.is_hide_as_article -%}
+                  {%- assign qa_index = qa_index | plus: 1 -%}
+                  <div
+                    class="faq-item"
+                    data-type="qna"
+                    data-cat="{{ init_cat.settings.title }}"
+                    data-product="{{ init_prod.settings.title }}"
+                    data-q="{{ p.settings.title }}"
+                  >
+                    <button class="faq-trigger-btn" type="button">
+                      <div class="faq-question">
+                        <span>{{ qa_index }}.</span>
                         <span>{{ p.settings.title }}</span>
                       </div>
-                      <svg class="guide-arrow" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                        <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                      <svg class="faq-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
-                    </a>
-                  {%- endunless -%}
-                {%- endfor -%}
-              </div>
+                    </button>
+                    <div class="faq-answer-container">
+                      <div class="faq-answer-content">{{ p.settings.content }}</div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
             </div>
+          </div>
 
-          {%- else -%}
-            <div class="faq-content-placeholder">
-              <p class="faq-select-hint">Choose a product model to view Quick Answer and Visual Guides.</p>
+          {%- comment -%} Visual Guides {%- endcomment -%}
+          <div class="guides-section">
+            <h2 class="section-title">Visual Guides</h2>
+            <div class="guides-list" id="visualGuidesContainer">
+              {%- assign guide_index = 0 -%}
+              {%- for p in init_prod.children -%}
+                {%- unless p.settings.is_hide_as_article -%}
+                  {%- assign guide_index = guide_index | plus: 1 -%}
+                  <a
+                    href="{{ p.path }}"
+                    class="guide-card"
+                    data-turbo-frame="main-content-frame"
+                    data-turbo-action="advance"
+                    data-type="guide"
+                    data-cat="{{ init_cat.settings.title }}"
+                    data-product="{{ init_prod.settings.title }}"
+                  >
+                    <div class="guide-title">
+                      <span>{{ guide_index }}.</span>
+                      <span>{{ p.settings.title }}</span>
+                    </div>
+                    <svg class="guide-arrow" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                      <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                {%- endunless -%}
+              {%- endfor -%}
             </div>
-          {%- endif -%}
+          </div>
+
         </div>
 
       </div>
