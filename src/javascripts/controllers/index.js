@@ -9,6 +9,7 @@ import ScrollToController from "./scroll_to_controller"
 // import ScrollspyController from "./scrollspy_controller"
 import LinkTargetController from "./link_target_controller"
 import AiSearchCompletionController from './ai_search_completion_controller'
+import FaqIndexController from './faq_index_controller'
 
 if (!window.Stimulus) {
   window.Stimulus = Application.start()
@@ -25,3 +26,4 @@ application.register("scroll-to", ScrollToController)
 // application.register("scrollspy", ScrollspyController)
 application.register('link-target', LinkTargetController)
 application.register('ai-search', AiSearchCompletionController)
+application.register('faq-index', FaqIndexController)

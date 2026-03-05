@@ -1,8 +1,8 @@
-<div class="faq-index-page">
+<div class="faq-index-page" data-controller="faq-index">
   <div class="page-wrapper">
     <!-- 面包屑导航 -->
     <nav class="breadcrumb-nav">
-      <a href="/" class="breadcrumb-link">{{ site.name }}</a>
+      <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
       <span class="breadcrumb-separator">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
           <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -86,10 +86,12 @@
       <div class="faq-section">
         <h2 class="section-title">Quick Answer</h2>
         <div class="faq-list" id="quickAnswerContainer">
+          {%- assign qa_index = 0 -%}
           {%- for cat in page.children -%}
             {%- for prod in cat.children -%}
               {%- for p in prod.children -%}
                 {%- if p.settings.is_quick_answer -%}
+                  {%- assign qa_index = qa_index | plus: 1 -%}
                   <div
                     class="faq-item"
                     data-type="qna"
@@ -99,7 +101,7 @@
                   >
                     <button class="faq-trigger-btn">
                       <div class="faq-question">
-                        <span>{{ forloop.index }}.</span>
+                        <span>{{ qa_index }}.</span>
                         <span>{{ p.settings.title}}</span>
                       </div>
                       <svg
@@ -130,19 +132,22 @@
       <div class="guides-section">
         <h2 class="section-title">Visual Guides</h2>
         <div class="guides-list" id="visualGuidesContainer">
+          {%- assign guide_index = 0 -%}
           {%- for cat in page.children -%}
             {%- for prod in cat.children -%}
               {%- for p in prod.children -%}
                 {%- if p.settings.is_quick_answer == false -%}
+                  {%- assign guide_index = guide_index | plus: 1 -%}
                   <a
                     href="{{ p.url }}"
                     class="guide-card"
+                    data-turbo-frame="_top"
                     data-type="guide"
                     data-cat="{{ cat.settings.title }}"
                     data-product="{{ prod.settings.title }}"
                   >
                     <div class="guide-title">
-                      <span>{{ forloop.index }}.</span>
+                      <span>{{ guide_index }}.</span>
                       <span>{{ p.settings.title}}</span>
                     </div>
                     <svg
@@ -215,293 +220,6 @@
     </div>
   </div>
 </div>
-
-<script>
-  /**
-   * FAQ 页面交互管理器
-   * 负责产品筛选、FAQ 折叠、移动端弹窗、URL 状态同步、内容筛选
-   */
-  document.addEventListener('DOMContentLoaded', function init() {
-    const MOBILE_BREAKPOINT = 768;
-    const DEFAULT_PLACEHOLDER = 'Choose Product Model';
-    const PLACEHOLDER_SVG =
-      '<svg viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
-
-    const filterContainer = document.getElementById('filterContainer');
-    const filterHeader = document.getElementById('filterHeader');
-    const pcDropdown = document.getElementById('pcDropdown');
-    const pcCategoryList = document.getElementById('pcCategoryList');
-    const pcProductList = document.getElementById('pcProductList');
-    const selectedNameDisplay = document.getElementById('selectedName');
-    const arrowIcon = document.getElementById('arrowIcon');
-    const thumbBox = document.getElementById('thumbBox');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const mobileSheet = document.getElementById('mobileSheet');
-    const closeSheet = document.getElementById('closeSheet');
-    const mobileAccordion = document.getElementById('mobileAccordion');
-    const quickAnswerContainer = document.getElementById('quickAnswerContainer');
-
-    const params = new URLSearchParams(location.search);
-
-    function handleize(str) {
-      if (!str || typeof str !== 'string') return '';
-      return str
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-    }
-
-    let currentCategoryId = handleize(params.get('cat') || '');
-    let selectedProductId = handleize(params.get('product') || '');
-    let hoverCategoryId = currentCategoryId || '';
-
-    function isMobile() {
-      return window.innerWidth < MOBILE_BREAKPOINT;
-    }
-
-    function updateUrl(cat, product) {
-      const url = new URL(location.href);
-      if (cat) url.searchParams.set('cat', cat);
-      else url.searchParams.delete('cat');
-      if (product) url.searchParams.set('product', product);
-      else url.searchParams.delete('product');
-      history.replaceState(null, '', url.toString());
-    }
-
-    function setHeaderDisplay(name, thumbUrl) {
-      if (selectedNameDisplay) {
-        selectedNameDisplay.textContent = name || DEFAULT_PLACEHOLDER;
-      }
-      if (thumbBox) {
-        const safe = thumbUrl && /^(https?:|\/)/.test(thumbUrl.trim());
-        thumbBox.innerHTML = safe
-          ? '<img src="' + thumbUrl + '" alt="" class="h-full w-full object-cover">'
-          : PLACEHOLDER_SVG;
-      }
-    }
-
-    function showProductsForCategory(catId) {
-      pcProductList?.querySelectorAll('.pc-product-item').forEach((el) => {
-        el.style.display = handleize(el.dataset.cat) === catId ? '' : 'none';
-      });
-      pcCategoryList?.querySelectorAll('.pc-category-item').forEach((el) => {
-        const active = handleize(el.dataset.cat) === currentCategoryId;
-        el.classList.toggle('active', active);
-        el.classList.toggle('inactive', !active);
-      });
-    }
-
-    function highlightSelectedProduct() {
-      pcProductList?.querySelectorAll('.pc-product-item').forEach((el) => {
-        const active = handleize(el.dataset.cat) === currentCategoryId && handleize(el.dataset.product) === selectedProductId;
-        el.classList.toggle('active', active);
-        el.classList.toggle('inactive', !active);
-      });
-      mobileAccordion?.querySelectorAll('.mobile-accordion-product').forEach((el) => {
-        const active = handleize(el.dataset.cat) === currentCategoryId && handleize(el.dataset.product) === selectedProductId;
-        el.classList.toggle('active', active);
-        el.classList.toggle('inactive', !active);
-      });
-    }
-
-    function applyContentFilter() {
-      document.querySelectorAll('[data-type="qna"], [data-type="guide"]').forEach((el) => {
-        const okCat = !currentCategoryId || handleize(el.dataset.cat) === currentCategoryId;
-        const okProd = !selectedProductId || handleize(el.dataset.product) === selectedProductId;
-        el.style.display = okCat && okProd ? '' : 'none';
-      });
-    }
-
-    function openMobileCategory(catId) {
-      if (!catId) return;
-      const wrapper = [...(mobileAccordion?.querySelectorAll('.mobile-accordion-item') || [])].find(
-        (el) => handleize(el.dataset.cat) === catId
-      );
-      if (!wrapper) return;
-      mobileAccordion?.querySelectorAll('.mobile-accordion-content').forEach((c) => {
-        c.classList.remove('open');
-        const icon = c.previousElementSibling?.querySelector('.mobile-accordion-arrow');
-        if (icon) icon.classList.remove('rotated');
-      });
-      const content = wrapper.querySelector('.mobile-accordion-content');
-      const icon = content?.previousElementSibling?.querySelector('.mobile-accordion-arrow');
-      if (content) content.classList.add('open');
-      if (icon) icon.classList.add('rotated');
-    }
-
-    function openMobileSheet() {
-      mobileOverlay?.classList.add('open');
-      mobileSheet?.classList.add('open');
-      document.body.classList.add('faq-index-modal-open');
-      if (currentCategoryId) openMobileCategory(currentCategoryId);
-      highlightSelectedProduct();
-    }
-
-    function closeMobileSheet() {
-      mobileOverlay?.classList.remove('open');
-      mobileSheet?.classList.remove('open');
-      document.body.classList.remove('faq-index-modal-open');
-    }
-
-    function getThumbForProduct(cat, product) {
-      const el = [...(pcProductList?.querySelectorAll('.pc-product-item') || [])].find(
-        (e) => handleize(e.dataset.cat) === cat && handleize(e.dataset.product) === product
-      );
-      return el?.dataset.thumb || '';
-    }
-
-    function selectProduct(name, cat, product, thumb) {
-      currentCategoryId = handleize(cat || '');
-      selectedProductId = handleize(product || '');
-      hoverCategoryId = currentCategoryId;
-      const thumbUrl = thumb || getThumbForProduct(currentCategoryId, selectedProductId);
-      setHeaderDisplay(name, thumbUrl);
-      updateUrl(currentCategoryId, selectedProductId);
-      applyContentFilter();
-      highlightSelectedProduct();
-      showProductsForCategory(currentCategoryId);
-    }
-
-    function closePcDropdown() {
-      pcDropdown?.classList.add('hidden');
-      if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
-    }
-
-    function toggleMobileCategoryContent(header) {
-      const content = header.nextElementSibling;
-      const icon = header.querySelector('.mobile-accordion-arrow');
-      mobileAccordion?.querySelectorAll('.mobile-accordion-content').forEach((c) => {
-        if (c !== content) {
-          c.classList.remove('open');
-          const i = c.previousElementSibling?.querySelector('.mobile-accordion-arrow');
-          if (i) i.classList.remove('rotated');
-        }
-      });
-      content?.classList.toggle('open');
-      icon?.classList.toggle('rotated');
-    }
-
-    if (!filterContainer) return;
-
-    filterHeader?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (isMobile()) {
-        openMobileSheet();
-      } else {
-        pcDropdown?.classList.toggle('hidden');
-        if (arrowIcon) {
-          arrowIcon.style.transform = pcDropdown?.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-        }
-        if (!pcDropdown?.classList.contains('hidden')) {
-          hoverCategoryId = currentCategoryId || hoverCategoryId;
-          if (hoverCategoryId) showProductsForCategory(hoverCategoryId);
-        }
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!filterContainer.contains(e.target)) closePcDropdown();
-    });
-
-    pcCategoryList?.querySelectorAll('.pc-category-item').forEach((el) => {
-      el.addEventListener('mouseenter', () => {
-        hoverCategoryId = handleize(el.dataset.cat);
-        showProductsForCategory(hoverCategoryId);
-        highlightSelectedProduct();
-      });
-    });
-
-    pcProductList?.querySelectorAll('.pc-product-item').forEach((el) => {
-      el.addEventListener('click', () => {
-        selectProduct(el.dataset.name, el.dataset.cat, el.dataset.product, el.dataset.thumb);
-        closePcDropdown();
-      });
-    });
-
-    closeSheet?.addEventListener('click', closeMobileSheet);
-    mobileOverlay?.addEventListener('click', closeMobileSheet);
-
-    mobileAccordion?.addEventListener('click', (e) => {
-      const header = e.target.closest('.mobile-accordion-header');
-      const product = e.target.closest('.mobile-accordion-product');
-      if (header) {
-        toggleMobileCategoryContent(header);
-      } else if (product) {
-        selectProduct(product.dataset.name, product.dataset.cat, product.dataset.product, product.dataset.thumb);
-        closeMobileSheet();
-      }
-    });
-
-    window.toggleMobileCategory = toggleMobileCategoryContent;
-    window.selectProductFromEl = (el) => {
-      selectProduct(
-        el.dataset.name,
-        el.dataset.cat,
-        el.dataset.product,
-        el.dataset.thumb || getThumbForProduct(el.dataset.cat, el.dataset.product)
-      );
-      closeMobileSheet();
-    };
-
-    quickAnswerContainer?.addEventListener('click', (e) => {
-      const btn = e.target.closest('.faq-trigger-btn');
-      if (!btn) return;
-      const item = btn.closest('.faq-item');
-      const content = item?.querySelector('.faq-answer-container');
-      const icon = item?.querySelector('.faq-trigger-icon');
-      if (!content) return;
-
-      const isOpen = content.classList.contains('open');
-
-      if (isOpen) {
-        content.style.maxHeight = content.scrollHeight + 'px';
-        content.offsetHeight;
-        content.style.maxHeight = '0px';
-        content.classList.remove('open');
-        icon?.classList.remove('rotated');
-      } else {
-        content.style.maxHeight = 'none';
-        const scrollHeight = content.scrollHeight;
-        content.style.maxHeight = '0px';
-        content.offsetHeight;
-        content.classList.add('open');
-        icon?.classList.add('rotated');
-        content.style.maxHeight = scrollHeight + 'px';
-
-        const observer = new ResizeObserver(() => {
-          if (content.classList.contains('open')) {
-            content.style.maxHeight = content.scrollHeight + 'px';
-          }
-        });
-        observer.observe(content);
-      }
-    });
-
-    function initDefaultSelection() {
-      let match = null;
-      if (currentCategoryId && selectedProductId) {
-        match = [...(pcProductList?.querySelectorAll('.pc-product-item') || [])].find(
-          (el) => handleize(el.dataset.cat) === currentCategoryId && handleize(el.dataset.product) === selectedProductId
-        );
-      }
-      if (!match) {
-        match = pcProductList?.querySelector('.pc-product-item');
-        if (match) {
-          currentCategoryId = handleize(match.dataset.cat);
-          selectedProductId = handleize(match.dataset.product);
-          hoverCategoryId = currentCategoryId;
-        }
-      }
-      if (match) setHeaderDisplay(match.dataset.name, match.dataset.thumb);
-      showProductsForCategory(currentCategoryId || hoverCategoryId);
-      highlightSelectedProduct();
-      applyContentFilter();
-    }
-
-    initDefaultSelection();
-  });
-</script>
 
 {% schema %}
 {
