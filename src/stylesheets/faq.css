@@ -1,7 +1,8 @@
 .faq-index-page {
     min-height: 100vh;
     color: #6e6e73;
-    background-color: #f5f5f7
+    background-color: #f5f5f7;
+    padding-bottom: 100px
 }
 
 .faq-index-page .page-wrapper {
@@ -508,6 +509,10 @@
 }
 
 @media (max-width: 767px) {
+    .faq-index-page {
+        padding-bottom: 0
+    }
+    
     .faq-index-page .page-wrapper {
         width: 100%;
         padding: 0
