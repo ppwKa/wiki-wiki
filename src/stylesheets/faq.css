@@ -526,6 +526,7 @@
     .faq-index-page .page-wrapper .main-card {
         margin-top: 0;
         border-radius: 0;
+        min-height: calc(100vh - 54px);
         padding: 40px 16px 70px
     }
 
