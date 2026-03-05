@@ -6414,7 +6414,7 @@ body.modal-open {
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,.15) transparent;
+  scrollbar-color: rgba(0, 0, 0, .15) transparent;
 }
 .faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar {
   width: 4px;
@@ -6495,13 +6495,13 @@ body.modal-open {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
-  transition: transform .4s cubic-bezier(.4,0,.2,1);
+  transition: transform .4s cubic-bezier(.4, 0, .2, 1);
 }
 .faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-icon.rotated {
   transform: rotate(180deg);
 }
 .faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-container {
-  transition: max-height .4s cubic-bezier(.4,0,.2,1),opacity .4s ease;
+  transition: max-height .4s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -6581,7 +6581,7 @@ body.modal-open {
   border-radius: 8px 8px 0 0;
   overflow: hidden;
   background-color: #fff;
-  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
   transform: translateY(100%);
 }
 .faq-index-page .mobile-sheet.open {
@@ -6672,7 +6672,7 @@ body.modal-open {
   max-height: 1000px;
 }
 @media (min-width: 768px) {
-  .mobile-overlay,.mobile-sheet {
+  .mobile-overlay, .mobile-sheet {
     display: none !important;
   }
 }
@@ -6694,7 +6694,7 @@ body.modal-open {
     border-radius: 0;
     padding: 40px 16px 70px;
   }
-  .faq-index-page .page-wrapper .main-card .page-title,.faq-index-page .page-wrapper .main-card .section-title {
+  .faq-index-page .page-wrapper .main-card .page-title, .faq-index-page .page-wrapper .main-card .section-title {
     font-size: 24px;
     line-height: 28px;
     letter-spacing: -.72px;
@@ -6747,7 +6747,7 @@ body.modal-open {
 }
 .faq-index-page .faq-skeleton-title {
   height: 24px;
-  background: linear-gradient(90deg,#e5e5e7 25%,#f5f5f7 50%,#e5e5e7 75%);
+  background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
   background-size: 200% 100%;
   animation: faq-skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
@@ -6756,7 +6756,7 @@ body.modal-open {
 }
 .faq-index-page .faq-skeleton-item {
   height: 52px;
-  background: linear-gradient(90deg,#e5e5e7 25%,#f5f5f7 50%,#e5e5e7 75%);
+  background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
   background-size: 200% 100%;
   animation: faq-skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
