@@ -47,9 +47,9 @@
 
 {%- if _depth < 4 -%}
 
-{%- comment -%} ═══════════════════════════════════════════════════
+{%- comment -%}
     聚合页（depth 1 / 2 / 3）— faq_index 结构
-═══════════════════════════════════════════════════ {%- endcomment -%}
+{%- endcomment -%}
 <div
   class="faq-index-page"
   data-controller="faq-index"
@@ -127,78 +127,98 @@
         </div>
       </div>
 
-      {%- comment -%} FAQ 内容区：服务端直接渲染 init_prod 的文章 {%- endcomment -%}
+      {%- comment -%} FAQ 内容区：骨架屏 + 实际内容 {%- endcomment -%}
       <div id="faqContentWrapper">
-        {%- if init_prod -%}
 
-          {%- comment -%} Quick Answer：schema 字段用 is_hide_as_article（true） {%- endcomment -%}
-          <div class="faq-section">
-            <h2 class="section-title">Quick Answer</h2>
-            <div class="faq-list" id="quickAnswerContainer">
-              {%- assign qa_index = 0 -%}
-              {%- for p in init_prod.children -%}
-                {%- if p.settings.is_hide_as_article -%}
-                  {%- assign qa_index = qa_index | plus: 1 -%}
-                  <div
-                    class="faq-item"
-                    data-type="qna"
-                    data-cat="{{ init_cat.settings.title }}"
-                    data-product="{{ init_prod.settings.title }}"
-                    data-q="{{ p.settings.title }}"
-                  >
-                    <button class="faq-trigger-btn" type="button">
-                      <div class="faq-question">
-                        <span>{{ qa_index }}.</span>
+        {%- comment -%} 骨架屏：初始可见，JS connect() 后隐藏 {%- endcomment -%}
+        <div class="faq-skeleton" id="faqSkeleton">
+          <div class="faq-skeleton-section">
+            <div class="faq-skeleton-title"></div>
+            <div class="faq-skeleton-item"></div>
+            <div class="faq-skeleton-item"></div>
+            <div class="faq-skeleton-item"></div>
+          </div>
+          <div class="faq-skeleton-section">
+            <div class="faq-skeleton-title"></div>
+            <div class="faq-skeleton-item"></div>
+            <div class="faq-skeleton-item"></div>
+          </div>
+        </div>
+
+        {%- comment -%} 实际内容：初始隐藏，JS connect() 后揭开 {%- endcomment -%}
+        <div id="faqContent" style="display:none">
+          {%- if init_prod -%}
+
+            {%- comment -%} Quick Answer {%- endcomment -%}
+            <div class="faq-section">
+              <h2 class="section-title">Quick Answer</h2>
+              <div class="faq-list" id="quickAnswerContainer">
+                {%- assign qa_index = 0 -%}
+                {%- for p in init_prod.children -%}
+                  {%- if p.settings.is_hide_as_article -%}
+                    {%- assign qa_index = qa_index | plus: 1 -%}
+                    <div
+                      class="faq-item"
+                      data-type="qna"
+                      data-cat="{{ init_cat.settings.title }}"
+                      data-product="{{ init_prod.settings.title }}"
+                      data-q="{{ p.settings.title }}"
+                    >
+                      <button class="faq-trigger-btn" type="button">
+                        <div class="faq-question">
+                          <span>{{ qa_index }}.</span>
+                          <span>{{ p.settings.title }}</span>
+                        </div>
+                        <svg class="faq-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                          <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                      <div class="faq-answer-container">
+                        <div class="faq-answer-content">{{ p.settings.content }}</div>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+
+            {%- comment -%} Visual Guides {%- endcomment -%}
+            <div class="guides-section">
+              <h2 class="section-title">Visual Guides</h2>
+              <div class="guides-list" id="visualGuidesContainer">
+                {%- assign guide_index = 0 -%}
+                {%- for p in init_prod.children -%}
+                  {%- unless p.settings.is_hide_as_article -%}
+                    {%- assign guide_index = guide_index | plus: 1 -%}
+                    <a
+                      href="{{ p.path }}"
+                      class="guide-card"
+                      data-turbo-frame="main-content-frame"
+                      data-turbo-action="advance"
+                      data-type="guide"
+                      data-cat="{{ init_cat.settings.title }}"
+                      data-product="{{ init_prod.settings.title }}"
+                    >
+                      <div class="guide-title">
+                        <span>{{ guide_index }}.</span>
                         <span>{{ p.settings.title }}</span>
                       </div>
-                      <svg class="faq-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                        <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                      <svg class="guide-arrow" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
-                    </button>
-                    <div class="faq-answer-container">
-                      <div class="faq-answer-content">{{ p.settings.content }}</div>
-                    </div>
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
+                    </a>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </div>
             </div>
-          </div>
 
-          {%- comment -%} Visual Guides：is_hide_as_article 为 false → 文章页展示 {%- endcomment -%}
-          <div class="guides-section">
-            <h2 class="section-title">Visual Guides</h2>
-            <div class="guides-list" id="visualGuidesContainer">
-              {%- assign guide_index = 0 -%}
-              {%- for p in init_prod.children -%}
-                {%- unless p.settings.is_hide_as_article -%}
-                  {%- assign guide_index = guide_index | plus: 1 -%}
-                  <a
-                    href="{{ p.path }}"
-                    class="guide-card"
-                    data-turbo-frame="main-content-frame"
-                    data-turbo-action="advance"
-                    data-type="guide"
-                    data-cat="{{ init_cat.settings.title }}"
-                    data-product="{{ init_prod.settings.title }}"
-                  >
-                    <div class="guide-title">
-                      <span>{{ guide_index }}.</span>
-                      <span>{{ p.settings.title }}</span>
-                    </div>
-                    <svg class="guide-arrow" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                      <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </a>
-                {%- endunless -%}
-              {%- endfor -%}
+          {%- else -%}
+            <div class="faq-content-placeholder">
+              <p class="faq-select-hint">Choose a product model to view Quick Answer and Visual Guides.</p>
             </div>
-          </div>
+          {%- endif -%}
+        </div>
 
-        {%- else -%}
-          <div class="faq-content-placeholder">
-            <p class="faq-select-hint">Choose a product model to view Quick Answer and Visual Guides.</p>
-          </div>
-        {%- endif -%}
       </div>
 
     </div>
@@ -250,9 +270,9 @@
 
 {%- elsif _depth == 4 -%}
 
-{%- comment -%} ═══════════════════════════════════════════════════
+{%- comment -%}
     文章页（depth 4）— faq_detail 结构
-═══════════════════════════════════════════════════ {%- endcomment -%}
+{%- endcomment -%}
 <div class="faq-detail-page">
 
   {%- comment -%} 面包屑：Site > FAQ Root > 文章标题 {%- endcomment -%}
@@ -301,7 +321,7 @@
     {
       "id": "is_hide_as_article",
       "type": "checkbox",
-      "label": "是否不作为完整文章页展示",
+      "label": "是否隐藏在FAQ文章列表中",
       "info": "勾选后在 FAQ 聚合页做为quick answer展示, 不勾选则作为visual guide展示",
       "default": false
     },

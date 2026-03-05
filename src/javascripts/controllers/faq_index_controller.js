@@ -30,6 +30,18 @@ export default class extends Controller {
     const mobileSheet = this.element.querySelector("#mobileSheet")
     const closeSheet = this.element.querySelector("#closeSheet")
     const mobileAccordion = this.element.querySelector("#mobileAccordion")
+    const faqSkeleton     = this.element.querySelector("#faqSkeleton")
+    const faqContent      = this.element.querySelector("#faqContent")
+
+    const showSkeleton = () => {
+      if (faqSkeleton) faqSkeleton.style.display = ""
+      if (faqContent)  faqContent.style.display  = "none"
+    }
+
+    const showContent = () => {
+      if (faqSkeleton) faqSkeleton.style.display = "none"
+      if (faqContent)  faqContent.style.display  = ""
+    }
 
     // 初始选中状态来自服务端注入的 Stimulus values
     const initCatTitle = this.initCatValue || ""
@@ -154,6 +166,7 @@ export default class extends Controller {
       setHeaderDisplay(name, thumbUrl)
       highlightSelectedProduct()
       showProductsForCategory(currentCategoryId)
+      showSkeleton()
 
       navigateToProduct(path)
     }
@@ -377,9 +390,13 @@ export default class extends Controller {
     }
 
     initDefaultSelection()
+
+    // 骨架屏揭开：首次加载 & 每次 frame 导航后 connect() 重新触发
+    this._skeletonTimer = setTimeout(showContent, 200)
   }
 
   disconnect() {
+    clearTimeout(this._skeletonTimer)
     if (this.abortController) this.abortController.abort()
     document.body.classList.remove("faq-index-modal-open")
 
