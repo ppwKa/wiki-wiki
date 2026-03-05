@@ -82,90 +82,27 @@
         </div>
       </div>
 
-      <!-- Quick Answer (FAQ 列表) -->
-      <div class="faq-section">
-        <h2 class="section-title">Quick Answer</h2>
-        <div class="faq-list" id="quickAnswerContainer">
-          {%- assign qa_index = 0 -%}
-          {%- for cat in page.children -%}
-            {%- for prod in cat.children -%}
-              {%- for p in prod.children -%}
-                {%- if p.settings.is_quick_answer -%}
-                  {%- assign qa_index = qa_index | plus: 1 -%}
-                  <div
-                    class="faq-item"
-                    data-type="qna"
-                    data-cat="{{ cat.settings.title }}"
-                    data-product="{{ prod.settings.title }}"
-                    data-q="{{ p.settings.title }}"
-                  >
-                    <button class="faq-trigger-btn">
-                      <div class="faq-question">
-                        <span>{{ qa_index }}.</span>
-                        <span>{{ p.settings.title}}</span>
-                      </div>
-                      <svg
-                        class="faq-trigger-icon"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="36"
-                        height="36"
-                        viewBox="0 0 36 36"
-                        fill="none"
-                      >
-                        <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </button>
-                    <div class="faq-answer-container">
-                      <div class="faq-answer-content">
-                        {{ p.settings.content }}
-                      </div>
-                    </div>
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endfor -%}
-          {%- endfor -%}
-        </div>
-      </div>
-
-      <!-- Visual Guides (指南列表) -->
-      <div class="guides-section">
-        <h2 class="section-title">Visual Guides</h2>
-        <div class="guides-list" id="visualGuidesContainer">
-          {%- assign guide_index = 0 -%}
-          {%- for cat in page.children -%}
-            {%- for prod in cat.children -%}
-              {%- for p in prod.children -%}
-                {%- if p.settings.is_quick_answer == false -%}
-                  {%- assign guide_index = guide_index | plus: 1 -%}
-                  <a
-                    href="{{ p.url }}"
-                    class="guide-card"
-                    data-turbo-frame="_top"
-                    data-type="guide"
-                    data-cat="{{ cat.settings.title }}"
-                    data-product="{{ prod.settings.title }}"
-                  >
-                    <div class="guide-title">
-                      <span>{{ guide_index }}.</span>
-                      <span>{{ p.settings.title}}</span>
-                    </div>
-                    <svg
-                      class="guide-arrow"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="36"
-                      height="36"
-                      viewBox="0 0 36 36"
-                      fill="none"
-                    >
-                      <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </a>
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endfor -%}
-          {%- endfor -%}
-        </div>
+      <!-- FAQ 内容区：懒加载，点击产品时加载 -->
+      <div class="faq-content-wrapper" id="faqContentWrapper" data-faq-path="{{ page.path }}">
+        <turbo-frame id="faq-content-frame" data-turbo-action="advance">
+          <!-- 未选择产品时显示提示；加载时显示骨架屏 -->
+          <div class="faq-content-placeholder" id="faqContentPlaceholder">
+            <div class="faq-skeleton" id="faqSkeleton" style="display: none;">
+              <div class="faq-skeleton-section">
+                <div class="faq-skeleton-title"></div>
+                <div class="faq-skeleton-item"></div>
+                <div class="faq-skeleton-item"></div>
+                <div class="faq-skeleton-item"></div>
+              </div>
+              <div class="faq-skeleton-section">
+                <div class="faq-skeleton-title"></div>
+                <div class="faq-skeleton-item"></div>
+                <div class="faq-skeleton-item"></div>
+              </div>
+            </div>
+            <p class="faq-select-hint" id="faqSelectHint">Choose a product model to view Quick Answer and Visual Guides.</p>
+          </div>
+        </turbo-frame>
       </div>
     </div>
   </div>

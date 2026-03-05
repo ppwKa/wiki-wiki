@@ -1,6 +1,6 @@
 /**
  * FAQ 聚合页交互控制器
- * 负责产品筛选、FAQ 折叠、移动端弹窗、URL 状态同步、内容筛选
+ * 负责产品筛选、FAQ 折叠、移动端弹窗、URL 状态同步、内容懒加载
  * 仅在 FAQ 聚合页生效（通过 data-controller="faq-index" 绑定）
  */
 import { Controller } from "@hotwired/stimulus"
@@ -26,9 +26,14 @@ export default class extends Controller {
     const mobileSheet = this.element.querySelector("#mobileSheet")
     const closeSheet = this.element.querySelector("#closeSheet")
     const mobileAccordion = this.element.querySelector("#mobileAccordion")
-    const quickAnswerContainer = this.element.querySelector("#quickAnswerContainer")
+    const faqContentFrame = this.element.querySelector("#faq-content-frame")
+    const faqContentPlaceholder = this.element.querySelector("#faqContentPlaceholder")
+    const faqSkeleton = this.element.querySelector("#faqSkeleton")
+    const faqSelectHint = this.element.querySelector("#faqSelectHint")
+    const faqContentWrapper = this.element.querySelector("#faqContentWrapper")
 
     const params = new URLSearchParams(location.search)
+    const faqPath = faqContentWrapper?.dataset.faqPath || "/faq"
 
     const handleize = (str) => {
       if (!str || typeof str !== "string") return ""
@@ -42,6 +47,8 @@ export default class extends Controller {
     let currentCategoryId = handleize(params.get("cat") || "")
     let selectedProductId = handleize(params.get("product") || "")
     let hoverCategoryId = currentCategoryId || ""
+    let currentCategoryTitle = ""
+    let currentProductTitle = ""
 
     const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT
 
@@ -94,12 +101,27 @@ export default class extends Controller {
       })
     }
 
-    const applyContentFilter = () => {
-      this.element.querySelectorAll('[data-type="qna"], [data-type="guide"]').forEach((el) => {
-        const okCat = !currentCategoryId || handleize(el.dataset.cat) === currentCategoryId
-        const okProd = !selectedProductId || handleize(el.dataset.product) === selectedProductId
-        el.style.display = okCat && okProd ? "" : "none"
-      })
+    const showSkeleton = () => {
+      if (faqSkeleton) faqSkeleton.style.display = ""
+      if (faqSelectHint) faqSelectHint.style.display = "none"
+    }
+
+    const showHint = () => {
+      if (faqSkeleton) faqSkeleton.style.display = "none"
+      if (faqSelectHint) faqSelectHint.style.display = ""
+    }
+
+    const loadContentForProduct = (catTitle, productTitle) => {
+      if (!faqContentFrame || !catTitle || !productTitle) return
+      showSkeleton()
+      const url =
+        "/s/faq/content?faq_path=" +
+        encodeURIComponent(faqPath) +
+        "&cat=" +
+        encodeURIComponent(catTitle) +
+        "&product=" +
+        encodeURIComponent(productTitle)
+      faqContentFrame.src = url
     }
 
     const openMobileCategory = (catId) => {
@@ -143,13 +165,15 @@ export default class extends Controller {
     const selectProduct = (name, cat, product, thumb) => {
       currentCategoryId = handleize(cat || "")
       selectedProductId = handleize(product || "")
+      currentCategoryTitle = cat || ""
+      currentProductTitle = product || ""
       hoverCategoryId = currentCategoryId
       const thumbUrl = thumb || getThumbForProduct(currentCategoryId, selectedProductId)
       setHeaderDisplay(name, thumbUrl)
       updateUrl(currentCategoryId, selectedProductId)
-      applyContentFilter()
       highlightSelectedProduct()
       showProductsForCategory(currentCategoryId)
+      loadContentForProduct(currentCategoryTitle, currentProductTitle)
     }
 
     const closePcDropdown = () => {
@@ -252,7 +276,8 @@ export default class extends Controller {
       { signal: this.signal }
     )
 
-    quickAnswerContainer?.addEventListener(
+    // FAQ 手风琴：使用事件委托，支持懒加载后的动态内容
+    this.element.addEventListener(
       "click",
       (e) => {
         const btn = e.target.closest(".faq-trigger-btn")
@@ -307,10 +332,17 @@ export default class extends Controller {
           hoverCategoryId = currentCategoryId
         }
       }
-      if (match) setHeaderDisplay(match.dataset.name, match.dataset.thumb)
       showProductsForCategory(currentCategoryId || hoverCategoryId)
       highlightSelectedProduct()
-      applyContentFilter()
+      if (match) {
+        setHeaderDisplay(match.dataset.name, match.dataset.thumb)
+        currentCategoryTitle = match.dataset.cat
+        currentProductTitle = match.dataset.product
+        loadContentForProduct(currentCategoryTitle, currentProductTitle)
+      } else {
+        setHeaderDisplay(DEFAULT_PLACEHOLDER, "")
+        showHint()
+      }
     }
 
     initDefaultSelection()

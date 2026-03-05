@@ -6726,6 +6726,56 @@ body.modal-open {
     padding: 17px 12px;
   }
 }
+.faq-index-page .faq-content-wrapper {
+  border-top: 1px solid #D2D2D7;
+  padding-top: 50px;
+}
+.faq-index-page .faq-content-placeholder {
+  min-height: 200px;
+}
+.faq-index-page .faq-select-hint {
+  color: #6e6e73;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 20px;
+}
+.faq-index-page .faq-skeleton-section {
+  margin-bottom: 40px;
+}
+.faq-index-page .faq-skeleton-section:first-child {
+  margin-top: 0;
+}
+.faq-index-page .faq-skeleton-title {
+  height: 24px;
+  background: linear-gradient(90deg,#e5e5e7 25%,#f5f5f7 50%,#e5e5e7 75%);
+  background-size: 200% 100%;
+  animation: faq-skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 180px;
+}
+.faq-index-page .faq-skeleton-item {
+  height: 52px;
+  background: linear-gradient(90deg,#e5e5e7 25%,#f5f5f7 50%,#e5e5e7 75%);
+  background-size: 200% 100%;
+  animation: faq-skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+@keyframes faq-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.faq-index-page .faq-empty-state {
+  color: #6e6e73;
+  font-size: 14px;
+  padding: 40px 0;
+  text-align: center;
+}
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light] {
     color-scheme: light;
