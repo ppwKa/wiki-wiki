@@ -71,12 +71,12 @@
         <div class="page-main">
           <h1 class="page-title">{{ faq_root.settings.title }}</h1>
 
-          {%- render '_faq_product_filter', faq_root: faq_root -%}
-          {%- render '_faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
+          {%- render 'faq_product_filter', faq_root: faq_root -%}
+          {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
         </div>
       </div>
 
-      {%- render '_faq_product_sheet', faq_root: faq_root, title: 'Choose Product Model' -%}
+      {%- render 'faq_product_sheet', faq_root: faq_root, title: 'Choose Product Model' -%}
     </div>
 
   {%- elsif _depth == 4 -%}
@@ -117,12 +117,12 @@
           <div class="page-main-container">
             <h1 class="page-title">{{ page.settings.title }}</h1>
 
-            {%- render '_faq_toc_aside', faq_root: faq_root -%}
+            {%- render 'faq_toc_aside', faq_root: faq_root -%}
           </div>
         </div>
       </div>
 
-      {%- render '_faq_toc_sheet', faq_root: faq_root, title: 'Visual Guide Contents' -%}
+      {%- render 'faq_toc_sheet', faq_root: faq_root, title: 'Visual Guide Contents' -%}
     </div>
 
     {%- comment -%} depth > 4 → 非法，不渲染任何内容 {%- endcomment -%}
