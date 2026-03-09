@@ -1,0 +1,54 @@
+{%- comment -%}
+  FAQ 聚合页移动端底部弹窗（产品选择器）
+  参数：faq_root — FAQ 根页面对象（含 .children 分类树）
+         title — 弹窗标题
+{%- endcomment -%}
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-sheet" id="mobileSheet">
+  <div class="mobile-sheet-header">
+    <span class="mobile-sheet-title">{{ title }}</span>
+    <button class="mobile-sheet-close-btn" id="closeSheet" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M7.00049 7L15.0005 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.00049 15L15.0005 7" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-sheet-content" id="mobileAccordion">
+    {%- for cat in faq_root.children -%}
+      <div class="mobile-accordion-item" data-cat="{{ cat.settings.title }}">
+        <div class="mobile-accordion-header">
+          <span class="mobile-accordion-title">{{ cat.settings.title }}</span>
+          <svg
+            class="mobile-accordion-arrow"
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+          >
+            <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="mobile-accordion-content">
+          <div class="mobile-accordion-list">
+            {%- for prod in cat.children -%}
+              <div
+                class="mobile-accordion-product"
+                data-cat="{{ cat.settings.title }}"
+                data-product="{{ prod.settings.title }}"
+                data-name="{{ prod.settings.title }}"
+                data-thumb="{{ prod.settings.thumbnail | default: '' }}"
+                data-path="{{ prod.path }}"
+              >
+                {{ prod.settings.title }}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>

@@ -2582,6 +2582,9 @@
   .block {
     display: block;
   }
+  .contents {
+    display: contents;
+  }
   .flex {
     display: flex;
   }
@@ -2785,9 +2788,6 @@
   }
   .max-w-full {
     max-width: 100%;
-  }
-  .max-w-none {
-    max-width: none;
   }
   .max-w-screen-lg {
     max-width: var(--breakpoint-lg);
@@ -6271,7 +6271,7 @@ body.modal-open {
   margin-left: 5px;
   margin-right: 5px;
 }
-.faq-index-page .page-wrapper .main-card {
+.faq-index-page .page-wrapper .page-main {
   width: 100%;
   border-radius: 18px;
   background: #fff;
@@ -6279,7 +6279,7 @@ body.modal-open {
   text-align: left;
   margin-top: 70px;
 }
-.faq-index-page .page-wrapper .main-card .page-title {
+.faq-index-page .page-wrapper .page-main .page-title {
   color: #151413;
   font-size: 28px;
   font-weight: 500;
@@ -6287,7 +6287,7 @@ body.modal-open {
   letter-spacing: -.84px;
   margin-bottom: 0;
 }
-.faq-index-page .page-wrapper .main-card .section-title {
+.faq-index-page .page-wrapper .page-main .section-title {
   color: #151413;
   font-size: 24px;
   font-weight: 500;
@@ -6295,11 +6295,11 @@ body.modal-open {
   letter-spacing: -.72px;
   margin-bottom: 0;
 }
-.faq-index-page .page-wrapper .main-card .filter-section {
+.faq-index-page .page-wrapper .page-main .filter-section {
   margin-top: 50px;
   margin-bottom: 50px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-label {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-label {
   color: #343436;
   font-size: 14px;
   font-weight: 500;
@@ -6307,12 +6307,12 @@ body.modal-open {
   letter-spacing: -.42px;
   margin-bottom: 20px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-container {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-container {
   position: relative;
   width: 100%;
   max-width: 400px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn {
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -6320,38 +6320,38 @@ body.modal-open {
   border-radius: 8px;
   background: #f5f5f7;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon {
   width: 100px;
   height: 100px;
   flex-shrink: 0;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon svg {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon svg {
   width: 100%;
   height: 100%;
   object-fit: cover;
   fill: #6e6e73;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon img {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-text {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-text {
   color: #151413;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -.42px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-arrow {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-arrow {
   margin-right: 20px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu {
   position: absolute;
   left: 0;
   top: 100%;
@@ -6366,16 +6366,16 @@ body.modal-open {
   box-shadow: 0 4px 12px #0000001f;
   padding: 16px 8px 16px 16px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu.hidden {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu.hidden {
   display: none;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list {
   width: 200px;
   flex-shrink: 0;
   position: relative;
   padding-right: 16px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list:after {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list:after {
   content: "";
   display: block;
   width: 1px;
@@ -6386,7 +6386,7 @@ body.modal-open {
   top: 0;
   border-radius: 4px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item {
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -6400,37 +6400,35 @@ body.modal-open {
   line-height: 140%;
   letter-spacing: -.36px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item:hover {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item:hover {
   background-color: #f5f5f7;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.active {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.active {
   color: #0071e3;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.inactive {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.inactive {
   color: #6e6e73;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list {
   flex: 1;
   padding-left: 16px;
   overflow-x: hidden;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, .15) transparent;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar {
   width: 4px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-button {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-button {
   display: none;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-track {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-track {
   background: transparent;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-thumb {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-thumb {
   background: #00000026;
   border-radius: 4px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item {
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -6445,33 +6443,33 @@ body.modal-open {
   letter-spacing: -.36px;
   margin-right: 8px;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item:hover {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item:hover {
   background-color: #f5f5f7;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.active {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.active {
   color: #0071e3;
 }
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.inactive {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.inactive {
   color: #6e6e73;
 }
-.faq-index-page .page-wrapper .main-card .faq-section {
+.faq-index-page .page-wrapper .page-main .faq-section {
   border-top: 1px solid #D2D2D7;
   padding-top: 50px;
   overflow: hidden;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item {
   overflow: hidden;
   border-radius: 4px;
   border: 1px solid #F5F5F7;
   background-color: #f5f5f7;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-btn {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
   display: flex;
   width: 100%;
   align-items: center;
@@ -6482,7 +6480,7 @@ body.modal-open {
   border: none;
   cursor: pointer;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-question {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-question {
   display: flex;
   align-items: flex-start;
   gap: 4px;
@@ -6492,26 +6490,26 @@ body.modal-open {
   line-height: 18px;
   letter-spacing: -.42px;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-icon {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-icon {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
   transition: transform .4s cubic-bezier(.4, 0, .2, 1);
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-icon.rotated {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-icon.rotated {
   transform: rotate(180deg);
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-container {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-container {
   transition: max-height .4s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
   background-color: #fff;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-container.open {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-container.open {
   opacity: 1;
 }
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-content {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content {
   padding: 30px 20px;
   color: #6e6e73;
   font-size: 12px;
@@ -6519,17 +6517,17 @@ body.modal-open {
   line-height: 16px;
   letter-spacing: -.36px;
 }
-.faq-index-page .page-wrapper .main-card .guides-section {
+.faq-index-page .page-wrapper .page-main .guides-section {
   padding-top: 50px;
   overflow: hidden;
 }
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -6542,7 +6540,7 @@ body.modal-open {
   text-decoration: none;
   color: #343436;
 }
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card .guide-title {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card .guide-title {
   display: flex;
   align-items: flex-start;
   gap: 4px;
@@ -6552,7 +6550,7 @@ body.modal-open {
   line-height: 18px;
   letter-spacing: -.42px;
 }
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card .guide-arrow {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card .guide-arrow {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
@@ -6578,11 +6576,12 @@ body.modal-open {
   z-index: 101;
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  height: 60vh;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
   background-color: #fff;
   transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0 -8px 30px 0 rgba(0, 0, 0, 0.15);
   transform: translateY(100%);
 }
 .faq-index-page .mobile-sheet.open {
@@ -6689,45 +6688,45 @@ body.modal-open {
     font-size: 12px;
     padding: 16px;
   }
-  .faq-index-page .page-wrapper .breadcrumb-nav .breadcrumb-link {
+  .faq-index-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
     margin-left: 0;
     margin-right: 0;
   }
-  .faq-index-page .page-wrapper .main-card {
+  .faq-index-page .page-wrapper .page-main {
     margin-top: 0;
     border-radius: 0;
     min-height: calc(100vh - 54px);
     padding: 40px 16px 70px;
   }
-  .faq-index-page .page-wrapper .main-card .page-title, .faq-index-page .page-wrapper .main-card .section-title {
+  .faq-index-page .page-wrapper .page-main .page-title, .faq-index-page .page-wrapper .page-main .section-title {
     font-size: 24px;
     line-height: 28px;
     letter-spacing: -.72px;
     padding: 0 6px;
   }
-  .faq-index-page .page-wrapper .main-card .filter-section {
+  .faq-index-page .page-wrapper .page-main .filter-section {
     margin-top: 40px;
     margin-bottom: 40px;
   }
-  .faq-index-page .page-wrapper .main-card .filter-section .filter-label {
+  .faq-index-page .page-wrapper .page-main .filter-section .filter-label {
     padding: 0 6px;
   }
-  .faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu {
+  .faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu {
     display: none !important;
   }
-  .faq-index-page .page-wrapper .main-card .filter-section .faq-list {
+  .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
     margin-top: 16px;
   }
-  .faq-index-page .page-wrapper .main-card .faq-section {
+  .faq-index-page .page-wrapper .page-main .faq-section {
     padding-top: 40px;
   }
-  .faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-btn {
+  .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
     padding: 17px 12px;
   }
-  .faq-index-page .page-wrapper .main-card .guides-section {
+  .faq-index-page .page-wrapper .page-main .guides-section {
     padding-top: 40px;
   }
-  .faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card {
+  .faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
     padding: 17px 12px;
   }
 }
@@ -6780,6 +6779,522 @@ body.modal-open {
   font-size: 14px;
   padding: 40px 0;
   text-align: center;
+}
+.faq-detail-page {
+  min-height: 100vh;
+  color: #6e6e73;
+  background-color: #f5f5f7;
+}
+.faq-detail-page .page-wrapper {
+  width: 100%;
+}
+.faq-detail-page .page-wrapper .breadcrumb-nav {
+  width: 87.5%;
+  max-width: 996px;
+  margin: 0 auto;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  color: #6e6e73;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -.42px;
+}
+.faq-detail-page .page-wrapper .breadcrumb-nav .breadcrumb-link {
+  color: inherit;
+  text-decoration: none;
+}
+.faq-detail-page .page-wrapper .breadcrumb-nav .breadcrumb-link:hover {
+  color: #343436;
+}
+.faq-detail-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.faq-detail-page .page-wrapper .page-main {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  background-color: #fff;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container {
+  width: 87.5%;
+  max-width: 996px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-title {
+  color: #151413;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -.84px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid #D2D2D7;
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper {
+  padding-top: 50px;
+  width: 100%;
+  display: flex;
+  gap: 40px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside {
+  width: 240px;
+  background-color: #f5f5f7;
+  padding: 10px 10px 10px 20px;
+  height: 80vh;
+  max-height: 900px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: sticky;
+  top: 20px;
+  flex-shrink: 0;
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: #D0D0D0 #F5F5F7;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside:hover {
+  scrollbar-color: #6E6E73 #F5F5F7;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside::-webkit-scrollbar {
+  width: 6px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-title {
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -.42px;
+  padding: 12px 0 17px;
+  border-bottom: 1px solid #D2D2D7;
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-subtitle {
+  color: #343436;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  padding: 17px 0 12px;
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-link {
+  width: 100%;
+  text-decoration: none;
+  color: #6e6e73;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: color .2s ease;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-link .toc-arrow {
+  display: flex;
+  align-items: flex-start;
+  width: 10px;
+  height: 10px;
+  transition: transform .2s ease;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-link .toc-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-link:hover {
+  color: #0071e3;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist {
+  list-style: none;
+  padding: 0;
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height .3s ease, opacity .3s ease;
+  opacity: 1;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-link {
+  text-decoration: none;
+  color: #6e6e73;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: color .2s ease;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list {
+  list-style: none;
+  padding: 0;
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height .3s ease, opacity .3s ease;
+  opacity: 1;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item .toc-link {
+  padding: 8px 30px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item.active .toc-link {
+  color: #0071e3;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content {
+  text-align: left;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-title {
+  color: #151413;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -.72px;
+  margin-bottom: 20px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h1 {
+  color: #343436;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -.72px;
+  margin-bottom: 20px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h2 {
+  color: #343436;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: -.6px;
+  margin-bottom: 10px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h3 {
+  color: #343436;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -.48px;
+  margin-bottom: 10px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h6 {
+  color: #343436;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -.42px;
+  margin-bottom: 10px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article p {
+  color: #6e6e73;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  margin-bottom: 10px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 30px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f5f5f7;
+  margin-bottom: 30px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th {
+  color: #343436;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -.42px;
+  padding: 12px 20px;
+  border: 1px solid #fff;
+  white-space: nowrap;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th p {
+  color: inherit;
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td {
+  color: #6e6e73;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  padding: 12px 20px;
+  border: 1px solid #fff;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td p {
+  color: inherit;
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol {
+  padding-left: 20px;
+  margin-bottom: 30px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li {
+  color: #6e6e73;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li p, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li p {
+  margin-bottom: 0;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li::marker {
+  font-size: 8px;
+}
+.faq-detail-page .contents-trigger-btn {
+  display: none;
+}
+.faq-detail-page .mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: #00000080;
+  transition: opacity .3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+.faq-detail-page .mobile-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.faq-detail-page .mobile-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  background-color: #fff;
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  transform: translateY(100%);
+  box-shadow: 0 -8px 30px #00000026;
+}
+.faq-detail-page .mobile-sheet.open {
+  transform: translateY(0);
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #D2D2D7;
+  background-color: #fff;
+  padding: 16px 24px;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-header .mobile-sheet-title {
+  color: #343436;
+  font-family: HarmonyOS Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -.36px;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-header .mobile-sheet-close-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  font-size: 0;
+  line-height: 0;
+  color: #343436;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  text-align: left;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-title {
+  color: #6e6e73;
+  font-family: HarmonyOS Sans;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-arrow {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform .3s ease-out;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-arrow.rotated {
+  transform: rotate(180deg);
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content {
+  transition: max-height .3s ease-out;
+  max-height: 0;
+  overflow: hidden;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-header {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px 12px 24px;
+  color: #6e6e73;
+  font-family: HarmonyOS Sans;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  transition: color .2s ease;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-header .mobile-accordion-product-arrow {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform .3s ease-out;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-header .mobile-accordion-product-arrow.rotated {
+  transform: rotate(180deg);
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-content {
+  transition: max-height .3s ease-out;
+  max-height: 0;
+  overflow: hidden;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-content .mobile-accordion-article-list .mobile-accordion-article-item {
+  display: block;
+  padding: 12px 36px;
+  color: #6e6e73;
+  font-family: HarmonyOS Sans;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -.36px;
+  transition: color .2s ease;
+  text-decoration: none;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-content .mobile-accordion-article-list .mobile-accordion-article-item.active {
+  color: #0071e3;
+}
+.faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-content.open, .faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open {
+  max-height: 1000px;
+}
+@media (min-width: 768px) {
+  .contents-trigger-btn, .mobile-overlay, .mobile-sheet {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .faq-detail-page .page-wrapper .breadcrumb-nav {
+    width: 100%;
+    font-size: 12px;
+    padding: 16px;
+    letter-spacing: -.3px;
+  }
+  .faq-detail-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .faq-detail-page .page-wrapper .page-main {
+    min-height: calc(100vh - 54px);
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container {
+    width: 100%;
+    padding: 40px 22px;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-title {
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -.72px;
+    padding-bottom: 40px;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper {
+    padding-top: 12px;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .contents-trigger-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+    color: #0071e3;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside.page-aside {
+    display: none;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-title {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.6px;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table {
+    margin-bottom: 20px;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table p {
+    margin-bottom: 0;
+  }
+  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -.3px;
+    padding: 12px 10px;
+  }
 }
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light] {

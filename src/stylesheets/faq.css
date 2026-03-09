@@ -37,7 +37,7 @@
     margin-right: 5px
 }
 
-.faq-index-page .page-wrapper .main-card {
+.faq-index-page .page-wrapper .page-main {
     width: 100%;
     border-radius: 18px;
     background: #fff;
@@ -46,7 +46,7 @@
     margin-top: 70px
 }
 
-.faq-index-page .page-wrapper .main-card .page-title {
+.faq-index-page .page-wrapper .page-main .page-title {
     color: #151413;
     font-size: 28px;
     font-weight: 500;
@@ -55,7 +55,7 @@
     margin-bottom: 0
 }
 
-.faq-index-page .page-wrapper .main-card .section-title {
+.faq-index-page .page-wrapper .page-main .section-title {
     color: #151413;
     font-size: 24px;
     font-weight: 500;
@@ -64,12 +64,12 @@
     margin-bottom: 0
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section {
+.faq-index-page .page-wrapper .page-main .filter-section {
     margin-top: 50px;
     margin-bottom: 50px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-label {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-label {
     color: #343436;
     font-size: 14px;
     font-weight: 500;
@@ -78,13 +78,13 @@
     margin-bottom: 20px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-container {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-container {
     position: relative;
     width: 100%;
     max-width: 400px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn {
     display: flex;
     cursor: pointer;
     align-items: center;
@@ -93,32 +93,32 @@
     background: #f5f5f7
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content {
     display: flex;
     align-items: center;
     gap: 10px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon {
     width: 100px;
     height: 100px;
     flex-shrink: 0
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon svg {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
     fill: #6e6e73
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon img {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-icon img {
     width: 100%;
     height: 100%;
     object-fit: cover
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-text {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-content .filter-trigger-text {
     color: #151413;
     font-size: 14px;
     font-weight: 500;
@@ -126,11 +126,11 @@
     letter-spacing: -.42px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .filter-trigger-btn .filter-trigger-arrow {
+.faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-arrow {
     margin-right: 20px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu {
     position: absolute;
     left: 0;
     top: 100%;
@@ -146,18 +146,18 @@
     padding: 16px 8px 16px 16px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu.hidden {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu.hidden {
     display: none
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list {
     width: 200px;
     flex-shrink: 0;
     position: relative;
     padding-right: 16px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list:after {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list:after {
     content: "";
     display: block;
     width: 1px;
@@ -169,7 +169,7 @@
     border-radius: 4px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item {
     display: flex;
     cursor: pointer;
     align-items: center;
@@ -184,45 +184,43 @@
     letter-spacing: -.36px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item:hover {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item:hover {
     background-color: #f5f5f7
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.active {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.active {
     color: #0071e3
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.inactive {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.inactive {
     color: #6e6e73
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list {
     flex: 1;
     padding-left: 16px;
     overflow-x: hidden;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, .15) transparent
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar {
     width: 4px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-button {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-button {
     display: none
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-track {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-track {
     background: transparent
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-thumb {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list::-webkit-scrollbar-thumb {
     background: #00000026;
     border-radius: 4px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item {
     display: flex;
     cursor: pointer;
     align-items: center;
@@ -238,39 +236,39 @@
     margin-right: 8px
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item:hover {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item:hover {
     background-color: #f5f5f7
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.active {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.active {
     color: #0071e3
 }
 
-.faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.inactive {
+.faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-product-list .pc-product-item.inactive {
     color: #6e6e73
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section {
+.faq-index-page .page-wrapper .page-main .faq-section {
     border-top: 1px solid #D2D2D7;
     padding-top: 50px;
     overflow: hidden
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 20px
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item {
     overflow: hidden;
     border-radius: 4px;
     border: 1px solid #F5F5F7;
     background-color: #f5f5f7
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-btn {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
     display: flex;
     width: 100%;
     align-items: center;
@@ -282,7 +280,7 @@
     cursor: pointer
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-question {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-question {
     display: flex;
     align-items: flex-start;
     gap: 4px;
@@ -293,18 +291,18 @@
     letter-spacing: -.42px
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-icon {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-icon {
     width: 32px;
     height: 32px;
     flex-shrink: 0;
     transition: transform .4s cubic-bezier(.4, 0, .2, 1)
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-icon.rotated {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-icon.rotated {
     transform: rotate(180deg)
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-container {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-container {
     transition: max-height .4s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
     max-height: 0;
     overflow: hidden;
@@ -312,11 +310,11 @@
     background-color: #fff
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-container.open {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-container.open {
     opacity: 1
 }
 
-.faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-answer-content {
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content {
     padding: 30px 20px;
     color: #6e6e73;
     font-size: 12px;
@@ -325,19 +323,19 @@
     letter-spacing: -.36px
 }
 
-.faq-index-page .page-wrapper .main-card .guides-section {
+.faq-index-page .page-wrapper .page-main .guides-section {
     padding-top: 50px;
     overflow: hidden
 }
 
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 20px
 }
 
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -351,7 +349,7 @@
     color: #343436
 }
 
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card .guide-title {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card .guide-title {
     display: flex;
     align-items: flex-start;
     gap: 4px;
@@ -362,7 +360,7 @@
     letter-spacing: -.42px
 }
 
-.faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card .guide-arrow {
+.faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card .guide-arrow {
     width: 32px;
     height: 32px;
     flex-shrink: 0
@@ -391,11 +389,12 @@
     z-index: 101;
     display: flex;
     flex-direction: column;
-    height: 80vh;
+    height: 60vh;
     border-radius: 8px 8px 0 0;
     overflow: hidden;
     background-color: #fff;
     transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0 -8px 30px 0 rgba(0, 0, 0, 0.15);
     transform: translateY(100%)
 }
 
@@ -523,56 +522,56 @@
         padding: 16px
     }
 
-    .faq-index-page .page-wrapper .breadcrumb-nav .breadcrumb-link {
+    .faq-index-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
         margin-left: 0;
         margin-right: 0
     }
 
-    .faq-index-page .page-wrapper .main-card {
+    .faq-index-page .page-wrapper .page-main {
         margin-top: 0;
         border-radius: 0;
         min-height: calc(100vh - 54px);
         padding: 40px 16px 70px
     }
 
-    .faq-index-page .page-wrapper .main-card .page-title,
-    .faq-index-page .page-wrapper .main-card .section-title {
+    .faq-index-page .page-wrapper .page-main .page-title,
+    .faq-index-page .page-wrapper .page-main .section-title {
         font-size: 24px;
         line-height: 28px;
         letter-spacing: -.72px;
         padding: 0 6px
     }
 
-    .faq-index-page .page-wrapper .main-card .filter-section {
+    .faq-index-page .page-wrapper .page-main .filter-section {
         margin-top: 40px;
         margin-bottom: 40px
     }
 
-    .faq-index-page .page-wrapper .main-card .filter-section .filter-label {
+    .faq-index-page .page-wrapper .page-main .filter-section .filter-label {
         padding: 0 6px
     }
 
-    .faq-index-page .page-wrapper .main-card .filter-section .pc-dropdown-menu {
+    .faq-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu {
         display: none !important
     }
 
-    .faq-index-page .page-wrapper .main-card .filter-section .faq-list {
+    .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
         margin-top: 16px
     }
 
-    .faq-index-page .page-wrapper .main-card .faq-section {
+    .faq-index-page .page-wrapper .page-main .faq-section {
         padding-top: 40px
     }
 
-    .faq-index-page .page-wrapper .main-card .faq-section .faq-list .faq-item .faq-trigger-btn {
+    .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
         padding: 17px 12px
     }
 
-    .faq-index-page .page-wrapper .main-card .guides-section {
+    .faq-index-page .page-wrapper .page-main .guides-section {
         padding-top: 40px
     }
 
-    .faq-index-page .page-wrapper .main-card .guides-section .guides-list .guide-card {
+    .faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
         padding: 17px 12px
     }
 }

@@ -372,3 +372,4 @@ body.modal-open {
 
 /* custom styles*/
 @import "./faq.css";
+@import "./faq_detail.css";
