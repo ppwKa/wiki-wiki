@@ -2,12 +2,15 @@
   FAQ 统一模板 通过 path segment 数判断深度： /faq/category/product/article depth < 4 → 目录节点（聚合页）：复用 faq_index 结构 +
   服务端渲染产品内容 depth=4 → 叶子节点（文章页）：复用 faq_detail 结构 depth> 4 → 非法，不渲染
 {%- endcomment -%}
+
 {%- assign _segs = page.path | remove_first: '/' | split: '/' -%}
 {%- assign _depth = _segs.size -%}
+
 {%- comment -%} 上下文解析：faq_root / init_cat / init_prod（加安全兜底） {%- endcomment -%}
 {%- assign faq_root = null -%}
 {%- assign init_cat = null -%}
 {%- assign init_prod = null -%}
+
 {%- if _depth == 1 -%}
   {%- assign faq_root = page -%}
   {%- assign init_cat = page.children[0] -%}
@@ -27,6 +30,7 @@
   {%- assign _init_cat_title = init_cat.settings.title | default: '' -%}
   {%- assign _init_prod_title = init_prod.settings.title | default: '' -%}
 {%- endif -%}
+
 {%- comment -%}
   ─────────────── TURBO
   FRAME 外壳 ───────────────
@@ -55,6 +59,7 @@
           </span>
           <span class="breadcrumb-current">{{ faq_root.settings.title }}</span>
         </nav>
+
         {%- comment -%} 主内容卡片 {%- endcomment -%}
         <div class="page-main">
           <h1 class="page-title">{{ faq_root.settings.title }}</h1>

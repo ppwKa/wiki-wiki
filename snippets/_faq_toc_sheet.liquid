@@ -61,6 +61,9 @@
                 <div class="mobile-accordion-product-content">
                   <div class="mobile-accordion-article-list">
                     {%- for p in prod.children -%}
+                      {%- if p.settings.is_hide_as_article -%}
+                        {%- continue -%}
+                      {%- endif -%}
                       <a
                         href="{{ p.path }}"
                         class="mobile-accordion-article-item"

@@ -35,6 +35,9 @@
 
               <ul class="toc-nested-list collapsed" id="nested-{{ cat_index }}-{{ prod_index }}">
                 {%- for p in prod.children -%}
+                  {%- if p.settings.is_hide_as_article -%}
+                    {%- continue -%}
+                  {%- endif -%}
                   <li class="toc-nested-item">
                     <a
                       href="{{ p.path }}"
