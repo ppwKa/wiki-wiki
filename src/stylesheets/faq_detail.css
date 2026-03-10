@@ -47,6 +47,7 @@
     width: 87.5%;
     max-width: 996px;
     margin: 0 auto;
+    text-align: center;
     padding: 50px 0
 }
 
@@ -72,6 +73,12 @@
     font-weight: 400;
     line-height: 22px;
     letter-spacing: -0.42px;
+}
+
+.faq-detail-page .page-wrapper .page-main .page-main-container .back-to-faq-link svg{
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
 }
 
 .faq-detail-page .page-wrapper .page-main .page-main-container .back-to-faq-link:hover {
