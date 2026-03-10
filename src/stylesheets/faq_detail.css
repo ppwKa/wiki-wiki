@@ -193,6 +193,10 @@
     transition: color .2s ease
 }
 
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-link:hover{
+    color: #0071e3
+}
+
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list {
     list-style: none;
     padding: 0;
@@ -207,14 +211,27 @@
     opacity: 0
 }
 
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item .toc-link {
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item .toc-nested-link {
+    text-decoration: none;
+    color: #6e6e73;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.36px;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: none;
+    font-family: inherit;
+    transition: color .2s ease;
     padding: 8px 10px 8px 30px;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
     white-space: nowrap
 }
 
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item.active .toc-link {
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item.active .toc-nested-link {
     color: #0071e3
 }
 
@@ -356,6 +373,11 @@
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td p {
     color: inherit;
     margin-bottom: 0
+}
+
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td a{
+    color: #0071e3;
+    text-decoration: underline;
 }
 
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul,

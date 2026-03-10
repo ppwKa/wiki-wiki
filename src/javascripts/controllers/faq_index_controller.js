@@ -2,7 +2,7 @@
  * FAQ 聚合页交互控制器
  * 负责产品筛选、FAQ 折叠、移动端弹窗
  * 初始选中状态由服务端通过 data-faq-index-init-cat-value / data-faq-index-init-product-value 注入
- * 产品切换通过 Turbo frame 导航驱动 main-content-frame 局部刷新并推入 URL 历史
+ * 产品切换通过 Turbo Drive 全页导航，由响应中同名 turbo-frame 完成局部内容替换
  */
 import { Controller } from "@hotwired/stimulus"
 
@@ -217,36 +217,19 @@ export default class extends Controller {
   }
 
   // ── Navigation ────────────────────────────────────────────────────────────
-  _getCurrentFramePathname() {
-    const frame = document.getElementById("main-content-frame")
-    if (frame) {
-      const src = frame.getAttribute("src")
-      if (src) {
-        try {
-          return new URL(src, window.location.origin).pathname
-        } catch (_) {}
-      }
-    }
-    return window.location.pathname
-  }
-
   _navigateToProduct(path) {
     if (!path) return
 
-    // ✅ 防止重复导航 / 历史堆叠
-    const targetPathname = (() => {
-      try {
-        return new URL(path, window.location.origin).pathname
-      } catch (_) {
-        return path
-      }
-    })()
-    if (targetPathname === this._getCurrentFramePathname()) return
+    // 防止重复导航 / 历史堆叠
+    try {
+      if (new URL(path, window.location.origin).pathname === window.location.pathname) return
+    } catch (_) {
+      if (path === window.location.pathname) return
+    }
 
+    // 走 Turbo Drive 全页导航（与 page.liquid 一致），Turbo 会自动替换同名 frame 内容
     const a = document.createElement("a")
     a.href = path
-    a.setAttribute("data-turbo-frame", "main-content-frame")
-    a.setAttribute("data-turbo-action", "advance")
     a.style.display = "none"
     document.body.appendChild(a)
     a.click()

@@ -97,6 +97,7 @@ export default class extends Controller {
   _markActive() {
     const path = window.location.pathname
     this.element.querySelectorAll(".toc-nested-link, .mobile-accordion-article-item").forEach((a) => {
+      console.log(a.getAttribute("href"), path)
       if (a.getAttribute("href") === path) {
         a.classList.add("active")
       }
