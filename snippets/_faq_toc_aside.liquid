@@ -2,78 +2,57 @@
   FAQ 文章页侧边目录（PC Contents 按钮 + aside TOC）
   参数：faq_root — FAQ 根页面对象（含 .children 分类→产品→文章树）
 {%- endcomment -%}
+<aside class="page-aside">
+  <h2 class="toc-title">Table of Contents</h2>
+  <h3 class="toc-subtitle">Visual Guide</h3>
+  <ul class="toc-list">
+    {%- assign cat_index = 0 -%}
+    {%- for cat in faq_root.children -%}
+      {%- assign cat_index = cat_index | plus: 1 -%}
+      {%- assign prod_index = 0 -%}
+      <li class="toc-item">
+        <button class="toc-link" data-toggle="submenu-{{ cat_index }}" data-action="click->faq-detail#toggleTocSubmenu">
+          <span class="toc-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
+            </svg>
+          </span>
+          <span>{{ cat.settings.title }}</span>
+        </button>
 
-<div class="page-main-wrapper">
-  <button
-    class="contents-trigger-btn"
-    id="contentsTrigger"
-    aria-label="Open contents"
-    type="button"
-    data-action="click->faq-detail#toggleAside"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M7 9C7.55228 9 8 8.5523 8 8C8 7.44771 7.55228 7 7 7C6.44771 7 6 7.44771 6 8C6 8.5523 6.44771 9 7 9Z" fill="#0071E3"/>
-      <path d="M7 13C7.55228 13 8 12.5523 8 12C8 11.4477 7.55228 11 7 11C6.44771 11 6 11.4477 6 12C6 12.5523 6.44771 13 7 13Z" fill="#0071E3"/>
-      <path d="M7 17C7.55228 17 8 16.5523 8 16C8 15.4477 7.55228 15 7 15C6.44771 15 6 15.4477 6 16C6 16.5523 6.44771 17 7 17Z" fill="#0071E3"/>
-      <path d="M11 12H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M11 16H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M11 8H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span>Contents</span>
-  </button>
+        <ul class="toc-sublist" id="submenu-{{ cat_index }}">
+          {%- for prod in cat.children -%}
+            {%- assign prod_index = prod_index | plus: 1 -%}
+            {%- assign article_index = 0 -%}
+            <li class="toc-subitem">
+              <button class="toc-link" data-toggle="nested-{{ prod_index }}" data-action="click->faq-detail#toggleTocSubmenu">
+                <span class="toc-arrow collapsed">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
+                  </svg>
+                </span>
+                <span>{{ prod.settings.title }}</span>
+              </button>
 
-  <aside class="page-aside">
-    <h2 class="toc-title">Table of Contents</h2>
-    <h3 class="toc-subtitle">Visual Guide</h3>
-    <ul class="toc-list">
-      {%- assign cat_index = 0 -%}
-      {%- for cat in faq_root.children -%}
-        {%- assign cat_index = cat_index | plus: 1 -%}
-        {%- assign prod_index = 0 -%}
-        <li class="toc-item">
-          <button class="toc-link" data-toggle="submenu-{{ cat_index }}" data-action="click->faq-detail#toggleTocSubmenu">
-            <span class="toc-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
-              </svg>
-            </span>
-            <span>{{ cat.settings.title }}</span>
-          </button>
-
-          <ul class="toc-sublist" id="submenu-{{ cat_index }}">
-            {%- for prod in cat.children -%}
-              {%- assign prod_index = prod_index | plus: 1 -%}
-              {%- assign article_index = 0 -%}
-              <li class="toc-subitem">
-                <button class="toc-link" data-toggle="submenu-{{ prod_index }}" data-action="click->faq-detail#toggleTocSubmenu">
-                  <span class="toc-arrow collapsed">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                      <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
-                    </svg>
-                  </span>
-                  <span>{{ prod.settings.title }}</span>
-                </button>
-
-                <ul class="toc-nested-list" id="submenu-{{ prod_index }}">
-                  {%- for p in prod.children -%}
-                    {%- assign article_index = article_index | plus: 1 -%}
-                    <li class="toc-nested-item">
-                      <a
-                        href="{{ p.path }}"
-                        class="toc-nested-link"
-                        data-turbo-frame="main-content-frame"
-                        data-turbo-action="advance"
-                      >
-                        <span>{{ p.settings.title }}</span>
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </li>
-      {%- endfor -%}
-    </ul>
-  </aside>
-</div>
+              <ul class="toc-nested-list" id="nested-{{ prod_index }}">
+                {%- for p in prod.children -%}
+                  {%- assign article_index = article_index | plus: 1 -%}
+                  <li class="toc-nested-item">
+                    <a
+                      href="{{ p.path }}"
+                      class="toc-link"
+                      data-turbo-frame="main-content-frame"
+                      data-turbo-action="advance"
+                    >
+                      <span>{{ p.settings.title }}</span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </li>
+    {%- endfor -%}
+  </ul>
+</aside>
