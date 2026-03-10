@@ -14,9 +14,9 @@ export default class extends Controller {
     this._abortController?.abort()
   }
 
-  // ── PC aside ──────────────────────────────────────────────────────────────
-  // contents-trigger-btn 点击：PC → 切换 aside；移动端 → 打开底部弹窗
-  toggleAside() {
+  // ── 弹窗展开 ───────────────────────────────────────────────────────
+  toggleSheet(event) {
+    event.stopPropagation()
     this._setSheetOpen(true)
   }
 
@@ -77,20 +77,19 @@ export default class extends Controller {
   _markActive() {
     const path = window.location.pathname
     this.element.querySelectorAll(".toc-nested-link, .mobile-accordion-article-item").forEach((a) => {
-      console.log(a.getAttribute("href"), path)
       if (a.getAttribute("href") === path) {
         a.classList.add("active")
       }
     })
   }
 
-  // PC aside：自动展开含有当前文章的 submenu
+  // PC aside：自动展开含有当前文章的所有祖先 submenu
   _expandActiveToc() {
     this.element.querySelectorAll(".toc-nested-item .active").forEach((activeEl) => {
       let el = activeEl.parentElement
       while (el && el !== this.element) {
         if (el.id && (el.classList.contains("toc-sublist") || el.classList.contains("toc-nested-list"))) {
-          el.classList.add("open")
+          el.classList.remove("collapsed")
           const btn = this.element.querySelector(`[data-toggle="${el.id}"]`)
           btn?.querySelector(".toc-arrow")?.classList.remove("collapsed")
         }

@@ -1,5 +1,5 @@
 {%- comment -%}
-  FAQ 文章页侧边目录（PC Contents 按钮 + aside TOC）
+  FAQ 文章页侧边目录（PC aside TOC）
   参数：faq_root — FAQ 根页面对象（含 .children 分类→产品→文章树）
 {%- endcomment -%}
 <aside class="page-aside">
@@ -12,7 +12,7 @@
       {%- assign prod_index = 0 -%}
       <li class="toc-item">
         <button class="toc-link" data-toggle="submenu-{{ cat_index }}" data-action="click->faq-detail#toggleTocSubmenu">
-          <span class="toc-arrow">
+          <span class="toc-arrow collapsed">
             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
             </svg>
@@ -20,12 +20,11 @@
           <span>{{ cat.settings.title }}</span>
         </button>
 
-        <ul class="toc-sublist" id="submenu-{{ cat_index }}">
+        <ul class="toc-sublist collapsed" id="submenu-{{ cat_index }}">
           {%- for prod in cat.children -%}
             {%- assign prod_index = prod_index | plus: 1 -%}
-            {%- assign article_index = 0 -%}
             <li class="toc-subitem">
-              <button class="toc-link" data-toggle="nested-{{ prod_index }}" data-action="click->faq-detail#toggleTocSubmenu">
+              <button class="toc-link" data-toggle="nested-{{ cat_index }}-{{ prod_index }}" data-action="click->faq-detail#toggleTocSubmenu">
                 <span class="toc-arrow collapsed">
                   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
@@ -34,13 +33,12 @@
                 <span>{{ prod.settings.title }}</span>
               </button>
 
-              <ul class="toc-nested-list" id="nested-{{ prod_index }}">
+              <ul class="toc-nested-list collapsed" id="nested-{{ cat_index }}-{{ prod_index }}">
                 {%- for p in prod.children -%}
-                  {%- assign article_index = article_index | plus: 1 -%}
                   <li class="toc-nested-item">
                     <a
                       href="{{ p.path }}"
-                      class="toc-link"
+                      class="toc-nested-link"
                       data-turbo-frame="main-content-frame"
                       data-turbo-action="advance"
                     >
