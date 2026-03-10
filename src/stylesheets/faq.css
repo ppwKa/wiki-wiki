@@ -1,3 +1,23 @@
+/* ── Turbo Frame 加载进度条（[busy] 由 Turbo 自动挂载） ──────────────────── */
+turbo-frame#main-content-frame[busy]::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #0071e3;
+    z-index: 9999;
+    animation: faq-frame-progress 1.2s cubic-bezier(.4, 0, .2, 1) infinite;
+    transform-origin: left center;
+}
+
+@keyframes faq-frame-progress {
+    0%   { transform: scaleX(0);   opacity: 1; }
+    60%  { transform: scaleX(.75); opacity: 1; }
+    100% { transform: scaleX(1);   opacity: 0; }
+}
+
 .faq-index-page {
     min-height: 100vh;
     color: #6e6e73;
@@ -127,6 +147,7 @@
 }
 
 .faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-arrow {
+    transition: transform .4s cubic-bezier(.4, 0, .2, 1);
     margin-right: 20px
 }
 
@@ -143,6 +164,7 @@
     border-radius: 12px;
     background: #fff;
     box-shadow: 0 4px 12px #0000001f;
+    user-select: none;
     padding: 16px 8px 16px 16px
 }
 
@@ -496,7 +518,7 @@
 }
 
 .faq-index-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open {
-    max-height: none
+    max-height: 1000px
 }
 
 @media (min-width: 768px) {

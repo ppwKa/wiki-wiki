@@ -277,10 +277,7 @@ export default class extends Controller {
     if (!wrapper) return
     const content = wrapper.querySelector(".mobile-accordion-content")
     const icon    = wrapper.querySelector(".mobile-accordion-arrow")
-    if (content) {
-      content.classList.add("open")
-      content.style.maxHeight = content.scrollHeight + "px"
-    }
+    if (content) content.classList.add("open")
     if (icon) icon.classList.add("rotated")
   }
 
@@ -304,17 +301,11 @@ export default class extends Controller {
     if (!content) return
     const isOpen = content.classList.contains("open")
     if (isOpen) {
-      content.style.maxHeight = content.scrollHeight + "px"
-      content.offsetHeight
-      content.style.maxHeight = "0px"
       content.classList.remove("open")
       icon?.classList.remove("rotated")
     } else {
-      content.style.maxHeight = "0px"
-      content.offsetHeight
       content.classList.add("open")
       icon?.classList.add("rotated")
-      content.style.maxHeight = content.scrollHeight + "px"
     }
   }
 

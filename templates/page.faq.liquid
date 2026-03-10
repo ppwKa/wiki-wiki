@@ -7,7 +7,8 @@
     depth > 4  → 非法，不渲染
 {%- endcomment -%}
 
-{%- assign _segs = page.path | remove_first: '/' | split: '/' -%}
+{%- assign _clean_path = page.path | remove_first: '/' | remove_last: '/' -%}
+{%- assign _segs = _clean_path | split: '/' -%}
 {%- assign _depth = _segs.size -%}
 
 {%- comment -%} 上下文解析：faq_root / init_cat / init_prod（加安全兜底） {%- endcomment -%}
@@ -51,8 +52,8 @@
     <div
       class="faq-index-page"
       data-controller="faq-index"
-      data-faq-index-init-cat-value="{{ _init_cat_title | escape }}"
-      data-faq-index-init-product-value="{{ _init_prod_title | escape }}"
+      data-faq-index-init-cat-value="{{ init_cat.path | escape }}"
+      data-faq-index-init-product-value="{{ init_prod.path | escape }}"
     >
       <div class="page-wrapper">
         {%- comment -%} 面包屑导航 {%- endcomment -%}
