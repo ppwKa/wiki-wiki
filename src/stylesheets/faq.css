@@ -1,4 +1,9 @@
 /* ── Turbo Frame 加载进度条（[busy] 由 Turbo 自动挂载） ──────────────────── */
+turbo-frame#main-content-frame:not([busy])::before {
+    content: none;
+    display: none;
+}
+
 turbo-frame#main-content-frame[busy]::before {
     content: '';
     position: fixed;
@@ -8,7 +13,7 @@ turbo-frame#main-content-frame[busy]::before {
     height: 3px;
     background: #0071e3;
     z-index: 9999;
-    animation: faq-frame-progress 1.2s cubic-bezier(.4, 0, .2, 1) infinite;
+    animation: faq-frame-progress 2.5s cubic-bezier(.4, 0, .2, 1) forwards;
     transform-origin: left center;
 }
 
@@ -147,7 +152,7 @@ turbo-frame#main-content-frame[busy]::before {
 }
 
 .faq-index-page .page-wrapper .page-main .filter-section .filter-trigger-btn .filter-trigger-arrow {
-    transition: transform .4s cubic-bezier(.4, 0, .2, 1);
+    transition: transform .2s cubic-bezier(.4, 0, .2, 1);
     margin-right: 20px
 }
 

@@ -1,6 +1,6 @@
 {%- comment -%}
-  FAQ 统一模板 通过 path segment 数判断深度： /faq/category/product/article depth < 4 → 目录节点（聚合页）：复用 faq_index 结构 +
-  服务端渲染产品内容 depth=4 → 叶子节点（文章页）：复用 faq_detail 结构 depth> 4 → 非法，不渲染
+  FAQ 统一模板 通过 path segment 数判断深度： /faq/category/product/article depth < 4 → 目录节点（聚合页）：复用 faq_index 结构 + 服务端渲染产品内容 depth=4
+    → 叶子节点（文章页）：复用 faq_detail 结构 depth> 4 → 非法，不渲染
 {%- endcomment -%}
 
 {%- assign _segs = page.path | remove_first: '/' | split: '/' -%}
@@ -26,10 +26,6 @@
 {%- elsif _depth == 4 -%}
   {%- assign faq_root = page.parent.parent.parent -%}
 {%- endif -%}
-{%- if _depth < 4 -%}
-  {%- assign _init_cat_title = init_cat.settings.title | default: '' -%}
-  {%- assign _init_prod_title = init_prod.settings.title | default: '' -%}
-{%- endif -%}
 
 {%- comment -%}
   ─────────────── TURBO
@@ -45,8 +41,8 @@
     <div
       class="faq-index-page"
       data-controller="faq-index"
-      data-faq-index-init-cat-value="{{ _init_cat_title | escape }}"
-      data-faq-index-init-product-value="{{ _init_prod_title | escape }}"
+      data-faq-index-init-cat-path-value="{{ init_cat.path | escape }}"
+      data-faq-index-init-product-path-value="{{ init_prod.path | escape }}"
     >
       <div class="page-wrapper">
         {%- comment -%} 面包屑导航 {%- endcomment -%}
@@ -107,6 +103,13 @@
         <div class="page-main">
           <div class="page-main-container">
             <h1 class="page-title">Visual Guide</h1>
+            <a href="{{ faq_root.path }}" class="back-to-faq-link">
+              <span>Back to FAQ</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 7L13 11L9 15" stroke="#007AFF" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </a>
+
             <div class="page-main-wrapper">
               <button
                 class="contents-trigger-btn"
