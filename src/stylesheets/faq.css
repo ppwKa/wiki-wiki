@@ -345,6 +345,11 @@ turbo-frame#main-content-frame[busy]::before {
     letter-spacing: -.36px
 }
 
+.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content a{
+    color: #0071e3;
+    text-decoration: underline;
+}
+
 .faq-index-page .page-wrapper .page-main .guides-section {
     padding-top: 50px;
     overflow: hidden

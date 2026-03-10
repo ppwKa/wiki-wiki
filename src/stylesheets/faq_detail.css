@@ -59,6 +59,7 @@
     letter-spacing: -0.96px;
     padding-bottom: 50px;
     border-bottom: 1px solid #D2D2D7;
+    text-align: center;
     margin-bottom: 0
 }
 
@@ -231,7 +232,8 @@
     white-space: nowrap
 }
 
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item.active .toc-nested-link {
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item .toc-nested-link:hover,
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item .toc-sublist .toc-subitem .toc-nested-list .toc-nested-item .toc-nested-link.active {
     color: #0071e3
 }
 
