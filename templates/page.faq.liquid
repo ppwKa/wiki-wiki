@@ -1,139 +1,131 @@
 {%- comment -%}
-  FAQ 统一模板
-  通过 path segment 数判断深度：
-    /faq/category/product/article
-    depth < 4  → 目录节点（聚合页）：faq_index 结构 + 服务端渲染产品内容
-    depth = 4  → 叶子节点（文章页）：faq_detail 结构
-    depth > 4  → 非法，显示兜底提示
+  FAQ 统一模板 通过 path segment 数判断深度： /faq/category/product/article depth < 4 → 目录节点（聚合页）：复用 faq_index 结构 +
+  服务端渲染产品内容 depth=4 → 叶子节点（文章页）：复用 faq_detail 结构 depth> 4 → 非法，不渲染
 {%- endcomment -%}
-
-{%- assign _clean_path = page.path | remove_first: '/' | remove_last: '/' -%}
-{%- assign _segs = _clean_path | split: '/' -%}
+{%- assign _segs = page.path | remove_first: '/' | split: '/' -%}
 {%- assign _depth = _segs.size -%}
-
-{%- comment -%} ── 上下文解析 ──────────────────────────────────────────────── {%- endcomment -%}
-{%- assign faq_root   = null -%}
-{%- assign init_cat   = null -%}
-{%- assign init_prod  = null -%}
-{%- assign detail_cat = null -%}
-{%- assign detail_prod = null -%}
-
+{%- comment -%} 上下文解析：faq_root / init_cat / init_prod（加安全兜底） {%- endcomment -%}
+{%- assign faq_root = null -%}
+{%- assign init_cat = null -%}
+{%- assign init_prod = null -%}
 {%- if _depth == 1 -%}
   {%- assign faq_root = page -%}
   {%- assign init_cat = page.children[0] -%}
-  {%- if init_cat and init_cat.children.size > 0 -%}
-    {%- assign init_prod = init_cat.children[0] -%}
-  {%- endif -%}
-
+  {%- if init_cat -%}{%- assign init_prod = init_cat.children[0] -%}{%- endif -%}
 {%- elsif _depth == 2 -%}
   {%- assign faq_root = page.parent -%}
   {%- assign init_cat = page -%}
-  {%- if page.children.size > 0 -%}
-    {%- assign init_prod = page.children[0] -%}
-  {%- endif -%}
-
+  {%- assign init_prod = page.children[0] -%}
 {%- elsif _depth == 3 -%}
-  {%- assign faq_root  = page.parent.parent -%}
-  {%- assign init_cat  = page.parent -%}
+  {%- assign faq_root = page.parent.parent -%}
+  {%- assign init_cat = page.parent -%}
   {%- assign init_prod = page -%}
-
 {%- elsif _depth == 4 -%}
-  {%- assign faq_root    = page.parent.parent.parent -%}
-  {%- assign detail_cat  = page.parent.parent -%}
-  {%- assign detail_prod = page.parent -%}
+  {%- assign faq_root = page.parent.parent.parent -%}
 {%- endif -%}
-
-{%- comment -%} 聚合页：给 Stimulus controller 注入初始 path {%- endcomment -%}
 {%- if _depth < 4 -%}
-  {%- assign _init_cat_path  = init_cat.path  | default: '' -%}
-  {%- assign _init_prod_path = init_prod.path | default: '' -%}
+  {%- assign _init_cat_title = init_cat.settings.title | default: '' -%}
+  {%- assign _init_prod_title = init_prod.settings.title | default: '' -%}
 {%- endif -%}
-
-{%- comment -%} ─────────────── TURBO FRAME 外壳 ─────────────── {%- endcomment -%}
+{%- comment -%}
+  ─────────────── TURBO
+  FRAME 外壳 ───────────────
+{%- endcomment -%}
 <turbo-frame
   id="main-content-frame"
   class="block w-full"
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
   {%- if _depth < 4 -%}
-    {%- comment -%} ── 聚合页（depth 1 / 2 / 3） ─────────────────────────── {%- endcomment -%}
+    {%- comment -%} 聚合页（depth 1 / 2 / 3）— faq_index 结构 {%- endcomment -%}
     <div
       class="faq-index-page"
       data-controller="faq-index"
-      data-faq-index-init-cat-value="{{ init_cat.path | escape }}"
-      data-faq-index-init-product-value="{{ init_prod.path | escape }}"
+      data-faq-index-init-cat-value="{{ _init_cat_title | escape }}"
+      data-faq-index-init-product-value="{{ _init_prod_title | escape }}"
     >
       <div class="page-wrapper">
+        {%- comment -%} 面包屑导航 {%- endcomment -%}
         <nav class="breadcrumb-nav">
           <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
           <span class="breadcrumb-separator">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
-          <span class="breadcrumb-current">{{ faq_root.settings.title | default: 'FAQ' }}</span>
+          <span class="breadcrumb-current">{{ faq_root.settings.title }}</span>
         </nav>
-
+        {%- comment -%} 主内容卡片 {%- endcomment -%}
         <div class="page-main">
-          <h1 class="page-title">{{ faq_root.settings.title | default: 'FAQ' }}</h1>
+          <h1 class="page-title">{{ faq_root.settings.title }}</h1>
 
           {%- render 'faq_product_filter', faq_root: faq_root -%}
 
-          {%- if init_cat and init_prod -%}
-            {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
-          {%- endif -%}
+          {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
         </div>
       </div>
 
       {%- render 'faq_product_sheet', faq_root: faq_root, title: 'Choose Product Model' -%}
     </div>
-
   {%- elsif _depth == 4 -%}
-    {%- comment -%} ── 文章页（depth 4） ─────────────────────────────────── {%- endcomment -%}
+    {%- comment -%} 文章页（depth 4）— faq_detail 结构 {%- endcomment -%}
     <div class="faq-detail-page" data-controller="faq-detail">
       <div class="page-wrapper">
-        {%- comment -%} 面包屑：Site > FAQ Root > Category > Product > 文章标题 {%- endcomment -%}
+        {%- comment -%} 面包屑：Site > FAQ Root > 文章标题 {%- endcomment -%}
         <nav class="breadcrumb-nav">
           <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
-
-          {%- if faq_root -%}
-            <span class="breadcrumb-separator">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <a href="{{ faq_root.path }}" class="breadcrumb-link" data-turbo-frame="main-content-frame" data-turbo-action="advance">
-              {{ faq_root.settings.title | default: 'FAQ' }}
-            </a>
-          {%- endif -%}
-
           <span class="breadcrumb-separator">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
-          <span class="breadcrumb-current">{{ page.settings.title | default: '' }}</span>
+
+          {%- if faq_root -%}
+            <a
+              href="{{ faq_root.path }}"
+              class="breadcrumb-link"
+              data-turbo-frame="main-content-frame"
+              data-turbo-action="advance"
+            >
+              {{ faq_root.settings.title }}
+            </a>
+            <span class="breadcrumb-separator">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          {%- endif -%}
+
+          <span class="breadcrumb-current">{{ page.settings.title }}</span>
         </nav>
 
         <div class="page-main">
           <div class="page-main-container">
             <h1 class="page-title">Visual Guide</h1>
-
             <div class="page-main-wrapper">
               <button
                 class="contents-trigger-btn"
                 id="contentsTrigger"
                 aria-label="Open contents"
                 type="button"
-                data-action="click->faq-detail#toggleAside"
+                data-action="click->faq-detail#toggleSheet"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M7 9C7.55228 9 8 8.5523 8 8C8 7.44771 7.55228 7 7 7C6.44771 7 6 7.44771 6 8C6 8.5523 6.44771 9 7 9Z" fill="#0071E3"/>
-                  <path d="M7 13C7.55228 13 8 12.5523 8 12C8 11.4477 7.55228 11 7 11C6.44771 11 6 11.4477 6 12C6 12.5523 6.44771 13 7 13Z" fill="#0071E3"/>
-                  <path d="M7 17C7.55228 17 8 16.5523 8 16C8 15.4477 7.55228 15 7 15C6.44771 15 6 15.4477 6 16C6 16.5523 6.44771 17 7 17Z" fill="#0071E3"/>
-                  <path d="M11 12H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M11 16H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M11 8H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path
+                    d="M7 9C7.55228 9 8 8.5523 8 8C8 7.44771 7.55228 7 7 7C6.44771 7 6 7.44771 6 8C6 8.5523 6.44771 9 7 9Z"
+                    fill="#0071E3" />
+                  <path
+                    d="M7 13C7.55228 13 8 12.5523 8 12C8 11.4477 7.55228 11 7 11C6.44771 11 6 11.4477 6 12C6 12.5523 6.44771 13 7 13Z"
+                    fill="#0071E3" />
+                  <path
+                    d="M7 17C7.55228 17 8 16.5523 8 16C8 15.4477 7.55228 15 7 15C6.44771 15 6 15.4477 6 16C6 16.5523 6.44771 17 7 17Z"
+                    fill="#0071E3" />
+                  <path d="M11 12H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M11 16H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M11 8H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
                 </svg>
                 <span>Contents</span>
               </button>
@@ -141,10 +133,8 @@
               {%- render 'faq_toc_aside', faq_root: faq_root -%}
 
               <div class="page-main-content">
-                <h1 class="page-main-title">{{ page.settings.title | default: '' }}</h1>
-                <article class="page-main-article">
-                  {{ page.settings.content }}
-                </article>
+                <h1 class="page-main-title">{{ page.settings.title }}</h1>
+                <article class="page-main-article">{{ page.settings.content }}</article>
               </div>
             </div>
           </div>
@@ -153,13 +143,13 @@
 
       {%- render 'faq_toc_sheet', faq_root: faq_root, title: 'Visual Guide Contents' -%}
     </div>
+    {%- comment -%} depth > 4 → 非法，不渲染任何内容 {%- endcomment -%}
   {%- endif -%}
 </turbo-frame>
-
 {% schema %}
 {
   "name": "FAQ",
-  "description": "FAQ 统一模板，深度 <4 为聚合页，深度 =4 为文章页",
+  "description": "FAQ 统一模板，深度 <4 为聚合页，深度=4 为文章页",
   "sub_page_templates": ["faq"],
   "settings": [
     {
@@ -184,11 +174,7 @@
       "label": "t:schema.templates.page.settings.title.label",
       "info": "t:schema.templates.page.settings.title.info"
     },
-    {
-      "id": "description",
-      "type": "textarea",
-      "label": "t:schema.templates.page.settings.description.label"
-    },
+    { "id": "description", "type": "textarea", "label": "t:schema.templates.page.settings.description.label" },
     {
       "id": "content",
       "type": "richtext",
