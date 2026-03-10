@@ -1,8 +1,8 @@
 /**
  * FAQ 聚合页交互控制器
  * 负责产品筛选、FAQ 折叠、移动端弹窗
- * 初始选中状态由服务端通过 data-faq-index-init-cat-value / data-faq-index-init-product-value 注入
- * 产品切换通过 Turbo Drive 全页导航，由响应中同名 turbo-frame 完成局部内容替换
+ * 初始选中状态由服务端通过 data-faq-index-init-cat-path-value / data-faq-index-init-product-path-value 注入
+ * 产品切换通过 Turbo Frame 导航（data-turbo-frame + data-turbo-action="advance"）局部刷新并推入 URL 历史
  */
 import { Controller } from "@hotwired/stimulus"
 
@@ -13,8 +13,8 @@ const PLACEHOLDER_SVG =
 
 export default class extends Controller {
   static values = {
-    initCat: String,
-    initProduct: String,
+    initCatPath: String,
+    initProductPath: String,
   }
 
   connect() {
@@ -35,9 +35,9 @@ export default class extends Controller {
     this._faqContent          = this.element.querySelector(".faq-index-page .faq-content")
 
     // ── State ─────────────────────────────────────────────────────────────────
-    this._currentCategoryId = this._handleize(this.initCatValue || "")
-    this._selectedProductId = this._handleize(this.initProductValue || "")
-    this._hoverCategoryId   = this._currentCategoryId
+    this._currentCategoryId = ""
+    this._selectedProductId = ""
+    this._hoverCategoryId   = ""
     this._faqRO = new WeakMap()
 
     if (!this._filterContainer) return
@@ -227,9 +227,10 @@ export default class extends Controller {
       if (path === window.location.pathname) return
     }
 
-    // 走 Turbo Drive 全页导航（与 page.liquid 一致），Turbo 会自动替换同名 frame 内容
     const a = document.createElement("a")
     a.href = path
+    a.setAttribute("data-turbo-frame", "main-content-frame")
+    a.setAttribute("data-turbo-action", "advance")
     a.style.display = "none"
     document.body.appendChild(a)
     a.click()
@@ -277,11 +278,8 @@ export default class extends Controller {
     if (!wrapper) return
     const content = wrapper.querySelector(".mobile-accordion-content")
     const icon    = wrapper.querySelector(".mobile-accordion-arrow")
-    if (content) {
-      content.classList.add("open")
-      content.style.maxHeight = content.scrollHeight + "px"
-    }
-    if (icon) icon.classList.add("rotated")
+    if (content) content.classList.add("open")
+    if (icon)    icon.classList.add("rotated")
   }
 
   _openMobileSheet() {
@@ -303,19 +301,8 @@ export default class extends Controller {
     const icon    = header.querySelector(".mobile-accordion-arrow")
     if (!content) return
     const isOpen = content.classList.contains("open")
-    if (isOpen) {
-      content.style.maxHeight = content.scrollHeight + "px"
-      content.offsetHeight
-      content.style.maxHeight = "0px"
-      content.classList.remove("open")
-      icon?.classList.remove("rotated")
-    } else {
-      content.style.maxHeight = "0px"
-      content.offsetHeight
-      content.classList.add("open")
-      icon?.classList.add("rotated")
-      content.style.maxHeight = content.scrollHeight + "px"
-    }
+    content.classList.toggle("open", !isOpen)
+    icon?.classList.toggle("rotated", !isOpen)
   }
 
   // ── FAQ Accordion ─────────────────────────────────────────────────────────
@@ -378,34 +365,30 @@ export default class extends Controller {
     let match = null
     const items = [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])]
 
-    // ✅ 修复：初始化匹配也用 handleize（避免大小写/空格导致失配）
-    if (this.initCatValue && this.initProductValue) {
-      const initCatId  = this._handleize(this.initCatValue)
-      const initProdId = this._handleize(this.initProductValue)
-      match = items.find(
-        (el) => this._handleize(el.dataset.cat) === initCatId && this._handleize(el.dataset.product) === initProdId
-      )
+    // 优先按产品 path 精确匹配（path 唯一，比 title 可靠）
+    if (this.initProductPathValue) {
+      match = items.find((el) => el.dataset.path === this.initProductPathValue)
     }
 
-    // 有 cat 但无 product（或 product 未匹配）：取该 cat 下第一个 product
-    if (!match && this.initCatValue) {
-      const initCatId = this._handleize(this.initCatValue)
-      match = items.find((el) => this._handleize(el.dataset.cat) === initCatId)
-      if (match) {
-        this._currentCategoryId = this._handleize(match.dataset.cat)
-        this._selectedProductId = this._handleize(match.dataset.product)
-        this._hoverCategoryId   = this._currentCategoryId
-      }
+    // 有分类 path 但无产品匹配：取该分类下第一个产品
+    if (!match && this.initCatPathValue) {
+      const catPath = this.initCatPathValue
+      match = items.find((el) => {
+        const p = el.dataset.path || ""
+        return p.startsWith(catPath + "/") || p === catPath
+      })
     }
 
     // 兜底：取第一个产品项
     if (!match) {
       match = this._pcProductList?.querySelector(".pc-product-item")
-      if (match) {
-        this._currentCategoryId = this._handleize(match.dataset.cat)
-        this._selectedProductId = this._handleize(match.dataset.product)
-        this._hoverCategoryId   = this._currentCategoryId
-      }
+    }
+
+    // 从匹配项同步内部 title 状态（UI 过滤 / 高亮仍依赖 handleize(title)）
+    if (match) {
+      this._currentCategoryId = this._handleize(match.dataset.cat)
+      this._selectedProductId = this._handleize(match.dataset.product)
+      this._hoverCategoryId   = this._currentCategoryId
     }
 
     this._showProductsForCategory(this._currentCategoryId || this._hoverCategoryId)
