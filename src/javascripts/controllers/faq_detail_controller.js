@@ -60,8 +60,9 @@ export default class extends Controller {
     const header  = event.currentTarget
     const item    = header.closest(".mobile-accordion-item")
     const content = item?.querySelector(":scope > .mobile-accordion-content")
-    content?.classList.toggle("open")
-    header.querySelector(".mobile-accordion-arrow")?.classList.toggle("rotated")
+    const arrow   = header.querySelector(".mobile-accordion-arrow")
+    if (!content) return
+    this._toggleAccordion(content, arrow)
   }
 
   // ── 移动端 accordion — 产品层 ─────────────────────────────────────────────
@@ -69,8 +70,27 @@ export default class extends Controller {
     const header  = event.currentTarget
     const item    = header.closest(".mobile-accordion-product-item")
     const content = item?.querySelector(".mobile-accordion-product-content")
-    content?.classList.toggle("open")
-    header.querySelector(".mobile-accordion-product-arrow")?.classList.toggle("rotated")
+    const arrow   = header.querySelector(".mobile-accordion-product-arrow")
+    if (!content) return
+    this._toggleAccordion(content, arrow)
+  }
+
+  // ── Accordion 通用展开/收起（动态 max-height，与 faq-answer-container 一致） ──
+  _toggleAccordion(content, arrow) {
+    const isOpen = content.classList.contains("open")
+    if (isOpen) {
+      content.style.maxHeight = content.scrollHeight + "px"
+      content.offsetHeight
+      content.style.maxHeight = "0px"
+      content.classList.remove("open")
+      arrow?.classList.remove("rotated")
+    } else {
+      content.style.maxHeight = "0px"
+      content.offsetHeight
+      content.classList.add("open")
+      arrow?.classList.add("rotated")
+      content.style.maxHeight = content.scrollHeight + "px"
+    }
   }
 
   // ── Active 文章高亮 ───────────────────────────────────────────────────────
@@ -105,13 +125,15 @@ export default class extends Controller {
 
     const productItem = activeLink.closest(".mobile-accordion-product-item")
     if (productItem) {
-      productItem.querySelector(".mobile-accordion-product-content")?.classList.add("open")
+      const pc = productItem.querySelector(".mobile-accordion-product-content")
+      if (pc) { pc.classList.add("open"); pc.style.maxHeight = pc.scrollHeight + "px" }
       productItem.querySelector(".mobile-accordion-product-arrow")?.classList.add("rotated")
     }
 
     const catItem = activeLink.closest(".mobile-accordion-item")
     if (catItem) {
-      catItem.querySelector(".mobile-accordion-content")?.classList.add("open")
+      const cc = catItem.querySelector(".mobile-accordion-content")
+      if (cc) { cc.classList.add("open"); cc.style.maxHeight = cc.scrollHeight + "px" }
       catItem.querySelector(".mobile-accordion-arrow")?.classList.add("rotated")
     }
   }

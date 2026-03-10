@@ -52,11 +52,11 @@
 
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-title {
     color: #151413;
-    text-align: center;
-    font-size: 28px;
-    font-weight: 500;
-    line-height: 32px;
-    letter-spacing: -.84px;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%;
+    letter-spacing: -0.96px;
     padding-bottom: 50px;
     border-bottom: 1px solid #D2D2D7;
     margin-bottom: 0
@@ -543,7 +543,7 @@
 
 .faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-content .mobile-accordion-article-list .mobile-accordion-article-item {
     display: block;
-    padding: 12px 36px;
+    padding: 12px 30px 12px 36px;
     color: #6e6e73;
     font-family: HarmonyOS Sans;
     font-size: 12px;
@@ -560,7 +560,7 @@
 
 .faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content .mobile-accordion-list .mobile-accordion-product-item .mobile-accordion-product-content.open,
 .faq-detail-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open {
-    max-height: 1000px
+    max-height: none
 }
 
 @media (min-width: 768px) {
@@ -602,9 +602,9 @@
     }
 
     .faq-detail-page .page-wrapper .page-main .page-main-container .page-title {
-        font-size: 24px;
-        line-height: 140%;
-        letter-spacing: -.72px;
+        font-size: 28px;
+        line-height: 125%;
+        letter-spacing: -0.84px;
         padding-bottom: 40px
     }
 

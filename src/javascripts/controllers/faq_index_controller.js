@@ -294,8 +294,11 @@ export default class extends Controller {
     if (!wrapper) return
     const content = wrapper.querySelector(".mobile-accordion-content")
     const icon    = wrapper.querySelector(".mobile-accordion-arrow")
-    if (content) content.classList.add("open")
-    if (icon)    icon.classList.add("rotated")
+    if (content) {
+      content.classList.add("open")
+      content.style.maxHeight = content.scrollHeight + "px"
+    }
+    if (icon) icon.classList.add("rotated")
   }
 
   _openMobileSheet() {
@@ -315,8 +318,21 @@ export default class extends Controller {
   _toggleMobileCategoryContent(header) {
     const content = header.nextElementSibling
     const icon    = header.querySelector(".mobile-accordion-arrow")
-    content?.classList.toggle("open")
-    icon?.classList.toggle("rotated")
+    if (!content) return
+    const isOpen = content.classList.contains("open")
+    if (isOpen) {
+      content.style.maxHeight = content.scrollHeight + "px"
+      content.offsetHeight
+      content.style.maxHeight = "0px"
+      content.classList.remove("open")
+      icon?.classList.remove("rotated")
+    } else {
+      content.style.maxHeight = "0px"
+      content.offsetHeight
+      content.classList.add("open")
+      icon?.classList.add("rotated")
+      content.style.maxHeight = content.scrollHeight + "px"
+    }
   }
 
   // ── FAQ Accordion ─────────────────────────────────────────────────────────
