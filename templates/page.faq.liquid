@@ -64,6 +64,7 @@
 <turbo-frame
   id="main-content-frame"
   class="block w-full"
+  {% if _depth < 3 and init_prod %}src="{{ init_prod.path }}"{% endif %}
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
   {%- if _depth < 4 -%}
@@ -93,9 +94,7 @@
 
           {%- render 'faq_product_filter', faq_root: faq_root -%}
 
-          <turbo-frame id="faq-content-frame" {% if _depth < 3 and init_prod %}src="{{ init_prod.path }}"{% endif %}>
-            {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
-          </turbo-frame>
+          {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
         </div>
       </div>
 

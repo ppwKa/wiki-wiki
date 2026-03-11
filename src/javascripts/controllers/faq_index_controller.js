@@ -1,8 +1,7 @@
 /**
  * FAQ 聚合页交互控制器
  * 负责产品筛选、FAQ 折叠、移动端弹窗
- * 产品切换由 Turbo Frame 处理（data-turbo-frame="faq-content-frame"）
- * 首屏加载由 turbo-frame src 处理（depth 1/2 时）
+ * 产品切换与首屏加载均由 main-content-frame 处理（整块替换）
  */
 import { Controller } from "@hotwired/stimulus"
 
@@ -93,25 +92,12 @@ export default class extends Controller {
       { signal }
     )
 
-    this._faqFrame = this.element.querySelector("turbo-frame#faq-content-frame")
-    this._faqFrame?.addEventListener("turbo:frame-render", () => {
-      this._syncFromUrl()
-      this._showContent()
-    }, { signal })
-    this._faqFrame?.addEventListener("turbo:frame-load", () => {
-      this._syncFromUrl()
-      this._showContent()
-    }, { signal })
-
     // FAQ 手风琴：事件委托
     this.element.addEventListener("click", (e) => this._onFaqClick(e), { signal })
     window.addEventListener("popstate", () => this._syncFromUrl(), { signal })
 
     this._initDefaultSelection()
-    // 仅当 frame 无 src（SSR 内容，如 depth 3 产品页）时才用 200ms 揭开；有 src 时等 turbo:frame-load
-    if (!this._faqFrame?.hasAttribute("src")) {
-      this._skeletonTimer = setTimeout(() => this._showContent(), 200)
-    }
+    this._skeletonTimer = setTimeout(() => this._showContent(), 200)
   }
 
   closeDropdowns() {
