@@ -108,12 +108,19 @@ export default class extends Controller {
     window.addEventListener("popstate", () => this._syncFromUrl(), { signal })
 
     this._initDefaultSelection()
-    this._skeletonTimer = setTimeout(() => this._showContent(), 200)
+    // 仅当 frame 无 src（SSR 内容，如 depth 3 产品页）时才用 200ms 揭开；有 src 时等 turbo:frame-load
+    if (!this._faqFrame?.hasAttribute("src")) {
+      this._skeletonTimer = setTimeout(() => this._showContent(), 200)
+    }
   }
 
   closeDropdowns() {
     this._closePcDropdown()
     this._closeMobileSheet()
+  }
+
+  showSkeletonBeforeNavigate() {
+    this._showSkeleton()
   }
 
   _syncFromUrl() {

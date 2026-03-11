@@ -44,7 +44,7 @@
                 data-name="{{ prod.settings.title }}"
                 data-thumb="{{ prod.settings.thumbnail | default: '' }}"
                 data-path="{{ prod.path }}"
-                data-action="click->faq-index#closeDropdowns"
+                data-action="click->faq-index#closeDropdowns click->faq-index#showSkeletonBeforeNavigate"
               >
                 {{ prod.settings.title }}
               </a>

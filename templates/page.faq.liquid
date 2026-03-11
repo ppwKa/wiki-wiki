@@ -40,16 +40,17 @@
 
 {%- if _depth == 1 -%}
   {%- for cat in page.children -%}
-    {%- if cat.children[0] -%}
+    {%- assign first_prod = cat.children | first -%}
+    {%- if first_prod -%}
       {%- assign init_cat = cat -%}
-      {%- assign init_prod = cat.children[0] -%}
+      {%- assign init_prod = first_prod -%}
       {%- break -%}
     {%- endif -%}
   {%- endfor -%}
 
 {%- elsif _depth == 2 -%}
   {%- assign init_cat = page -%}
-  {%- assign init_prod = page.children[0] -%}
+  {%- assign init_prod = page.children | first -%}
 
 {%- elsif _depth == 3 -%}
   {%- assign init_cat = page.parent -%}
