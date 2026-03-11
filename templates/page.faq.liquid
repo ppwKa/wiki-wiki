@@ -1,30 +1,67 @@
 {%- comment -%}
-  FAQ 统一模板 通过 path segment 数判断深度： /faq/category/product/article depth < 4 → 目录节点（聚合页）：复用 faq_index 结构 + 服务端渲染产品内容 depth=4
-    → 叶子节点（文章页）：复用 faq_detail 结构 depth> 4 → 非法，不渲染
+  FAQ 专用页面树模板
+
+  页面树约定：
+  /faq                           → FAQ Root
+  /faq/{category}                → 分类页
+  /faq/{category}/{product}      → 产品聚合页
+  /faq/{category}/{product}/{article} → 文章详情页
+
+  渲染规则：
+  depth 1~3 → 聚合页（faq_index）
+  depth 4   → 文章页（faq_detail）
+  depth > 4 → 非法层级，不渲染
+
+  内容角色约定：
+  - Root：仅作为 FAQ 入口与分类容器
+  - Category：仅作为产品分类容器
+  - Product：用于承载 Quick Answer / Visual Guides 的聚合内容来源
+  - Article：具体文章内容页
+
+  维护约束：
+  - 只允许使用上述 4 层结构
+  - 不要跳层建页，例如 /faq/{category}/{article}
+  - 不要超过 4 层
+  - FAQ 树内页面统一使用 faq 模板
+  - `is_hide_as_article` 仅对 article 层有效：
+    true  → Quick Answer
+    false → Visual Guide
 {%- endcomment -%}
 
-{%- assign _segs = page.path | remove_first: '/' | split: '/' -%}
-{%- assign _depth = _segs.size -%}
+{%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
 
-{%- comment -%} 上下文解析：faq_root / init_cat / init_prod（加安全兜底） {%- endcomment -%}
-{%- assign faq_root = null -%}
+{%- assign faq_root = page -%}
+{%- if _depth > 1 -%}{%- assign faq_root = page.parent -%}{%- endif -%}
+{%- if _depth > 2 -%}{%- assign faq_root = faq_root.parent -%}{%- endif -%}
+{%- if _depth > 3 -%}{%- assign faq_root = faq_root.parent -%}{%- endif -%}
+
 {%- assign init_cat = null -%}
 {%- assign init_prod = null -%}
 
 {%- if _depth == 1 -%}
-  {%- assign faq_root = page -%}
-  {%- assign init_cat = page.children[0] -%}
-  {%- if init_cat -%}{%- assign init_prod = init_cat.children[0] -%}{%- endif -%}
+  {%- for cat in page.children -%}
+    {%- for prod in cat.children -%}
+      {%- if prod.children.size > 0 -%}
+        {%- assign init_cat = cat -%}
+        {%- assign init_prod = prod -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if init_prod -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+
 {%- elsif _depth == 2 -%}
-  {%- assign faq_root = page.parent -%}
   {%- assign init_cat = page -%}
-  {%- assign init_prod = page.children[0] -%}
+  {%- for prod in page.children -%}
+    {%- if prod.children.size > 0 -%}
+      {%- assign init_prod = prod -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
 {%- elsif _depth == 3 -%}
-  {%- assign faq_root = page.parent.parent -%}
   {%- assign init_cat = page.parent -%}
   {%- assign init_prod = page -%}
-{%- elsif _depth == 4 -%}
-  {%- assign faq_root = page.parent.parent.parent -%}
 {%- endif -%}
 
 {%- comment -%}

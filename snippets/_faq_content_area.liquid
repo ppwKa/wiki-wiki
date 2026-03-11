@@ -33,6 +33,7 @@
       <h2 class="section-title">Quick Answer</h2>
       <div class="faq-list" id="quickAnswerContainer">
         {%- assign qa_index = 0 -%}
+        {%- if init_prod -%}
         {%- for p in init_prod.children -%}
           {%- if p.settings.is_hide_as_article -%}
             {%- assign qa_index = qa_index | plus: 1 -%}
@@ -65,6 +66,7 @@
             </div>
           {%- endif -%}
         {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
 
@@ -73,6 +75,7 @@
       <h2 class="section-title">Visual Guides</h2>
       <div class="guides-list" id="visualGuidesContainer">
         {%- assign guide_index = 0 -%}
+        {%- if init_prod -%}
         {%- for p in init_prod.children -%}
           {%- unless p.settings.is_hide_as_article -%}
             {%- assign guide_index = guide_index | plus: 1 -%}
@@ -102,6 +105,7 @@
             </a>
           {%- endunless -%}
         {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
 

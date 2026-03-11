@@ -6519,7 +6519,7 @@ turbo-frame#main-content-frame[busy]::before {
   color: #343436;
   font-size: 14px;
   font-weight: 500;
-  line-height: 18px;
+  line-height: 150%;
   letter-spacing: -.42px;
 }
 .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-icon {
@@ -6546,7 +6546,7 @@ turbo-frame#main-content-frame[busy]::before {
   color: #6e6e73;
   font-size: 12px;
   font-weight: 400;
-  line-height: 16px;
+  line-height: 140%;
   letter-spacing: -.36px;
 }
 .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content a {
