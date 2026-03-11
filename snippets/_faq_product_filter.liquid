@@ -33,7 +33,7 @@
     <div class="pc-dropdown-menu hidden" id="pcDropdown">
       <div class="pc-category-list" id="pcCategoryList">
         {%- for cat in faq_root.children -%}
-          <div class="pc-category-item" data-cat="{{ cat.settings.title }}">
+          <div class="pc-category-item" data-cat-path="{{ cat.path }}">
             {{ cat.settings.title }}
             <span class="pc-category-arrow">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -47,16 +47,19 @@
       <div class="pc-product-list" id="pcProductList">
         {%- for cat in faq_root.children -%}
           {%- for prod in cat.children -%}
-            <div
+            <a
+              href="{{ prod.path }}"
               class="pc-product-item"
-              data-cat="{{ cat.settings.title }}"
-              data-product="{{ prod.settings.title }}"
+              data-turbo-frame="faq-content-frame"
+              data-turbo-action="advance"
+              data-cat-path="{{ cat.path }}"
               data-name="{{ prod.settings.title }}"
               data-thumb="{{ prod.settings.thumbnail | default: '' }}"
               data-path="{{ prod.path }}"
+              data-action="click->faq-index#closeDropdowns"
             >
               {{ prod.settings.title }}
-            </div>
+            </a>
           {%- endfor -%}
         {%- endfor -%}
       </div>

@@ -40,7 +40,7 @@
             <div
               class="faq-item"
               data-type="qna"
-              data-cat="{{ init_cat.settings.title }}"
+              data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
               data-product="{{ init_prod.settings.title }}"
               data-q="{{ p.settings.title }}"
             >
@@ -85,7 +85,7 @@
               data-turbo-frame="main-content-frame"
               data-turbo-action="advance"
               data-type="guide"
-              data-cat="{{ init_cat.settings.title }}"
+              data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
               data-product="{{ init_prod.settings.title }}"
             >
               <div class="guide-title">

@@ -40,24 +40,16 @@
 
 {%- if _depth == 1 -%}
   {%- for cat in page.children -%}
-    {%- for prod in cat.children -%}
-      {%- if prod.children.size > 0 -%}
-        {%- assign init_cat = cat -%}
-        {%- assign init_prod = prod -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- if init_prod -%}{%- break -%}{%- endif -%}
+    {%- if cat.children[0] -%}
+      {%- assign init_cat = cat -%}
+      {%- assign init_prod = cat.children[0] -%}
+      {%- break -%}
+    {%- endif -%}
   {%- endfor -%}
 
 {%- elsif _depth == 2 -%}
   {%- assign init_cat = page -%}
-  {%- for prod in page.children -%}
-    {%- if prod.children.size > 0 -%}
-      {%- assign init_prod = prod -%}
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
+  {%- assign init_prod = page.children[0] -%}
 
 {%- elsif _depth == 3 -%}
   {%- assign init_cat = page.parent -%}
@@ -78,8 +70,9 @@
     <div
       class="faq-index-page"
       data-controller="faq-index"
-      data-faq-index-init-cat-path-value="{{ init_cat.path | escape }}"
-      data-faq-index-init-product-path-value="{{ init_prod.path | escape }}"
+      data-faq-index-page-path-value="{{ page.path | escape }}"
+      data-faq-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
+      data-faq-index-init-product-path-value="{% if init_prod %}{{ init_prod.path | escape }}{% endif %}"
     >
       <div class="page-wrapper">
         {%- comment -%} 面包屑导航 {%- endcomment -%}
@@ -99,7 +92,9 @@
 
           {%- render 'faq_product_filter', faq_root: faq_root -%}
 
-          {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
+          <turbo-frame id="faq-content-frame" {% if _depth < 3 and init_prod %}src="{{ init_prod.path }}"{% endif %}>
+            {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
+          </turbo-frame>
         </div>
       </div>
 
@@ -140,7 +135,7 @@
         <div class="page-main">
           <div class="page-main-container">
             <h1 class="page-title">Visual Guide</h1>
-            <a href="{{ faq_root.path }}" class="back-to-faq-link">
+            <a href="{{ faq_root.path }}" class="back-to-faq-link" data-turbo-frame="main-content-frame" data-turbo-action="advance">
               <span>Back to FAQ</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                 <path d="M9 7L13 11L9 15" stroke="#007AFF" stroke-linecap="round" stroke-linejoin="round"></path>

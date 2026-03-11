@@ -18,7 +18,7 @@
 
   <div class="mobile-sheet-content" id="mobileAccordion">
     {%- for cat in faq_root.children -%}
-      <div class="mobile-accordion-item" data-cat="{{ cat.settings.title }}">
+      <div class="mobile-accordion-item" data-cat-path="{{ cat.path }}">
         <div class="mobile-accordion-header">
           <span class="mobile-accordion-title">{{ cat.settings.title }}</span>
           <svg
@@ -35,16 +35,19 @@
         <div class="mobile-accordion-content">
           <div class="mobile-accordion-list">
             {%- for prod in cat.children -%}
-              <div
+              <a
+                href="{{ prod.path }}"
                 class="mobile-accordion-product"
-                data-cat="{{ cat.settings.title }}"
-                data-product="{{ prod.settings.title }}"
+                data-turbo-frame="faq-content-frame"
+                data-turbo-action="advance"
+                data-cat-path="{{ cat.path }}"
                 data-name="{{ prod.settings.title }}"
                 data-thumb="{{ prod.settings.thumbnail | default: '' }}"
                 data-path="{{ prod.path }}"
+                data-action="click->faq-index#closeDropdowns"
               >
                 {{ prod.settings.title }}
-              </div>
+              </a>
             {%- endfor -%}
           </div>
         </div>

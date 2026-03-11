@@ -1,8 +1,8 @@
 /**
  * FAQ 聚合页交互控制器
  * 负责产品筛选、FAQ 折叠、移动端弹窗
- * 初始选中状态由服务端通过 data-faq-index-init-cat-path-value / data-faq-index-init-product-path-value 注入
- * 产品切换通过 Turbo Frame 导航（data-turbo-frame + data-turbo-action="advance"）局部刷新并推入 URL 历史
+ * 产品切换由 Turbo Frame 处理（data-turbo-frame="faq-content-frame"）
+ * 首屏加载由 turbo-frame src 处理（depth 1/2 时）
  */
 import { Controller } from "@hotwired/stimulus"
 
@@ -13,6 +13,7 @@ const PLACEHOLDER_SVG =
 
 export default class extends Controller {
   static values = {
+    pagePath: String,
     initCatPath: String,
     initProductPath: String,
   }
@@ -31,13 +32,11 @@ export default class extends Controller {
     this._mobileSheet         = this.element.querySelector(".faq-index-page .mobile-sheet")
     this._closeSheetBtn       = this.element.querySelector(".faq-index-page .mobile-sheet-close-btn")
     this._mobileAccordion     = this.element.querySelector(".faq-index-page .mobile-sheet-content")
-    this._faqSkeleton         = this.element.querySelector(".faq-index-page .faq-skeleton")
-    this._faqContent          = this.element.querySelector(".faq-index-page .faq-content")
 
     // ── State ─────────────────────────────────────────────────────────────────
-    this._currentCategoryId = ""
-    this._selectedProductId = ""
-    this._hoverCategoryId   = ""
+    this._currentCategoryPath = ""
+    this._selectedProductPath = ""
+    this._hoverCategoryPath   = ""
     this._faqRO = new WeakMap()
 
     if (!this._filterContainer) return
@@ -60,8 +59,8 @@ export default class extends Controller {
               : "rotate(180deg)"
           }
           if (!this._pcDropdown?.classList.contains("hidden")) {
-            this._hoverCategoryId = this._currentCategoryId || this._hoverCategoryId
-            if (this._hoverCategoryId) this._showProductsForCategory(this._hoverCategoryId)
+            this._hoverCategoryPath = this._currentCategoryPath || this._hoverCategoryPath
+            if (this._hoverCategoryPath) this._showProductsForCategory(this._hoverCategoryPath)
           }
         }
       },
@@ -74,20 +73,9 @@ export default class extends Controller {
       el.addEventListener(
         "mouseenter",
         () => {
-          this._hoverCategoryId = this._handleize(el.dataset.cat)
-          this._showProductsForCategory(this._hoverCategoryId)
+          this._hoverCategoryPath = el.dataset.catPath || ""
+          this._showProductsForCategory(this._hoverCategoryPath)
           this._highlightSelectedProduct()
-        },
-        { signal }
-      )
-    })
-
-    this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
-      el.addEventListener(
-        "click",
-        () => {
-          this._selectProduct(el.dataset.name, el.dataset.cat, el.dataset.product, el.dataset.thumb, el.dataset.path)
-          this._closePcDropdown()
         },
         { signal }
       )
@@ -99,31 +87,47 @@ export default class extends Controller {
     this._mobileAccordion?.addEventListener(
       "click",
       (e) => {
-        const header  = e.target.closest(".mobile-accordion-header")
-        const product = e.target.closest(".mobile-accordion-product")
-        if (header) {
-          this._toggleMobileCategoryContent(header)
-        } else if (product) {
-          this._selectProduct(
-            product.dataset.name,
-            product.dataset.cat,
-            product.dataset.product,
-            product.dataset.thumb,
-            product.dataset.path
-          )
-          this._closeMobileSheet()
-        }
+        const header = e.target.closest(".mobile-accordion-header")
+        if (header) this._toggleMobileCategoryContent(header)
       },
       { signal }
     )
 
+    this._faqFrame = this.element.querySelector("turbo-frame#faq-content-frame")
+    this._faqFrame?.addEventListener("turbo:frame-render", () => {
+      this._syncFromUrl()
+      this._showContent()
+    }, { signal })
+    this._faqFrame?.addEventListener("turbo:frame-load", () => {
+      this._syncFromUrl()
+      this._showContent()
+    }, { signal })
+
     // FAQ 手风琴：事件委托
     this.element.addEventListener("click", (e) => this._onFaqClick(e), { signal })
+    window.addEventListener("popstate", () => this._syncFromUrl(), { signal })
 
     this._initDefaultSelection()
-
-    // 骨架屏揭开：首次加载 & 每次 frame 导航后 connect() 重新触发
     this._skeletonTimer = setTimeout(() => this._showContent(), 200)
+  }
+
+  closeDropdowns() {
+    this._closePcDropdown()
+    this._closeMobileSheet()
+  }
+
+  _syncFromUrl() {
+    const path = window.location.pathname
+    let item = this._getProductItemByPath(path)
+    if (!item && this.pagePathValue && path === this.pagePathValue && this.initProductPathValue) {
+      item = this._getProductItemByPath(this.initProductPathValue) || this._pcProductList?.querySelector(".pc-product-item")
+    }
+    if (item) {
+      this._syncSelectionFromItem(item)
+      this._setHeaderDisplay(item.dataset.name, item.dataset.thumb)
+      this._showProductsForCategory(this._currentCategoryPath)
+      this._highlightSelectedProduct()
+    }
   }
 
   disconnect() {
@@ -141,23 +145,19 @@ export default class extends Controller {
 
   // ── Skeleton ──────────────────────────────────────────────────────────────
   _showSkeleton() {
-    if (this._faqSkeleton) this._faqSkeleton.style.display = ""
-    if (this._faqContent)  this._faqContent.style.display  = "none"
+    clearTimeout(this._skeletonTimer)
+    const sk = this.element.querySelector(".faq-index-page .faq-skeleton")
+    const ct = this.element.querySelector(".faq-index-page .faq-content")
+    if (sk) sk.style.display = ""
+    if (ct) ct.style.display = "none"
   }
 
   _showContent() {
-    if (this._faqSkeleton) this._faqSkeleton.style.display = "none"
-    if (this._faqContent)  this._faqContent.style.display  = ""
-  }
-
-  // ── Utilities ─────────────────────────────────────────────────────────────
-  _handleize(str) {
-    if (!str || typeof str !== "string") return ""
-    return str
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "")
+    clearTimeout(this._skeletonTimer)
+    const sk = this.element.querySelector(".faq-index-page .faq-skeleton")
+    const ct = this.element.querySelector(".faq-index-page .faq-content")
+    if (sk) sk.style.display = "none"
+    if (ct) ct.style.display = ""
   }
 
   _isMobile() {
@@ -178,14 +178,14 @@ export default class extends Controller {
   }
 
   // ── Product List ──────────────────────────────────────────────────────────
-  _showProductsForCategory(catId) {
+  _showProductsForCategory(catPath) {
     this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
-      el.style.display = this._handleize(el.dataset.cat) === catId ? "" : "none"
+      el.style.display = (el.dataset.catPath || "") === catPath ? "" : "none"
     })
 
     // 类目列表 active 以"当前选中类目"为准（不是 hover）
     this._pcCategoryList?.querySelectorAll(".pc-category-item").forEach((el) => {
-      const active = this._handleize(el.dataset.cat) === this._currentCategoryId
+      const active = (el.dataset.catPath || "") === this._currentCategoryPath
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
@@ -193,63 +193,36 @@ export default class extends Controller {
 
   _highlightSelectedProduct() {
     this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
-      const active =
-        this._handleize(el.dataset.cat) === this._currentCategoryId &&
-        this._handleize(el.dataset.product) === this._selectedProductId
+      const active = (el.dataset.path || "") === this._selectedProductPath
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
 
     this._mobileAccordion?.querySelectorAll(".mobile-accordion-product").forEach((el) => {
-      const active =
-        this._handleize(el.dataset.cat) === this._currentCategoryId &&
-        this._handleize(el.dataset.product) === this._selectedProductId
+      const active = (el.dataset.path || "") === this._selectedProductPath
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
   }
 
-  _getThumbForProduct(cat, product) {
+  _getThumbForProduct(productPath) {
     const el = [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])].find(
-      (e) => this._handleize(e.dataset.cat) === cat && this._handleize(e.dataset.product) === product
+      (e) => (e.dataset.path || "") === productPath
     )
     return el?.dataset.thumb || ""
   }
 
-  // ── Navigation ────────────────────────────────────────────────────────────
-  _navigateToProduct(path) {
-    if (!path) return
-
-    // 防止重复导航 / 历史堆叠
-    try {
-      if (new URL(path, window.location.origin).pathname === window.location.pathname) return
-    } catch (_) {
-      if (path === window.location.pathname) return
-    }
-
-    const a = document.createElement("a")
-    a.href = path
-    a.setAttribute("data-turbo-frame", "main-content-frame")
-    a.setAttribute("data-turbo-action", "advance")
-    a.style.display = "none"
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
+  _getProductItemByPath(path) {
+    return [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])].find(
+      (el) => (el.dataset.path || "") === path
+    )
   }
 
-  // ── Product Selection ─────────────────────────────────────────────────────
-  _selectProduct(name, cat, product, thumb, path) {
-    this._currentCategoryId = this._handleize(cat || "")
-    this._selectedProductId = this._handleize(product || "")
-    this._hoverCategoryId   = this._currentCategoryId
-    const thumbUrl = thumb || this._getThumbForProduct(this._currentCategoryId, this._selectedProductId)
-
-    this._setHeaderDisplay(name, thumbUrl)
-    this._highlightSelectedProduct()
-    this._showProductsForCategory(this._currentCategoryId)
-    this._showSkeleton()
-
-    this._navigateToProduct(path)
+  _syncSelectionFromItem(item) {
+    if (!item) return
+    this._currentCategoryPath = item.dataset.catPath || ""
+    this._selectedProductPath = item.dataset.path || ""
+    this._hoverCategoryPath   = this._currentCategoryPath
   }
 
   // ── Document 全局点击 ─────────────────────────────────────────────────────
@@ -270,10 +243,10 @@ export default class extends Controller {
   }
 
   // ── Mobile Sheet ──────────────────────────────────────────────────────────
-  _openMobileCategory(catId) {
-    if (!catId) return
+  _openMobileCategory(catPath) {
+    if (!catPath) return
     const wrapper = [...(this._mobileAccordion?.querySelectorAll(".mobile-accordion-item") || [])].find(
-      (el) => this._handleize(el.dataset.cat) === catId
+      (el) => (el.dataset.catPath || "") === catPath
     )
     if (!wrapper) return
     const content = wrapper.querySelector(".mobile-accordion-content")
@@ -286,7 +259,7 @@ export default class extends Controller {
     this._mobileOverlay?.classList.add("open")
     this._mobileSheet?.classList.add("open")
     document.body.classList.add("modal-open")
-    if (this._currentCategoryId) this._openMobileCategory(this._currentCategoryId)
+    if (this._currentCategoryPath) this._openMobileCategory(this._currentCategoryPath)
     this._highlightSelectedProduct()
   }
 
@@ -384,14 +357,12 @@ export default class extends Controller {
       match = this._pcProductList?.querySelector(".pc-product-item")
     }
 
-    // 从匹配项同步内部 title 状态（UI 过滤 / 高亮仍依赖 handleize(title)）
+    // 从匹配项同步 path 状态
     if (match) {
-      this._currentCategoryId = this._handleize(match.dataset.cat)
-      this._selectedProductId = this._handleize(match.dataset.product)
-      this._hoverCategoryId   = this._currentCategoryId
+      this._syncSelectionFromItem(match)
     }
 
-    this._showProductsForCategory(this._currentCategoryId || this._hoverCategoryId)
+    this._showProductsForCategory(this._currentCategoryPath || this._hoverCategoryPath)
     this._highlightSelectedProduct()
 
     if (match) {
@@ -400,4 +371,5 @@ export default class extends Controller {
       this._setHeaderDisplay(DEFAULT_PLACEHOLDER, "")
     }
   }
+
 }
