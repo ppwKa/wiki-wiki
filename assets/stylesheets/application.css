@@ -7115,11 +7115,6 @@ turbo-frame#main-content-frame[busy]::before {
   margin-bottom: 30px;
 }
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th {
-  color: #343436;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 130%;
-  letter-spacing: -.42px;
   padding: 12px 20px;
   border: 1px solid #fff;
   white-space: nowrap;
@@ -7129,11 +7124,6 @@ turbo-frame#main-content-frame[busy]::before {
   margin-bottom: 0;
 }
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td {
-  color: #6e6e73;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 140%;
-  letter-spacing: -.36px;
   padding: 12px 20px;
   border: 1px solid #fff;
 }
@@ -7148,6 +7138,9 @@ turbo-frame#main-content-frame[busy]::before {
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol {
   padding-left: 20px;
   margin-bottom: 30px;
+}
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article menu {
+  list-style: auto;
 }
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li {
   color: #343436;
