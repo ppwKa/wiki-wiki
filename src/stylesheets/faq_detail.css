@@ -351,7 +351,9 @@
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h4,
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h5,
 .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h6,
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th p {
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th p,
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th ul li,
+.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th ol li {
     color: inherit;
     margin-bottom: 0
 }
