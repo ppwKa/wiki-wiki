@@ -72,7 +72,7 @@
   {%- if _depth < 4 -%}
     {%- comment -%} 聚合页（depth 1 / 2 / 3）— faq_index 结构 {%- endcomment -%}
     <div
-      class="faq-index-page catalog-index-page"
+      class="catalog-index-page faq-index-page"
       data-controller="faq-index"
       data-faq-index-page-path-value="{{ page.path | escape }}"
       data-faq-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
