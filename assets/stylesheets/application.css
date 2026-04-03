@@ -6238,6 +6238,36 @@ body.modal-open {
   font-weight: bold;
   font-style: normal;
 }
+turbo-frame#main-content-frame:not([busy])::before {
+  content: none;
+  display: none;
+}
+turbo-frame#main-content-frame[busy]::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #0071e3;
+  z-index: 9999;
+  animation: faq-frame-progress 2.5s cubic-bezier(.4, 0, .2, 1) forwards;
+  transform-origin: left center;
+}
+@keyframes faq-frame-progress {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  60% {
+    transform: scaleX(.75);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
 :is(.catalog-index-page,.faq-index-page) {
   min-height: 100vh;
   color: #6e6e73;
@@ -6615,6 +6645,190 @@ body.modal-open {
   }
   :is(.catalog-index-page,.faq-index-page) .page-wrapper .page-main .filter-section .pc-dropdown-menu {
     display: none !important;
+  }
+}
+article h1 {
+  color: #343436;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  letter-spacing: -0.96px;
+  margin-bottom: 24px;
+}
+article h2 {
+  color: #343436;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 125%;
+  letter-spacing: -0.84px;
+  margin-bottom: 20px;
+}
+article h3 {
+  color: #343436;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  letter-spacing: -0.72px;
+  margin-bottom: 16px;
+}
+article h4 {
+  color: #343436;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  letter-spacing: -0.6px;
+  margin-bottom: 12px;
+}
+article h5 {
+  color: #343436;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.54px;
+  margin-bottom: 8px;
+}
+article h6 {
+  color: #6E6E73;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -.42px;
+  margin-bottom: 8px;
+}
+article p {
+  color: #343436;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -.36px;
+  margin-bottom: 10px;
+}
+article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 30px;
+}
+article hr {
+  margin: 20px 0;
+}
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f5f5f7;
+  margin-bottom: 30px;
+}
+article table th {
+  padding: 12px 20px;
+  border: 1px solid #fff;
+  white-space: nowrap;
+}
+article table th h1, article table th h2, article table th h3, article table th h4, article table th h5, article table th h6, article table th p, article table th ul li, article table th ol li {
+  color: inherit;
+  margin-bottom: 0;
+}
+article table td {
+  padding: 12px 20px;
+  border: 1px solid #fff;
+}
+article table td h1, article table td h2, article table td h3, article table td h4, article table td h5, article table td h6, article table td p {
+  color: inherit;
+  margin-bottom: 0;
+}
+article table td a {
+  color: #0071e3;
+  text-decoration: underline;
+}
+article ul, article ol {
+  padding-left: 20px;
+  margin-bottom: 30px;
+}
+article ul, article ol, article menu {
+  list-style: auto;
+}
+article ul li, article ol li {
+  color: #343436;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 125%;
+  letter-spacing: -0.48px;
+  margin-bottom: 0;
+}
+article ul li h1, article ul li h2, article ul li h3, article ul li h4, article ul li h5, article ul li h6, article ul li p, article ol li h1, article ol li h2, article ol li h3, article ol li h4, article ol li h5, article ol li h6, article ol li p {
+  margin-bottom: 0;
+}
+article ul li::marker {
+  font-size: 10px;
+}
+@media (max-width: 767px) {
+  article h1 {
+    font-size: 28px;
+    line-height: 125%;
+    letter-spacing: -0.84px;
+  }
+  article h2 {
+    font-size: 24px;
+    line-height: 130%;
+    letter-spacing: -0.72px;
+  }
+  article h3 {
+    font-size: 20px;
+    line-height: 130%;
+    letter-spacing: -0.6px;
+  }
+  article h4 {
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: -0.54px;
+  }
+  article h5 {
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: -0.48px;
+  }
+  article h6 {
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: -0.42px;
+  }
+  article p {
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: -0.28px;
+  }
+  article hr {
+    margin: 15px 0;
+  }
+  article table {
+    margin-bottom: 20px;
+  }
+  article table h1, article table h2, article table h3, article table h4, article table h5, article table h6, article table p {
+    margin-bottom: 0;
+  }
+  article table th, article table td {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -.3px;
+    padding: 12px 10px;
+  }
+  article ul, article ol {
+    padding-left: 16px;
+    margin-bottom: 20px;
+  }
+  article ul li, article ol li {
+    font-size: 14px;
+    line-height: 130%;
+    letter-spacing: -0.28px;
+    margin-bottom: 0;
+  }
+  article ul li::marker {
+    font-size: 8px;
   }
 }
 .faq-index-page .page-wrapper .page-main .faq-section {
@@ -7009,125 +7223,6 @@ body.modal-open {
   letter-spacing: -0.96px;
   margin-bottom: 24px;
 }
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h1 {
-  color: #343436;
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 120%;
-  letter-spacing: -0.96px;
-  margin-bottom: 24px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h2 {
-  color: #343436;
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 125%;
-  letter-spacing: -0.84px;
-  margin-bottom: 20px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h3 {
-  color: #343436;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 130%;
-  letter-spacing: -0.72px;
-  margin-bottom: 16px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h4 {
-  color: #343436;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 130%;
-  letter-spacing: -0.6px;
-  margin-bottom: 12px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h5 {
-  color: #343436;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%;
-  letter-spacing: -0.54px;
-  margin-bottom: 8px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h6 {
-  color: #6E6E73;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%;
-  letter-spacing: -.42px;
-  margin-bottom: 8px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article p {
-  color: #343436;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 140%;
-  letter-spacing: -.36px;
-  margin-bottom: 10px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin-bottom: 30px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article hr {
-  margin: 20px 0;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #f5f5f7;
-  margin-bottom: 30px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th {
-  padding: 12px 20px;
-  border: 1px solid #fff;
-  white-space: nowrap;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th p, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th ul li, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th ol li {
-  color: inherit;
-  margin-bottom: 0;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td {
-  padding: 12px 20px;
-  border: 1px solid #fff;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td p {
-  color: inherit;
-  margin-bottom: 0;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td a {
-  color: #0071e3;
-  text-decoration: underline;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol {
-  padding-left: 20px;
-  margin-bottom: 30px;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article menu {
-  list-style: auto;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li {
-  color: #343436;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 125%;
-  letter-spacing: -0.48px;
-  margin-bottom: 0;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li p, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li p {
-  margin-bottom: 0;
-}
-.faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li::marker {
-  font-size: 10px;
-}
 .faq-detail-page .contents-trigger-btn {
   display: none;
 }
@@ -7334,69 +7429,6 @@ body.modal-open {
     font-size: 28px;
     line-height: 125%;
     letter-spacing: -0.84px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h1 {
-    font-size: 28px;
-    line-height: 125%;
-    letter-spacing: -0.84px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h2 {
-    font-size: 24px;
-    line-height: 130%;
-    letter-spacing: -0.72px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h3 {
-    font-size: 20px;
-    line-height: 130%;
-    letter-spacing: -0.6px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h4 {
-    font-size: 18px;
-    line-height: 140%;
-    letter-spacing: -0.54px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h5 {
-    font-size: 16px;
-    line-height: 140%;
-    letter-spacing: -0.48px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article h6 {
-    font-size: 14px;
-    line-height: 150%;
-    letter-spacing: -0.42px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article p {
-    font-size: 14px;
-    line-height: 140%;
-    letter-spacing: -0.28px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article hr {
-    margin: 15px 0;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table {
-    margin-bottom: 20px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h1, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h2, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h3, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h4, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h5, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table h6, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table p {
-    margin-bottom: 0;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table th, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article table td {
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: -.3px;
-    padding: 12px 10px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol {
-    padding-left: 16px;
-    margin-bottom: 20px;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li, .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ol li {
-    font-size: 14px;
-    line-height: 130%;
-    letter-spacing: -0.28px;
-    margin-bottom: 0;
-  }
-  .faq-detail-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content .page-main-article ul li::marker {
-    font-size: 8px;
   }
 }
 @layer base {

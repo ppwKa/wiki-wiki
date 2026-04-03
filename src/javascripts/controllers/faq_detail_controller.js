@@ -12,6 +12,7 @@ export default class extends Controller {
 
   disconnect() {
     this._abortController?.abort()
+    document.body.classList.remove("modal-open")
   }
 
   // ── 弹窗展开 ───────────────────────────────────────────────────────
