@@ -64,13 +64,15 @@
 <turbo-frame
   id="main-content-frame"
   class="block w-full"
-  {% if _depth < 3 and init_prod %}src="{{ init_prod.path }}"{% endif %}
+  {% if _depth < 3 and init_prod %}
+    src="{{ init_prod.path }}"
+  {% endif %}
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
   {%- if _depth < 4 -%}
     {%- comment -%} 聚合页（depth 1 / 2 / 3）— faq_index 结构 {%- endcomment -%}
     <div
-      class="faq-index-page"
+      class="faq-index-page catalog-index-page"
       data-controller="faq-index"
       data-faq-index-page-path-value="{{ page.path | escape }}"
       data-faq-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
@@ -208,7 +210,11 @@
       "label": "t:schema.templates.page.settings.title.label",
       "info": "t:schema.templates.page.settings.title.info"
     },
-    { "id": "description", "type": "textarea", "label": "t:schema.templates.page.settings.description.label" },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
     {
       "id": "content",
       "type": "richtext",

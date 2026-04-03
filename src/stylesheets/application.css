@@ -371,5 +371,6 @@ body.modal-open {
 }
 
 /* custom styles*/
+@import "./catalog.css";
 @import "./faq.css";
 @import "./faq_detail.css";

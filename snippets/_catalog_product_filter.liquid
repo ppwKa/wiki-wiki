@@ -1,0 +1,83 @@
+{%- comment -%}
+  通用：分类 → 产品 两级筛选（PC 端触发器 + 双列下拉）
+
+  传参（命名约定）：
+  - catalog_root     — 必填。站点内目录树根页面对象；`.children` 为分类，分类的 `.children` 为产品页
+  - controller_name  — 必填。与页面 `data-controller` 一致，如 `catalog-index`、`faq-index`（用于 `data-action`）
+  - placeholder_label — 可选。未选产品时触发器与标签占位文案，默认 "Choose Product Model"
+
+  配套：`src/stylesheets/catalog.css`（根节点 `.catalog-index-page` 或与 FAQ 共用 `:is(.catalog-index-page,.faq-index-page)`）
+        + `catalog_index_controller.js` / `faq_index_controller.js`（后者继承前者并增加 FAQ 手风琴）
+
+  约定：产品链接使用 `data-turbo-frame="main-content-frame"` + `data-turbo-action="advance"`。
+{%- endcomment -%}
+
+{%- if placeholder_label == blank -%}
+  {%- assign _placeholder = 'Choose Product Model' -%}
+{%- else -%}
+  {%- assign _placeholder = placeholder_label -%}
+{%- endif -%}
+
+<div class="filter-section">
+  <p class="filter-label">{{ _placeholder }}</p>
+  <div class="filter-container" id="filterContainer">
+    <div class="filter-trigger-btn" id="filterHeader">
+      <div class="filter-trigger-content">
+        <div class="filter-trigger-icon" id="thumbBox">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
+            <rect width="100" height="100" fill="#F5F5F7"/>
+            <rect x="10" y="10" width="80" height="80" fill="white"/>
+          </svg>
+        </div>
+        <span class="filter-trigger-text" id="selectedName">{{ _placeholder }}</span>
+      </div>
+      <svg
+        class="filter-trigger-arrow"
+        id="arrowIcon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="36"
+        height="36"
+        viewBox="0 0 36 36"
+        fill="none"
+      >
+        <path d="M24.5455 14.7275L18 21.273L11.4546 14.7275" stroke="#343436" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    {%- comment -%} PC 端两列下拉 {%- endcomment -%}
+    <div class="pc-dropdown-menu hidden" id="pcDropdown">
+      <div class="pc-category-list" id="pcCategoryList">
+        {%- for cat in catalog_root.children -%}
+          <div class="pc-category-item" data-cat-path="{{ cat.path }}">
+            {{ cat.settings.title }}
+            <span class="pc-category-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="pc-product-list" id="pcProductList">
+        {%- for cat in catalog_root.children -%}
+          {%- for prod in cat.children -%}
+            <a
+              href="{{ prod.path }}"
+              class="pc-product-item"
+              data-turbo-frame="main-content-frame"
+              data-turbo-action="advance"
+              data-cat-path="{{ cat.path }}"
+              data-name="{{ prod.settings.title }}"
+              data-thumb="{{ prod.settings.thumbnail | default: '' }}"
+              data-path="{{ prod.path }}"
+              data-action="click->{{ controller_name }}#closeDropdowns click->{{ controller_name }}#showSkeletonBeforeNavigate"
+            >
+              {{ prod.settings.title }}
+            </a>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>

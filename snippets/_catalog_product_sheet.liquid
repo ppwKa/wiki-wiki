@@ -1,0 +1,68 @@
+{%- comment -%}
+  通用：分类 → 产品 两级筛选（移动端底部弹窗 + 手风琴）
+
+  传参（命名约定）：
+  - catalog_root    — 必填。站点内目录树根页面对象；`.children` 为分类，分类的 `.children` 为产品页
+  - controller_name — 必填。与页面 `data-controller` 一致（如 `catalog-index`、`faq-index`）
+  - sheet_title     — 可选。弹窗标题栏文案，默认 "Choose Product Model"
+
+  配套：同 `_catalog_product_filter`（catalog.css + catalog_index_controller / faq_index_controller）
+{%- endcomment -%}
+
+{%- if sheet_title == blank -%}
+  {%- assign _sheet_title = 'Choose Product Model' -%}
+{%- else -%}
+  {%- assign _sheet_title = sheet_title -%}
+{%- endif -%}
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-sheet" id="mobileSheet">
+  <div class="mobile-sheet-header">
+    <span class="mobile-sheet-title">{{ _sheet_title }}</span>
+    <button class="mobile-sheet-close-btn" id="closeSheet" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M7.00049 7L15.0005 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.00049 15L15.0005 7" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-sheet-content" id="mobileAccordion">
+    {%- for cat in catalog_root.children -%}
+      <div class="mobile-accordion-item" data-cat-path="{{ cat.path }}">
+        <div class="mobile-accordion-header">
+          <span class="mobile-accordion-title">{{ cat.settings.title }}</span>
+          <svg
+            class="mobile-accordion-arrow"
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+          >
+            <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="mobile-accordion-content">
+          <div class="mobile-accordion-list">
+            {%- for prod in cat.children -%}
+              <a
+                href="{{ prod.path }}"
+                class="mobile-accordion-product"
+                data-turbo-frame="main-content-frame"
+                data-turbo-action="advance"
+                data-cat-path="{{ cat.path }}"
+                data-name="{{ prod.settings.title }}"
+                data-thumb="{{ prod.settings.thumbnail | default: '' }}"
+                data-path="{{ prod.path }}"
+                data-action="click->{{ controller_name }}#closeDropdowns click->{{ controller_name }}#showSkeletonBeforeNavigate"
+              >
+                {{ prod.settings.title }}
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
