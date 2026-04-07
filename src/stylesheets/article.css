@@ -86,6 +86,7 @@ article hr {
 }
 
 article table {
+    min-width: auto !important;
     width: 100%;
     max-width: 100%;
     overflow-wrap: anywhere;
