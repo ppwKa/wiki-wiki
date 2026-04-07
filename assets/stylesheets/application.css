@@ -6742,6 +6742,9 @@ article table {
   overflow-x: auto;
   margin-bottom: 50px;
 }
+article table img, article table svg {
+  max-width: 50px;
+}
 article table th {
   color: #343436;
   font-family: "HarmonyOS Sans";
