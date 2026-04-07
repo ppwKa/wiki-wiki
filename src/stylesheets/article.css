@@ -107,7 +107,6 @@ article table svg{
 }
 
 article table th {
-    min-width: 150px;
     color: #343436;
     font-family: "HarmonyOS Sans";
     font-size: 14px;
@@ -117,6 +116,7 @@ article table th {
     letter-spacing: -0.42px;
     padding: 12px 20px;
     border: 1px solid #fff;
+    white-space: nowrap;
 }
 
 article table th h1,
@@ -133,6 +133,7 @@ article table th ol li {
 }
 
 article table td {
+    min-width: 62px;
     color: #6E6E73;
     font-family: "HarmonyOS Sans";
     font-size: 12px;
