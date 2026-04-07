@@ -85,6 +85,12 @@ article hr {
     margin: 20px 0;
 }
 
+article .bke-table-container{
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
 article table {
     min-width: auto !important;
     width: 100%;
@@ -92,7 +98,6 @@ article table {
     overflow-wrap: anywhere;
     border-collapse: collapse;
     background: #f5f5f7;
-    overflow-x: auto;
     margin-bottom: 50px
 }
 
@@ -102,6 +107,7 @@ article table svg{
 }
 
 article table th {
+    min-width: 150px;
     color: #343436;
     font-family: "HarmonyOS Sans";
     font-size: 14px;
