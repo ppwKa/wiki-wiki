@@ -87,7 +87,7 @@ article hr {
 
 article .bke-table-container{
     width: 100%;
-    max-width: 100%;
+    max-width: calc(100vw - 32px);
     overflow-x: auto;
 }
 
@@ -117,7 +117,6 @@ article table th {
     letter-spacing: -0.42px;
     padding: 12px 20px;
     border: 1px solid #fff;
-    white-space: nowrap
 }
 
 article table th h1,

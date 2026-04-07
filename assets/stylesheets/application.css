@@ -6734,7 +6734,7 @@ article hr {
 }
 article .bke-table-container {
   width: 100%;
-  max-width: 100%;
+  max-width: calc(100vw - 32px);
   overflow-x: auto;
 }
 article table {
@@ -6760,7 +6760,6 @@ article table th {
   letter-spacing: -0.42px;
   padding: 12px 20px;
   border: 1px solid #fff;
-  white-space: nowrap;
 }
 article table th h1, article table th h2, article table th h3, article table th h4, article table th h5, article table th h6, article table th p, article table th ul li, article table th ol li {
   color: inherit;
