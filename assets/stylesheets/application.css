@@ -6733,6 +6733,7 @@ article hr {
   margin: 20px 0;
 }
 article table {
+  min-width: auto !important;
   width: 100%;
   max-width: 100%;
   overflow-wrap: anywhere;
