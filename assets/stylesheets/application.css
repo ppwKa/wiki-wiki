@@ -6324,10 +6324,10 @@ turbo-frame#main-content-frame[busy]::before {
 }
 .catalog-index-page .page-wrapper .page-main .section-title {
   color: #151413;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 500;
-  line-height: 28px;
-  letter-spacing: -.72px;
+  line-height: 120%;
+  letter-spacing: -0.54px;
   margin-bottom: 0;
 }
 .catalog-index-page .page-wrapper .page-main .filter-section {
@@ -6638,10 +6638,13 @@ turbo-frame#main-content-frame[busy]::before {
   .catalog-index-page .page-wrapper .page-main .page-main-content {
     padding-top: 40px;
   }
-  .catalog-index-page .page-wrapper .page-main .page-title, .catalog-index-page .page-wrapper .page-main .section-title {
+  .catalog-index-page .page-wrapper .page-main .page-title {
     font-size: 24px;
     line-height: 28px;
     letter-spacing: -.72px;
+    padding: 0 6px;
+  }
+  .catalog-index-page .page-wrapper .page-main .section-title {
     padding: 0 6px;
   }
   .catalog-index-page .page-wrapper .page-main .filter-section {
@@ -7423,23 +7426,6 @@ article ul li::marker {
   height: 32px;
   flex-shrink: 0;
 }
-@media (max-width: 767px) {
-  .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
-    margin-top: 16px;
-  }
-  .faq-index-page .page-wrapper .page-main .faq-section {
-    padding-top: 40px;
-  }
-  .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
-    padding: 17px 12px;
-  }
-  .faq-index-page .page-wrapper .page-main .guides-section {
-    padding-top: 40px;
-  }
-  .faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
-    padding: 17px 12px;
-  }
-}
 .faq-index-page .faq-content-placeholder {
   min-height: 200px;
 }
@@ -7485,6 +7471,23 @@ article ul li::marker {
   font-size: 14px;
   padding: 40px 0;
   text-align: center;
+}
+@media (max-width: 767px) {
+  .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
+    margin-top: 16px;
+  }
+  .faq-index-page .page-wrapper .page-main .faq-section {
+    padding-top: 40px;
+  }
+  .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
+    padding: 17px 12px;
+  }
+  .faq-index-page .page-wrapper .page-main .guides-section {
+    padding-top: 40px;
+  }
+  .faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
+    padding: 17px 12px;
+  }
 }
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light] {

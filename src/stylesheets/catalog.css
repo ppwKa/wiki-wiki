@@ -64,10 +64,10 @@
 
 .catalog-index-page .page-wrapper .page-main .section-title {
     color: #151413;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
-    line-height: 28px;
-    letter-spacing: -.72px;
+    line-height: 120%;
+    letter-spacing: -0.54px;
     margin-bottom: 0
 }
 
@@ -433,11 +433,14 @@
         padding-top: 40px;
     }
 
-    .catalog-index-page .page-wrapper .page-main .page-title,
-    .catalog-index-page .page-wrapper .page-main .section-title {
+    .catalog-index-page .page-wrapper .page-main .page-title {
         font-size: 24px;
         line-height: 28px;
         letter-spacing: -.72px;
+        padding: 0 6px
+    }
+
+    .catalog-index-page .page-wrapper .page-main .section-title{
         padding: 0 6px
     }
 

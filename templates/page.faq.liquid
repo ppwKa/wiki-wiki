@@ -170,7 +170,8 @@
                 tree_root: faq_root,
                 toc_subtitle: 'Visual Guide',
                 toc_levels: 3,
-                toc_filter_hide_as_article: true
+                toc_filter_hide_as_article: true,
+                stimulus_controller: 'faq-detail'
               -%}
 
               <div class="page-main-content">
@@ -186,7 +187,8 @@
         tree_root: faq_root,
         title: 'Visual Guide Contents',
         toc_levels: 3,
-        toc_filter_hide_as_article: true
+        toc_filter_hide_as_article: true,
+        stimulus_controller: 'faq-detail'
       -%}
     </div>
     {%- comment -%} depth > 4 → 非法，不渲染任何内容 {%- endcomment -%}

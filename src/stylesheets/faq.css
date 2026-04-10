@@ -122,28 +122,6 @@
     flex-shrink: 0
 }
 
-@media (max-width: 767px) {
-    .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
-        margin-top: 16px
-    }
-
-    .faq-index-page .page-wrapper .page-main .faq-section {
-        padding-top: 40px
-    }
-
-    .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
-        padding: 17px 12px
-    }
-
-    .faq-index-page .page-wrapper .page-main .guides-section {
-        padding-top: 40px
-    }
-
-    .faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
-        padding: 17px 12px
-    }
-}
-
 /* FAQ 内容懒加载：骨架屏、占位提示、空状态 */
 .faq-index-page .faq-content-placeholder {
     min-height: 200px
@@ -198,4 +176,26 @@
     font-size: 14px;
     padding: 40px 0;
     text-align: center
+}
+
+@media (max-width: 767px) {
+    .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
+        margin-top: 16px
+    }
+
+    .faq-index-page .page-wrapper .page-main .faq-section {
+        padding-top: 40px
+    }
+
+    .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-trigger-btn {
+        padding: 17px 12px
+    }
+
+    .faq-index-page .page-wrapper .page-main .guides-section {
+        padding-top: 40px
+    }
+
+    .faq-index-page .page-wrapper .page-main .guides-section .guides-list .guide-card {
+        padding: 17px 12px
+    }
 }
