@@ -104,7 +104,7 @@
     </div>
   {%- elsif _depth == 4 -%}
     {%- comment -%} 文章页（depth 4）— faq_detail 结构 {%- endcomment -%}
-    <div class="faq-detail-page" data-controller="faq-detail">
+    <div class="article-toc-page faq-detail-page" data-controller="faq-detail">
       <div class="page-wrapper">
         {%- comment -%} 面包屑：Site > FAQ Root > 文章标题 {%- endcomment -%}
         <nav class="breadcrumb-nav">
@@ -166,7 +166,12 @@
                 <span>Contents</span>
               </button>
 
-              {%- render 'faq_toc_aside', faq_root: faq_root -%}
+              {%- render 'tree_article_toc_aside',
+                tree_root: faq_root,
+                toc_subtitle: 'Visual Guide',
+                toc_levels: 3,
+                toc_filter_hide_as_article: true
+              -%}
 
               <div class="page-main-content">
                 <h1 class="page-main-title">{{ page.settings.title }}</h1>
@@ -177,7 +182,12 @@
         </div>
       </div>
 
-      {%- render 'faq_toc_sheet', faq_root: faq_root, title: 'Visual Guide Contents' -%}
+      {%- render 'tree_article_toc_sheet',
+        tree_root: faq_root,
+        title: 'Visual Guide Contents',
+        toc_levels: 3,
+        toc_filter_hide_as_article: true
+      -%}
     </div>
     {%- comment -%} depth > 4 → 非法，不渲染任何内容 {%- endcomment -%}
   {%- endif -%}

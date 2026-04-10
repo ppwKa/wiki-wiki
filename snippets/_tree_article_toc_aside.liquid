@@ -1,0 +1,126 @@
+{%- comment -%}
+  通用页面树 TOC（PC 侧栏）
+  参数：
+    tree_root — 树根页面对象
+    toc_subtitle — 可选，侧栏副标题；默认 tree_root.settings.title
+    stimulus_controller — 可选，默认 article-toc（须与外层 data-controller 一致）
+    toc_levels — 可选，2 或 3（默认 2）
+      - 2：分类（仅展开收起）→ 文章链接（导航）
+      - 3：品线（展开收起）→ 产品分类（展开收起）→ FAQ 文章链接（导航）
+    toc_filter_hide_as_article — 可选，为 true 时跳过 settings.is_hide_as_article 的文章（FAQ Visual Guide）
+{%- endcomment -%}
+{%- assign _toc_subtitle = toc_subtitle | default: tree_root.settings.title -%}
+{%- assign _stimulus = stimulus_controller | default: 'article-toc' -%}
+{%- assign _levels = toc_levels | default: 2 | plus: 0 -%}
+{%- assign _filter_hide = toc_filter_hide_as_article | default: false -%}
+<aside class="page-aside">
+  <h2 class="toc-title">Table of Contents</h2>
+  <h3 class="toc-subtitle">{{ _toc_subtitle }}</h3>
+  <ul class="toc-list">
+    {%- if _levels == 3 -%}
+      {%- assign cat_index = 0 -%}
+      {%- for cat in tree_root.children -%}
+        {%- assign cat_index = cat_index | plus: 1 -%}
+        {%- assign prod_index = 0 -%}
+        <li class="toc-item">
+          <button
+            class="toc-link"
+            type="button"
+            data-toggle="tree-article-toc-submenu-{{ cat_index }}"
+            data-action="click->{{ _stimulus }}#toggleTocSubmenu"
+          >
+            <span class="toc-arrow collapsed">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
+              </svg>
+            </span>
+            <span>{{ cat.settings.title }}</span>
+          </button>
+
+          <ul class="toc-sublist collapsed" id="tree-article-toc-submenu-{{ cat_index }}">
+            {%- for prod in cat.children -%}
+              {%- assign prod_index = prod_index | plus: 1 -%}
+              <li class="toc-subitem">
+                <button
+                  class="toc-link"
+                  type="button"
+                  data-toggle="tree-article-toc-nested-{{ cat_index }}-{{ prod_index }}"
+                  data-action="click->{{ _stimulus }}#toggleTocSubmenu"
+                >
+                  <span class="toc-arrow collapsed">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                      <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
+                    </svg>
+                  </span>
+                  <span>{{ prod.settings.title }}</span>
+                </button>
+
+                <ul class="toc-nested-list collapsed" id="tree-article-toc-nested-{{ cat_index }}-{{ prod_index }}">
+                  {%- for article in prod.children -%}
+                    {%- if _filter_hide and article.settings.is_hide_as_article -%}
+                      {%- continue -%}
+                    {%- endif -%}
+                    <li class="toc-nested-item">
+                      <a
+                        href="{{ article.path }}"
+                        class="toc-nested-link"
+                        data-turbo-frame="main-content-frame"
+                        data-turbo-action="advance"
+                        title="{{ article.settings.title | escape }}"
+                      >
+                        <span>{{ article.settings.title }}</span>
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </li>
+      {%- endfor -%}
+    {%- else -%}
+      {%- assign section_index = 0 -%}
+      {%- for section in tree_root.children -%}
+        {%- assign section_index = section_index | plus: 1 -%}
+        <li class="toc-item">
+          <button
+            class="toc-link"
+            type="button"
+            data-toggle="tree-article-toc-submenu-{{ section_index }}"
+            data-action="click->{{ _stimulus }}#toggleTocSubmenu"
+          >
+            <span class="toc-arrow collapsed">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M5.30858 7.62586C5.14859 7.81985 4.85141 7.81985 4.69142 7.62586L1.20971 3.40451C0.994523 3.14362 1.1801 2.75 1.51829 2.75L8.48171 2.75C8.8199 2.75 9.00548 3.14362 8.79029 3.40451L5.30858 7.62586Z" fill="#6E6E73"/>
+              </svg>
+            </span>
+            <span>{{ section.settings.title }}</span>
+          </button>
+
+          <ul class="toc-sublist collapsed" id="tree-article-toc-submenu-{{ section_index }}">
+            <li class="toc-subitem">
+              <ul class="toc-nested-list" id="tree-article-toc-nested-{{ section_index }}-1">
+                {%- for article in section.children -%}
+                  {%- if _filter_hide and article.settings.is_hide_as_article -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  <li class="toc-nested-item">
+                    <a
+                      href="{{ article.path }}"
+                      class="toc-nested-link"
+                      data-turbo-frame="main-content-frame"
+                      data-turbo-action="advance"
+                      title="{{ article.settings.title | escape }}"
+                    >
+                      <span>{{ article.settings.title }}</span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </li>
+          </ul>
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+</aside>

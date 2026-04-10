@@ -1,5 +1,4 @@
 /* 通用：分类+产品筛选（PC/移动）与 page-wrapper 布局，配套 snippets/_catalog_product_* + catalog_index_controller.js */
-
 .catalog-index-page {
     min-height: 100vh;
     color: #6e6e73;

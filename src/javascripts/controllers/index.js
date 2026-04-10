@@ -11,7 +11,7 @@ import LinkTargetController from "./link_target_controller"
 import AiSearchCompletionController from './ai_search_completion_controller'
 import CatalogIndexController from './catalog_index_controller'
 import FaqIndexController from './faq_index_controller'
-import FaqDetailController from './faq_detail_controller'
+import ArticleTocController from './article_toc_controller'
 
 if (!window.Stimulus) {
   window.Stimulus = Application.start()
@@ -30,4 +30,5 @@ application.register('link-target', LinkTargetController)
 application.register('ai-search', AiSearchCompletionController)
 application.register('catalog-index', CatalogIndexController)
 application.register('faq-index', FaqIndexController)
-application.register('faq-detail', FaqDetailController)
+application.register('article-toc', ArticleTocController)
+application.register('faq-detail', ArticleTocController)

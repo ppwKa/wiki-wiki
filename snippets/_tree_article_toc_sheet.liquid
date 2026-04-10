@@ -1,0 +1,135 @@
+{%- comment -%}
+  通用页面树 TOC（移动端底部弹窗）
+  参数：
+    tree_root — 树根页面对象
+    title — 弹窗标题
+    stimulus_controller — 可选，默认 article-toc
+    toc_levels — 可选，2 或 3（默认 2）
+      - 2：分类手风琴 → 文章链接（无中间层）
+      - 3：分类 → 产品行手风琴 → 文章链接
+    toc_filter_hide_as_article — 可选，为 true 时跳过 is_hide_as_article（FAQ）
+{%- endcomment -%}
+{%- assign _stimulus = stimulus_controller | default: 'article-toc' -%}
+{%- assign _levels = toc_levels | default: 2 | plus: 0 -%}
+{%- assign _filter_hide = toc_filter_hide_as_article | default: false -%}
+
+<div class="mobile-overlay"></div>
+<div class="mobile-sheet">
+  <div class="mobile-sheet-header">
+    <span class="mobile-sheet-title">{{ title }}</span>
+    <button class="mobile-sheet-close-btn" type="button" data-action="click->{{ _stimulus }}#closeSheet">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M7.00049 7L15.0005 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.00049 15L15.0005 7" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-sheet-content">
+    {%- if _levels == 3 -%}
+      {%- for cat in tree_root.children -%}
+        <div class="mobile-accordion-item" data-cat="{{ cat.settings.title }}">
+          <div class="mobile-accordion-header" data-action="click->{{ _stimulus }}#toggleSheetCategory">
+            <span class="mobile-accordion-title">{{ cat.settings.title }}</span>
+            <svg
+              class="mobile-accordion-arrow"
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+            >
+              <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="mobile-accordion-content">
+            <div class="mobile-accordion-list">
+              {%- for prod in cat.children -%}
+                <div
+                  class="mobile-accordion-product-item"
+                  data-cat="{{ cat.settings.title }}"
+                  data-product="{{ prod.settings.title }}"
+                  data-name="{{ prod.settings.title }}"
+                  data-thumb="{{ prod.settings.thumbnail | default: '' }}"
+                  data-path="{{ prod.path }}"
+                >
+                  <div class="mobile-accordion-product-header" data-action="click->{{ _stimulus }}#toggleSheetProduct">
+                    <span class="mobile-accordion-product-title">{{ prod.settings.title }}</span>
+                    <svg
+                      class="mobile-accordion-product-arrow"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 22 22"
+                      fill="none"
+                    >
+                      <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+
+                  <div class="mobile-accordion-product-content">
+                    <div class="mobile-accordion-article-list">
+                      {%- for p in prod.children -%}
+                        {%- if _filter_hide and p.settings.is_hide_as_article -%}
+                          {%- continue -%}
+                        {%- endif -%}
+                        <a
+                          href="{{ p.path }}"
+                          class="mobile-accordion-article-item"
+                          data-cat="{{ cat.settings.title }}"
+                          data-product="{{ prod.settings.title }}"
+                          data-turbo-frame="main-content-frame"
+                          data-turbo-action="advance"
+                        >
+                          {{ p.settings.title }}
+                        </a>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for section in tree_root.children -%}
+        <div class="mobile-accordion-item" data-cat="{{ section.settings.title }}">
+          <div class="mobile-accordion-header" data-action="click->{{ _stimulus }}#toggleSheetCategory">
+            <span class="mobile-accordion-title">{{ section.settings.title }}</span>
+            <svg
+              class="mobile-accordion-arrow"
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+            >
+              <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="mobile-accordion-content">
+            <div class="mobile-accordion-article-list mobile-accordion-article-list--section">
+              {%- for article in section.children -%}
+                {%- if _filter_hide and article.settings.is_hide_as_article -%}
+                  {%- continue -%}
+                {%- endif -%}
+                <a
+                  href="{{ article.path }}"
+                  class="mobile-accordion-article-item"
+                  data-cat="{{ section.settings.title }}"
+                  data-turbo-frame="main-content-frame"
+                  data-turbo-action="advance"
+                >
+                  {{ article.settings.title }}
+                </a>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
