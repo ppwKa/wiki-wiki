@@ -239,6 +239,32 @@
     color: #0071e3
 }
 
+/* 一层 TOC：根副标题下扁平文章链接 */
+.article-toc-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item.toc-item--flat > .toc-nested-link {
+    text-decoration: none;
+    color: #6e6e73;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.36px;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: none;
+    font-family: inherit;
+    transition: color .2s ease;
+    padding: 8px 10px 8px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap
+}
+
+.article-toc-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item.toc-item--flat > .toc-nested-link:hover,
+.article-toc-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside .toc-list .toc-item.toc-item--flat > .toc-nested-link.active {
+    color: #0071e3
+}
+
 .article-toc-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-main-content {
     text-align: left
 }
@@ -431,6 +457,24 @@
 }
 
 .article-toc-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content > .mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item.active {
+    color: #0071e3
+}
+
+/* 一层 TOC：弹层内扁平文章列表 */
+.article-toc-page .mobile-sheet .mobile-sheet-content > .mobile-accordion-article-list.mobile-accordion-article-list--flat .mobile-accordion-article-item {
+    display: block;
+    padding: 12px 8px 12px 24px;
+    color: #6e6e73;
+    font-family: HarmonyOS Sans;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.36px;
+    transition: color .2s ease;
+    text-decoration: none
+}
+
+.article-toc-page .mobile-sheet .mobile-sheet-content > .mobile-accordion-article-list.mobile-accordion-article-list--flat .mobile-accordion-article-item.active {
     color: #0071e3
 }
 

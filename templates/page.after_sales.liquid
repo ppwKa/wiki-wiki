@@ -100,7 +100,7 @@
                 <span>Contents</span>
               </button>
 
-              {%- render 'tree_article_toc_aside', tree_root: after_sales_root, toc_levels: 2 -%}
+              {%- render 'tree_article_toc_aside', tree_root: after_sales_root, toc_levels: 1 -%}
 
               <div class="page-main-content">
                 {%- if display_page -%}
@@ -116,7 +116,7 @@
         </div>
       </div>
 
-      {%- render 'tree_article_toc_sheet', tree_root: after_sales_root, title: after_sales_root.settings.title, toc_levels: 2 -%}
+      {%- render 'tree_article_toc_sheet', tree_root: after_sales_root, title: after_sales_root.settings.title, toc_levels: 1 -%}
     </div>
   {%- endif -%}
 </turbo-frame>
