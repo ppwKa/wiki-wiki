@@ -69,15 +69,16 @@
     padding-top: 50px;
     width: 100%;
     display: flex;
+    align-items: flex-start;
     gap: 40px
 }
 
 .article-toc-page .page-wrapper .page-main .page-main-container .page-main-wrapper aside {
     width: 240px;
     background-color: #f5f5f7;
-    padding: 10px 10px 10px 20px;
-    height: 80vh;
-    max-height: 900px;
+    padding: 10px 10px 20px 20px;
+    height: auto;
+    max-height: 80vh;
     overflow-x: hidden;
     overflow-y: auto;
     position: sticky;
