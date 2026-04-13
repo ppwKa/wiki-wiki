@@ -5,7 +5,7 @@
     toc_subtitle — 可选，侧栏副标题；默认 tree_root.settings.title
     stimulus_controller — 可选，默认 article-toc（须与外层 data-controller 一致）
     toc_levels — 可选，1、2 或 3（默认 2）
-      - 1：仅根副标题 + 跨分类扁平文章链接（售后 TOC）
+      - 1：仅根副标题 + 根的直接子页文章链接（售后：无分类层）
       - 2：分类（仅展开收起）→ 文章链接（导航）
       - 3：品线（展开收起）→ 产品分类（展开收起）→ FAQ 文章链接（导航）
     toc_filter_hide_as_article — 可选，为 true 时跳过 settings.is_hide_as_article 的文章（FAQ Visual Guide）
@@ -80,23 +80,21 @@
         </li>
       {%- endfor -%}
     {%- elsif _levels == 1 -%}
-      {%- for section in tree_root.children -%}
-        {%- for article in section.children -%}
-          {%- if _filter_hide and article.settings.is_hide_as_article -%}
-            {%- continue -%}
-          {%- endif -%}
-          <li class="toc-item toc-item--flat">
-            <a
-              href="{{ article.path }}"
-              class="toc-nested-link"
-              data-turbo-frame="main-content-frame"
-              data-turbo-action="advance"
-              title="{{ article.settings.title | escape }}"
-            >
-              <span>{{ article.settings.title }}</span>
-            </a>
-          </li>
-        {%- endfor -%}
+      {%- for article in tree_root.children -%}
+        {%- if _filter_hide and article.settings.is_hide_as_article -%}
+          {%- continue -%}
+        {%- endif -%}
+        <li class="toc-item toc-item--flat">
+          <a
+            href="{{ article.path }}"
+            class="toc-nested-link"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            title="{{ article.settings.title | escape }}"
+          >
+            <span>{{ article.settings.title }}</span>
+          </a>
+        </li>
       {%- endfor -%}
     {%- else -%}
       {%- assign section_index = 0 -%}

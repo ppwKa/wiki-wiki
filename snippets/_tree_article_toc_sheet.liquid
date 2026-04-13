@@ -5,7 +5,7 @@
     title — 弹窗标题
     stimulus_controller — 可选，默认 article-toc
     toc_levels — 可选，1、2 或 3（默认 2）
-      - 1：扁平文章列表（根下各分类内文章汇总，无分类手风琴）
+      - 1：扁平文章列表（根的直接子页，无分类手风琴）
       - 2：分类手风琴 → 文章链接（无中间层）
       - 3：分类 → 产品行手风琴 → 文章链接
     toc_filter_hide_as_article — 可选，为 true 时跳过 is_hide_as_article（FAQ）
@@ -96,20 +96,18 @@
       {%- endfor -%}
     {%- elsif _levels == 1 -%}
       <div class="mobile-accordion-article-list mobile-accordion-article-list--flat">
-        {%- for section in tree_root.children -%}
-          {%- for article in section.children -%}
-            {%- if _filter_hide and article.settings.is_hide_as_article -%}
-              {%- continue -%}
-            {%- endif -%}
-            <a
-              href="{{ article.path }}"
-              class="mobile-accordion-article-item"
-              data-turbo-frame="main-content-frame"
-              data-turbo-action="advance"
-            >
-              {{ article.settings.title }}
-            </a>
-          {%- endfor -%}
+        {%- for article in tree_root.children -%}
+          {%- if _filter_hide and article.settings.is_hide_as_article -%}
+            {%- continue -%}
+          {%- endif -%}
+          <a
+            href="{{ article.path }}"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+          >
+            {{ article.settings.title }}
+          </a>
         {%- endfor -%}
       </div>
     {%- else -%}

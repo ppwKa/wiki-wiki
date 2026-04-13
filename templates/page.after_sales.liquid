@@ -1,34 +1,22 @@
 {%- comment -%}
-  售后页面树（三层）：根 → 文章分类 → 文章。
+  售后页面树（两层）：根 → 文章（无分类中间层）。
   任意层级 URL 均使用与 FAQ 文章页相同的版式；正文默认展示：
-  - 根：第一个分类下的第一篇文章
-  - 分类：该分类下第一篇文章
-  - 文章：当前文章
+  - 根：第一篇子文章
+  - 文章：当前页
 
-  维护：不要跳层；不要超过 3 层；子页统一使用 after_sales 模板。
+  维护：不要跳层；不要超过 2 层；子页统一使用 after_sales 模板。
 {%- endcomment -%}
 
 {%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
 
 {%- assign after_sales_root = page -%}
 {%- if _depth > 1 -%}{%- assign after_sales_root = page.parent -%}{%- endif -%}
-{%- if _depth > 2 -%}{%- assign after_sales_root = after_sales_root.parent -%}{%- endif -%}
 
 {%- assign display_page = null -%}
 {%- if _depth == 1 -%}
-  {%- assign _first_cat = page.children | first -%}
-  {%- if _first_cat -%}
-    {%- assign display_page = _first_cat.children | first -%}
-  {%- endif -%}
-{%- elsif _depth == 2 -%}
   {%- assign display_page = page.children | first -%}
 {%- else -%}
   {%- assign display_page = page -%}
-{%- endif -%}
-
-{%- assign category_page = null -%}
-{%- if display_page -%}
-  {%- assign category_page = display_page.parent -%}
 {%- endif -%}
 
 <turbo-frame
@@ -36,7 +24,7 @@
   class="block w-full"
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
-  {%- if _depth <= 3 -%}
+  {%- if _depth <= 2 -%}
     <div class="article-toc-page" data-controller="article-toc">
       <div class="page-wrapper">
         <nav class="breadcrumb-nav">
@@ -58,7 +46,7 @@
             </a>
           {%- endif -%}
 
-          {%- if display_page and _depth == 3 -%}
+          {%- if display_page and _depth == 2 -%}
             <span class="breadcrumb-separator">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                 <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
@@ -123,7 +111,7 @@
 {% schema %}
 {
   "name": "After sales",
-  "description": "售后统一模板，深度 1~3 都为文章页",
+  "description": "售后统一模板，深度 1~2: 根与文章，无分类层",
   "sub_page_templates": ["after_sales", "page"],
   "settings": [
     {
