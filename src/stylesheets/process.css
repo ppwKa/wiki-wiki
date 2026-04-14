@@ -1,0 +1,238 @@
+.process-page {
+    min-height: 100vh;
+    color: #6e6e73;
+    background-color: #f5f5f7;
+    padding-bottom: 100px
+}
+
+.process-page .page-wrapper {
+    width: 87.5%;
+    max-width: 996px;
+    margin: 0 auto;
+    padding: 20px 0
+}
+
+.process-page .page-wrapper .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    color: #6e6e73;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: -.42px
+}
+
+.process-page .page-wrapper .breadcrumb-nav .breadcrumb-link {
+    color: inherit;
+    text-decoration: none
+}
+
+.process-page .page-wrapper .breadcrumb-nav .breadcrumb-link:hover {
+    color: #343436
+}
+
+.process-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
+    margin-left: 5px;
+    margin-right: 5px
+}
+
+.process-page .page-wrapper .page-main,
+.process-page .page-wrapper .page-note {
+    width: 100%;
+    border-radius: 18px;
+    background: #fff;
+    padding: 50px 80px 70px;
+    text-align: left;
+    margin-top: 70px
+}
+
+.process-page .page-wrapper .page-note {
+    margin-top: 20px;
+}
+
+.process-page .page-wrapper .page-main .page-title,
+.process-page .page-wrapper .page-note .page-note-title {
+    color: #151413;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px;
+    letter-spacing: -0.84px;
+    margin-bottom: 0
+}
+
+.process-page .page-wrapper .page-main .page-subtitle,
+.process-page .page-wrapper .page-note .page-note-subtitle {
+    color: #343436;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: -0.72px;
+    margin-top: 32px;
+    margin-bottom: 0
+}
+
+.process-page .page-wrapper .page-note .page-note-subtitle {
+    margin-top: 0;
+}
+
+.process-page .page-wrapper .page-main .page-flow {
+    width: 100%;
+    padding-top: 50px;
+}
+
+.process-page .page-wrapper .page-main .page-stepper {
+    --step-circle: 48px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+}
+
+.process-page .page-wrapper .page-main .page-stepper::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    top: calc(var(--step-circle) / 2 - 1px);
+    height: 2px;
+    background: var(--step-blue, #0071E3);
+}
+
+.process-page .page-wrapper .page-main .page-stepper-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    gap: 22px;
+}
+
+.process-page .page-wrapper .page-main .page-stepper-num {
+    width: var(--step-circle);
+    height: var(--step-circle);
+    border-radius: 50%;
+    background: var(--step-blue, #0071E3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #F5F5F5;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 150%;
+    letter-spacing: -0.48px;
+}
+
+.process-page .page-wrapper .page-main .page-stepper-text {
+    color: #343436;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+}
+
+.process-page .page-wrapper .page-main .page-main-content,
+.process-page .page-wrapper .page-note .page-note-content {
+    border-top: 1px solid #D2D2D7;
+    margin-top: 40px;
+    padding-top: 40px;
+    width: 100%;
+    text-align: left;
+}
+
+@media (max-width: 767px) {
+    .process-page {
+        padding-bottom: 0
+    }
+
+    .process-page .page-wrapper {
+        width: 100%;
+        padding: 0
+    }
+
+    .process-page .page-wrapper .breadcrumb-nav {
+        font-size: 12px;
+        padding: 16px
+    }
+
+    .process-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
+        margin-left: 0;
+        margin-right: 0
+    }
+
+    .process-page .page-wrapper .page-main,
+    .process-page .page-wrapper .page-note {
+        margin-top: 0;
+        border-radius: 0;
+        padding: 40px 22px 50px
+    }
+
+    .process-page .page-wrapper .page-main .page-title,
+    .process-page .page-wrapper .page-note .page-note-title {
+        font-size: 24px;
+        line-height: 28px;
+        letter-spacing: -.72px;
+        margin-bottom: 10px;
+    }
+
+    .process-page .page-wrapper .page-main .page-subtitle,
+    .process-page .page-wrapper .page-note .page-note-subtitle {
+        font-size: 20px;
+        line-height: 28px;
+        letter-spacing: -.6px;
+        padding: 10px 0;
+        margin-top: 0;
+    }
+
+    .process-page .page-wrapper .page-main .page-flow {
+        padding-top: 40px;
+    }
+
+    .process-page .page-wrapper .page-main .page-stepper {
+        --step-circle: 50px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 40px;
+    }
+
+    .process-page .page-wrapper .page-main .page-stepper::before {
+        left: calc(var(--step-circle) / 2 - 1px);
+        right: auto;
+        top: calc(var(--step-circle) / 2);
+        bottom: calc(var(--step-circle) / 2);
+        width: 2px;
+        height: auto;
+    }
+
+    .process-page .page-wrapper .page-main .page-stepper-item {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 20px;
+    }
+
+    .process-page .page-wrapper .page-main .page-stepper-num {
+        font-size: 24px;
+        letter-spacing: -0.72px;
+        font-weight: 500;
+    }
+
+    .process-page .page-wrapper .page-main .page-stepper-text {
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 400;
+        letter-spacing: -0.48px;
+    }
+}

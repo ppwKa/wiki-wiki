@@ -1,0 +1,108 @@
+{%- comment -%}
+  after-sales service process 专用页面模板
+
+  仅用于 after-sales service process 页面，不用于其他页面
+{%- endcomment -%}
+
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  <div class="process-page">
+    <div class="page-wrapper">
+      {%- comment -%} 面包屑导航 {%- endcomment -%}
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+        <span class="breadcrumb-separator">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="breadcrumb-current">{{ page.settings.title }}</span>
+      </nav>
+
+      {%- comment -%} 主内容卡片 {%- endcomment -%}
+      <div class="page-main">
+        <h1 class="page-title">{{ page.settings.title }}</h1>
+        <h2 class="page-subtitle">Repair Process</h2>
+
+        <div class="page-flow">
+          <ol class="page-stepper">
+            <li class="page-stepper-item">
+              <span class="page-stepper-num">1</span>
+              <span class="page-stepper-text">Submit a Request</span>
+            </li>
+            <li class="page-stepper-item">
+              <span class="page-stepper-num">2</span>
+              <span class="page-stepper-text">Evaluation &amp; Product Shipping</span>
+            </li>
+            <li class="page-stepper-item">
+              <span class="page-stepper-num">3</span>
+              <span class="page-stepper-text">Inspection &amp; Repair</span>
+            </li>
+            <li class="page-stepper-item">
+              <span class="page-stepper-num">4</span>
+              <span class="page-stepper-text">Completion &amp; Return</span>
+            </li>
+          </ol>
+        </div>
+
+        {%- comment -%} 正文由 turbo-frame 导航加载；可在此追加 process 专用内容区 {%- endcomment -%}
+        <div class="page-main-content">
+          <article class="page-main-article">{{ page.settings.content }}</article>
+        </div>
+      </div>
+
+      {%- comment -%} 备注区域 {%- endcomment -%}
+      <div class="page-note">
+        <h2 class="page-note-subtitle">Notes</h2>
+        <div class="page-note-content">
+          <article class="page-note-article">{{ page.settings.notes }}</article>
+        </div>
+      </div>
+    </div>
+  </div>
+</turbo-frame>
+{% schema %}
+{
+  "name": "After-sales Service Process",
+  "description": "After-sales Service Process 唯一模板",
+  "sub_page_templates": ["process"],
+  "settings": [
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    },
+    {
+      "id": "notes",
+      "type": "richtext",
+      "label": "After-sales Service Process Note",
+      "info": "Only displayed on the after-sales service process page"
+    }
+  ]
+}
+{% endschema %}
