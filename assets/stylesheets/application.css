@@ -7624,7 +7624,6 @@ article ul li::marker {
   background: var(--step-blue, #0071E3);
 }
 .process-page .page-wrapper .page-main .page-stepper-item {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7632,18 +7631,6 @@ article ul li::marker {
   position: relative;
   z-index: 1;
   gap: 22px;
-}
-.process-page .page-wrapper .page-main .page-stepper-item:nth-child(1) {
-  width: var(--step-first-width);
-}
-.process-page .page-wrapper .page-main .page-stepper-item:nth-child(2) {
-  width: var(--step-second-width);
-}
-.process-page .page-wrapper .page-main .page-stepper-item:nth-child(3) {
-  width: var(--step-third-width);
-}
-.process-page .page-wrapper .page-main .page-stepper-item:nth-child(4) {
-  width: var(--step-fourth-width);
 }
 .process-page .page-wrapper .page-main .page-stepper-num {
   width: var(--step-circle);
@@ -7680,6 +7667,58 @@ article ul li::marker {
   border-top: none;
   margin-top: 0;
   padding-top: 30px;
+}
+.process-page .page-wrapper .page-main .page-main-content h1, .process-page .page-wrapper .page-main .page-main-content h2, .process-page .page-wrapper .page-main .page-main-content h3, .process-page .page-wrapper .page-main .page-main-content h4, .process-page .page-wrapper .page-main .page-main-content h5, .process-page .page-wrapper .page-main .page-main-content h6, .process-page .page-wrapper .page-note .page-note-content h1, .process-page .page-wrapper .page-note .page-note-content h2, .process-page .page-wrapper .page-note .page-note-content h3, .process-page .page-wrapper .page-note .page-note-content h4, .process-page .page-wrapper .page-note .page-note-content h5, .process-page .page-wrapper .page-note .page-note-content h6 {
+  color: #343436;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.42px;
+  margin-bottom: 10px;
+}
+.process-page .page-wrapper .page-main .page-main-content p, .process-page .page-wrapper .page-main .page-main-content [bke-role="paragraph"], .process-page .page-wrapper .page-note .page-note-content p, .process-page .page-wrapper .page-note .page-note-content [bke-role="paragraph"] {
+  color: #6E6E73;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -0.36px;
+  margin-bottom: 30px;
+}
+.process-page .page-wrapper .page-main .page-main-content a, .process-page .page-wrapper .page-note .page-note-content a {
+  color: #0071E3;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -0.36px;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+}
+.process-page .page-wrapper .page-main .page-main-content ul, .process-page .page-wrapper .page-note .page-note-content ul, .process-page .page-wrapper .page-main .page-main-content ol, .process-page .page-wrapper .page-note .page-note-content ol {
+  margin-bottom: 30px;
+}
+.process-page .page-wrapper .page-main .page-main-content ul li p, .process-page .page-wrapper .page-main .page-main-content ul li [bke-role="paragraph"], .process-page .page-wrapper .page-note .page-note-content ul li p, .process-page .page-wrapper .page-note .page-note-content ul li [bke-role="paragraph"], .process-page .page-wrapper .page-main .page-main-content ol li p, .process-page .page-wrapper .page-main .page-main-content ol li [bke-role="paragraph"], .process-page .page-wrapper .page-note .page-note-content ol li p, .process-page .page-wrapper .page-note .page-note-content ol li [bke-role="paragraph"] {
+  margin-bottom: 0;
+}
+@media (min-width: 768px) {
+  .process-page .page-wrapper .page-main .page-stepper-item:nth-child(1) {
+    width: var(--step-first-width);
+  }
+  .process-page .page-wrapper .page-main .page-stepper-item:nth-child(2) {
+    width: var(--step-second-width);
+  }
+  .process-page .page-wrapper .page-main .page-stepper-item:nth-child(3) {
+    width: var(--step-third-width);
+  }
+  .process-page .page-wrapper .page-main .page-stepper-item:nth-child(4) {
+    width: var(--step-fourth-width);
+  }
 }
 @media (max-width: 767px) {
   .process-page {
@@ -7733,6 +7772,7 @@ article ul li::marker {
     height: auto;
   }
   .process-page .page-wrapper .page-main .page-stepper-item {
+    flex: 1;
     flex-direction: row;
     align-items: center;
     text-align: left;
