@@ -65,7 +65,8 @@ article h6 {
     margin-bottom: 8px
 }
 
-article p {
+article p,
+article [bke-role="paragraph"] {
     color: #343436;
     font-size: 16px;
     font-weight: 400;
@@ -126,6 +127,7 @@ article table th h4,
 article table th h5,
 article table th h6,
 article table th p,
+article table th [bke-role="paragraph"],
 article table th ul li,
 article table th ol li {
     color: inherit;
@@ -151,7 +153,8 @@ article table td h3,
 article table td h4,
 article table td h5,
 article table td h6,
-article table td p {
+article table td p,
+article table td [bke-role="paragraph"] {
     color: inherit;
     margin-bottom: 0
 }
@@ -196,12 +199,13 @@ article ol li h3,
 article ol li h4,
 article ol li h5,
 article ol li h6,
-article ol li p {
+article ol li p,
+article ol li [bke-role="paragraph"] {
     margin-bottom: 0
 }
 
 article ul li::marker {
-    font-size: 10px
+    font-size: 14px
 }
 
 @media (max-width: 767px) {
@@ -241,7 +245,8 @@ article ul li::marker {
         letter-spacing: -0.42px
     }
 
-    article p {
+    article p,
+    article [bke-role="paragraph"] {
         font-size: 14px;
         line-height: 140%;
         letter-spacing: -0.28px
@@ -261,7 +266,8 @@ article ul li::marker {
     article table h4,
     article table h5,
     article table h6,
-    article table p {
+    article table p,
+    article table [bke-role="paragraph"] {
         margin-bottom: 0
     }
 
@@ -288,6 +294,6 @@ article ul li::marker {
     }
 
     article ul li::marker {
-        font-size: 8px;
+        font-size: 10px;
     }
 }

@@ -6718,7 +6718,7 @@ article h6 {
   letter-spacing: -.42px;
   margin-bottom: 8px;
 }
-article p {
+article p, article [bke-role="paragraph"] {
   color: #343436;
   font-size: 16px;
   font-weight: 400;
@@ -6764,7 +6764,7 @@ article table th {
   border: 1px solid #fff;
   white-space: nowrap;
 }
-article table th h1, article table th h2, article table th h3, article table th h4, article table th h5, article table th h6, article table th p, article table th ul li, article table th ol li {
+article table th h1, article table th h2, article table th h3, article table th h4, article table th h5, article table th h6, article table th p, article table th [bke-role="paragraph"], article table th ul li, article table th ol li {
   color: inherit;
   margin-bottom: 0;
 }
@@ -6780,7 +6780,7 @@ article table td {
   padding: 12px 20px;
   border: 1px solid #fff;
 }
-article table td h1, article table td h2, article table td h3, article table td h4, article table td h5, article table td h6, article table td p {
+article table td h1, article table td h2, article table td h3, article table td h4, article table td h5, article table td h6, article table td p, article table td [bke-role="paragraph"] {
   color: inherit;
   margin-bottom: 0;
 }
@@ -6803,11 +6803,11 @@ article ul li, article ol li {
   letter-spacing: -0.48px;
   margin-bottom: 0;
 }
-article ul li h1, article ul li h2, article ul li h3, article ul li h4, article ul li h5, article ul li h6, article ul li p, article ol li h1, article ol li h2, article ol li h3, article ol li h4, article ol li h5, article ol li h6, article ol li p {
+article ul li h1, article ul li h2, article ul li h3, article ul li h4, article ul li h5, article ul li h6, article ul li p, article ol li h1, article ol li h2, article ol li h3, article ol li h4, article ol li h5, article ol li h6, article ol li p, article ol li [bke-role="paragraph"] {
   margin-bottom: 0;
 }
 article ul li::marker {
-  font-size: 10px;
+  font-size: 14px;
 }
 @media (max-width: 767px) {
   article h1 {
@@ -6840,7 +6840,7 @@ article ul li::marker {
     line-height: 150%;
     letter-spacing: -0.42px;
   }
-  article p {
+  article p, article [bke-role="paragraph"] {
     font-size: 14px;
     line-height: 140%;
     letter-spacing: -0.28px;
@@ -6851,7 +6851,7 @@ article ul li::marker {
   article table {
     margin-bottom: 30px;
   }
-  article table h1, article table h2, article table h3, article table h4, article table h5, article table h6, article table p {
+  article table h1, article table h2, article table h3, article table h4, article table h5, article table h6, article table p, article table [bke-role="paragraph"] {
     margin-bottom: 0;
   }
   article table th, article table td {
@@ -6871,7 +6871,7 @@ article ul li::marker {
     margin-bottom: 0;
   }
   article ul li::marker {
-    font-size: 8px;
+    font-size: 10px;
   }
 }
 .article-toc-page {
@@ -7599,6 +7599,10 @@ article ul li::marker {
 }
 .process-page .page-wrapper .page-main .page-stepper {
   --step-circle: 48px;
+  --step-first-width: 120px;
+  --step-second-width: 187px;
+  --step-third-width: 120px;
+  --step-fourth-width: 129px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -7614,6 +7618,7 @@ article ul li::marker {
   left: 50%;
   right: 0;
   transform: translateX(-50%);
+  width: calc(var(--step-first-width) + var(--step-second-width) + var(--step-third-width) + var(--step-fourth-width) + var(--step-circle) * 3);
   top: calc(var(--step-circle) / 2 - 1px);
   height: 2px;
   background: var(--step-blue, #0071E3);
@@ -7627,6 +7632,18 @@ article ul li::marker {
   position: relative;
   z-index: 1;
   gap: 22px;
+}
+.process-page .page-wrapper .page-main .page-stepper-item:nth-child(1) {
+  width: var(--step-first-width);
+}
+.process-page .page-wrapper .page-main .page-stepper-item:nth-child(2) {
+  width: var(--step-second-width);
+}
+.process-page .page-wrapper .page-main .page-stepper-item:nth-child(3) {
+  width: var(--step-third-width);
+}
+.process-page .page-wrapper .page-main .page-stepper-item:nth-child(4) {
+  width: var(--step-fourth-width);
 }
 .process-page .page-wrapper .page-main .page-stepper-num {
   width: var(--step-circle);
@@ -7658,6 +7675,11 @@ article ul li::marker {
   padding-top: 40px;
   width: 100%;
   text-align: left;
+}
+.process-page .page-wrapper .page-note .page-note-content {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 30px;
 }
 @media (max-width: 767px) {
   .process-page {
