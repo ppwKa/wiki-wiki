@@ -7706,6 +7706,9 @@ article ul li::marker {
 .process-page .page-wrapper .page-main .page-main-content ul li p, .process-page .page-wrapper .page-main .page-main-content ul li [bke-role="paragraph"], .process-page .page-wrapper .page-note .page-note-content ul li p, .process-page .page-wrapper .page-note .page-note-content ul li [bke-role="paragraph"], .process-page .page-wrapper .page-main .page-main-content ol li p, .process-page .page-wrapper .page-main .page-main-content ol li [bke-role="paragraph"], .process-page .page-wrapper .page-note .page-note-content ol li p, .process-page .page-wrapper .page-note .page-note-content ol li [bke-role="paragraph"] {
   margin-bottom: 0;
 }
+.process-page .page-wrapper .page-main .page-main-content ul li::marker, .process-page .page-wrapper .page-note .page-note-content ul li::marker, .process-page .page-wrapper .page-main .page-main-content ol li::marker, .process-page .page-wrapper .page-note .page-note-content ol li::marker {
+  font-size: 12px;
+}
 @media (min-width: 768px) {
   .process-page .page-wrapper .page-main .page-stepper-item:nth-child(1) {
     width: var(--step-first-width);
@@ -7741,6 +7744,9 @@ article ul li::marker {
     border-radius: 0;
     padding: 40px 22px 50px;
   }
+  .process-page .page-wrapper .page-note {
+    margin-top: 20px;
+  }
   .process-page .page-wrapper .page-main .page-title, .process-page .page-wrapper .page-note .page-note-title {
     font-size: 24px;
     line-height: 28px;
@@ -7755,7 +7761,8 @@ article ul li::marker {
     margin-top: 0;
   }
   .process-page .page-wrapper .page-main .page-flow {
-    padding-top: 40px;
+    padding-top: 30px;
+    padding-left: 30px;
   }
   .process-page .page-wrapper .page-main .page-stepper {
     --step-circle: 50px;
@@ -7788,6 +7795,9 @@ article ul li::marker {
     line-height: 20px;
     font-weight: 400;
     letter-spacing: -0.48px;
+  }
+  .process-page .page-wrapper .page-note .page-note-content {
+    padding-top: 20px;
   }
 }
 @layer base {
