@@ -10,7 +10,7 @@ import ScrollToController from "./scroll_to_controller"
 import LinkTargetController from "./link_target_controller"
 import AiSearchCompletionController from './ai_search_completion_controller'
 import CatalogIndexController from './catalog_index_controller'
-import FaqIndexController from './faq_index_controller'
+import MaxHeightAccordionController from './max_height_accordion_controller'
 import ArticleTocController from './article_toc_controller'
 
 if (!window.Stimulus) {
@@ -29,6 +29,6 @@ application.register("scroll-to", ScrollToController)
 application.register('link-target', LinkTargetController)
 application.register('ai-search', AiSearchCompletionController)
 application.register('catalog-index', CatalogIndexController)
-application.register('faq-index', FaqIndexController)
+application.register('max-height-accordion', MaxHeightAccordionController)
 application.register('article-toc', ArticleTocController)
 application.register('faq-detail', ArticleTocController)

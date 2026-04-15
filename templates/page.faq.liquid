@@ -8,8 +8,8 @@
   /faq/{category}/{product}/{article} → 文章详情页
 
   渲染规则：
-  depth 1~3 → 聚合页（faq_index）
-  depth 4   → 文章页（faq_detail）
+  depth 1~3 → 聚合页（catalog-index + max-height-accordion）
+  depth 4   → 文章页（faq-detail）
   depth > 4 → 非法层级，不渲染
 
   内容角色约定：
@@ -70,13 +70,13 @@
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
   {%- if _depth < 4 -%}
-    {%- comment -%} 聚合页（depth 1 / 2 / 3）— faq_index 结构 {%- endcomment -%}
+    {%- comment -%} 聚合页（depth 1 / 2 / 3）— 与目录页共用 catalog-index，手风琴为 max-height-accordion {%- endcomment -%}
     <div
       class="catalog-index-page faq-index-page"
-      data-controller="faq-index"
-      data-faq-index-page-path-value="{{ page.path | escape }}"
-      data-faq-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
-      data-faq-index-init-product-path-value="{% if init_prod %}{{ init_prod.path | escape }}{% endif %}"
+      data-controller="catalog-index max-height-accordion"
+      data-catalog-index-page-path-value="{{ page.path | escape }}"
+      data-catalog-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
+      data-catalog-index-init-product-path-value="{% if init_prod %}{{ init_prod.path | escape }}{% endif %}"
     >
       <div class="page-wrapper">
         {%- comment -%} 面包屑导航 {%- endcomment -%}
@@ -94,13 +94,20 @@
         <div class="page-main">
           <h1 class="page-title">{{ faq_root.settings.title }}</h1>
 
-          {%- render 'faq_product_filter', faq_root: faq_root -%}
+          {%- render 'catalog_product_filter',
+            catalog_root: faq_root,
+            controller_name: 'catalog-index'
+          -%}
 
           {%- render 'faq_content_area', init_prod: init_prod, init_cat: init_cat -%}
         </div>
       </div>
 
-      {%- render 'faq_product_sheet', faq_root: faq_root, title: 'Choose Product Model' -%}
+      {%- render 'catalog_product_sheet',
+        catalog_root: faq_root,
+        controller_name: 'catalog-index',
+        sheet_title: 'Choose Product Model'
+      -%}
     </div>
   {%- elsif _depth == 4 -%}
     {%- comment -%} 文章页（depth 4）— faq_detail 结构 {%- endcomment -%}

@@ -9,7 +9,14 @@
   class="block w-full"
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
-  <div class="product-warranty-period-page" data-controller="product-warranty-period">
+  <div
+    class="product-warranty-period-page"
+    data-controller="max-height-accordion"
+    data-max-height-accordion-trigger-selector-value=".page-trigger-btn"
+    data-max-height-accordion-item-selector-value=".page-item"
+    data-max-height-accordion-content-selector-value=".page-warranty-period-container"
+    data-max-height-accordion-icon-selector-value=".page-trigger-icon"
+  >
     <div class="page-wrapper">
       {%- comment -%} 面包屑导航 {%- endcomment -%}
       <nav class="breadcrumb-nav">

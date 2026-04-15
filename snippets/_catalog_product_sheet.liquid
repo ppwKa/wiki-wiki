@@ -3,10 +3,10 @@
 
   传参（命名约定）：
   - catalog_root    — 必填。站点内目录树根页面对象；`.children` 为分类，分类的 `.children` 为产品页
-  - controller_name — 必填。与页面 `data-controller` 一致（如 `catalog-index`、`faq-index`）
+  - controller_name — 必填。与页面 `data-controller` 中的筛选控制器一致（如 `catalog-index`）
   - sheet_title     — 可选。弹窗标题栏文案，默认 "Choose Product Model"
 
-  配套：同 `_catalog_product_filter`（catalog.css + catalog_index_controller / faq_index_controller）
+  配套：同 `_catalog_product_filter`（catalog.css + catalog_index_controller）
 {%- endcomment -%}
 
 {%- if sheet_title == blank -%}

@@ -1,7 +1,7 @@
 /**
  * 通用：分类 → 产品 筛选（PC 下拉 + 移动 Sheet）
  * 配套 snippets/_catalog_product_filter、_catalog_product_sheet 与 catalog.css
- * 页面根节点：class="catalog-index-page" data-controller="catalog-index"
+ * 页面根节点：class="catalog-index-page" data-controller="catalog-index"（FAQ 聚合页同用，并叠 `max-height-accordion`）
  */
 import { Controller } from "@hotwired/stimulus"
 
