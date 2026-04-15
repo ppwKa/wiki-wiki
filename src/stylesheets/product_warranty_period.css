@@ -88,7 +88,6 @@
 .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item {
     overflow: hidden;
     border-radius: 8px;
-    background: #F5F5F7;
 }
 
 .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-trigger-btn {
@@ -100,6 +99,7 @@
     text-align: left;
     background: none;
     border: none;
+    background: #F5F5F7;
     cursor: pointer
 }
 
@@ -146,5 +146,73 @@
 .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h4,
 .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h5,
 .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h6 {
+    color: #151413;
     margin-bottom: 20px;
+}
+
+@media (max-width: 767px) {
+    .product-warranty-period-page .page-wrapper .breadcrumb-nav {
+        width: 100%;
+        font-size: 12px;
+        padding: 16px;
+        white-space: nowrap;
+        letter-spacing: -.3px
+    }
+
+    .product-warranty-period-page .page-wrapper .breadcrumb-nav .breadcrumb-separator {
+        margin-left: 0;
+        margin-right: 0
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container {
+        width: 100%;
+        padding: 40px 16px 120px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-title {
+        font-size: 24px;
+        line-height: 28px;
+        letter-spacing: -.72px;
+        padding: 5px 6px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-description {
+        font-size: 12px;
+        line-height: 140%;
+        letter-spacing: -.36px;
+        padding: 4px 6px;
+        margin-top: 18px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper {
+        padding-top: 29px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-list {
+        gap: 6px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-trigger-btn {
+        padding: 10px 10px 10px 20px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-category {
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: -.42px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content {
+        padding: 20px 0 40px;
+    }
+
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h1,
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h2,
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h3,
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h4,
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h5,
+    .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h6 {
+        padding: 6px;
+        margin-bottom: 10px;
+    }
 }

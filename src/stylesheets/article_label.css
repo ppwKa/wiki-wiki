@@ -6,7 +6,7 @@ article {
 }
 
 article h1 {
-    color: #343436;
+    color: #151413;
     font-size: 32px;
     font-style: normal;
     font-weight: 700;
@@ -86,7 +86,7 @@ article hr {
     margin: 20px 0;
 }
 
-article .bke-table-container{
+article .bke-table-container {
     width: 100%;
     max-width: calc(100vw - 32px);
     overflow-x: auto;
@@ -103,7 +103,7 @@ article table {
 }
 
 article table img,
-article table svg{
+article table svg {
     max-width: 50px;
 }
 
@@ -131,6 +131,8 @@ article table th [bke-role="paragraph"],
 article table th ul li,
 article table th ol li {
     color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
     margin-bottom: 0
 }
 
@@ -156,6 +158,8 @@ article table td h6,
 article table td p,
 article table td [bke-role="paragraph"] {
     color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
     margin-bottom: 0
 }
 
@@ -201,6 +205,11 @@ article ol li h5,
 article ol li h6,
 article ol li p,
 article ol li [bke-role="paragraph"] {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
     margin-bottom: 0
 }
 
