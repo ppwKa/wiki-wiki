@@ -1,0 +1,218 @@
+{%- comment -%}
+  Product Warranty Period 专用页面模板
+
+  仅用于 product warranty period 页面，不用于其他页面
+{%- endcomment -%}
+
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  <div class="product-warranty-period-page" data-controller="product-warranty-period">
+    <div class="page-wrapper">
+      {%- comment -%} 面包屑导航 {%- endcomment -%}
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+        <span class="breadcrumb-separator">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="breadcrumb-current">{{ page.settings.title }}</span>
+      </nav>
+
+      {%- comment -%} 主内容 {%- endcomment -%}
+      <div class="page-main">
+        <div class="page-main-container">
+          <h1 class="page-title">{{ page.settings.title }}</h1>
+          <p class="page-description">{{ page.settings.description }}</p>
+
+          <div class="page-main-wrapper">
+            <div class="page-list">
+              <div class="page-item">
+                <button class="page-trigger-btn" type="button">
+                  <div class="page-category">
+                    <span>{{ page.settings.video_solutions_title }}</span>
+                  </div>
+                  <svg
+                    class="page-trigger-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                    fill="none"
+                  >
+                    <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="page-warranty-period-container">
+                  <div class="page-warranty-period-content">
+                    <article class="page-warranty-period-article">
+                      {{ page.settings.video_solutions_description }}
+                    </article>
+                  </div>
+                </div>
+              </div>
+              <div class="page-item">
+                <button class="page-trigger-btn" type="button">
+                  <div class="page-category">
+                    <span>{{ page.settings.intercom_systems_title }}</span>
+                  </div>
+                  <svg
+                    class="page-trigger-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                    fill="none"
+                  >
+                    <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="page-warranty-period-container">
+                  <div class="page-warranty-period-content">
+                    <article class="page-warranty-period-article">
+                      {{ page.settings.intercom_systems_description }}
+                    </article>
+                  </div>
+                </div>
+              </div>
+              <div class="page-item">
+                <button class="page-trigger-btn" type="button">
+                  <div class="page-category">
+                    <span>{{ page.settings.wireless_microphones_title }}</span>
+                  </div>
+                  <svg
+                    class="page-trigger-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                    fill="none"
+                  >
+                    <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="page-warranty-period-container">
+                  <div class="page-warranty-period-content">
+                    <article class="page-warranty-period-article">
+                      {{ page.settings.wireless_microphones_description }}
+                    </article>
+                  </div>
+                </div>
+              </div>
+              <div class="page-item">
+                <button class="page-trigger-btn" type="button">
+                  <div class="page-category">
+                    <span>{{ page.settings.cameras_title }}</span>
+                  </div>
+                  <svg
+                    class="page-trigger-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                    fill="none"
+                  >
+                    <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="page-warranty-period-container">
+                  <div class="page-warranty-period-content">
+                    <article class="page-warranty-period-article">{{ page.settings.cameras_description }}</article>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</turbo-frame>
+
+{% schema %}
+{
+  "name": "Product Warranty Period",
+  "description": "Product Warranty Period 唯一模板",
+  "sub_page_templates": ["product_warranty_period"],
+  "settings": [
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    },
+    {
+      "id": "video_solutions_title",
+      "type": "text",
+      "label": "Video Solutions Title",
+      "info": "Used to display the title of the video solutions section"
+    },
+    {
+      "id": "video_solutions_description",
+      "type": "richtext",
+      "label": "Video Solutions Description",
+      "info": "Used to display the description of the video solutions section"
+    },
+    {
+      "id": "intercom_systems_title",
+      "type": "text",
+      "label": "Intercom Systems Title",
+      "info": "Used to display the title of the intercom systems section"
+    },
+    {
+      "id": "intercom_systems_description",
+      "type": "richtext",
+      "label": "Intercom Systems Description",
+      "info": "Used to display the description of the intercom systems section"
+    },
+    {
+      "id": "wireless_microphones_title",
+      "type": "text",
+      "label": "Wireless Microphones Title",
+      "info": "Used to display the title of the wireless microphones section"
+    },
+    {
+      "id": "wireless_microphones_description",
+      "type": "richtext",
+      "label": "Wireless Microphones Description",
+      "info": "Used to display the description of the wireless microphones section"
+    },
+    {
+      "id": "cameras_title",
+      "type": "text",
+      "label": "Cameras Title",
+      "info": "Used to display the title of the cameras section"
+    },
+    {
+      "id": "cameras_description",
+      "type": "richtext",
+      "label": "Cameras Description",
+      "info": "Used to display the description of the cameras section"
+    }
+  ]
+}
+{% endschema %}
