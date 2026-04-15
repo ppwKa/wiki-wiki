@@ -1,4 +1,4 @@
-/* FAQ 文章详情与通用树形文章页（article-toc-page）共用版式；配套 Stimulus：article-toc / faq-detail */
+/* FAQ 文章详情、双层文章（.article-toc-page.two-level-articles-page）与通用树形文章页共用版式；Stimulus：article-toc / faq-detail；双层专属覆写见 two_level_articles.css */
 .article-toc-page {
     min-height: 100vh;
     color: #6e6e73;
