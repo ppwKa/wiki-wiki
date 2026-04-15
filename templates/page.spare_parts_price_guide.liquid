@@ -1,0 +1,144 @@
+{%- comment -%}
+  Spare Parts Price Guide 专用页面树模板
+
+  页面树约定：
+  /spare_parts_price_guide                           → Spare Parts Price Guide 根
+  /spare_parts_price_guide/{category}                → 分类（栏目）
+  /spare_parts_price_guide/{category}/{product}      → 产品页（正文由该页承接；产品下无子文章）
+
+  渲染规则：
+    depth 1~3 → 产品聚合壳层 + turbo-frame 首屏加载
+
+  内容角色约定：
+  - Root：Spare Parts Price Guide 入口与分类容器
+  - 分类：产品分组；其直接子页面均为「产品页」
+  - 产品：文档内容写在产品页本身，不由子页面列表承接
+
+  维护约束：
+  - 仅使用上述 URL 深度（1~3）
+  - Spare Parts Price Guide 树内页面统一使用 spare_parts_price_guide 模板
+
+  init_cat / init_prod：与当前 URL 对应的默认分类、产品，供 select 与 turbo-frame 首屏一致
+{%- endcomment -%}
+
+{%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
+
+{%- assign spare_parts_price_guide_root = page -%}
+{%- if _depth > 1 -%}{%- assign spare_parts_price_guide_root = page.parent -%}{%- endif -%}
+{%- if _depth > 2 -%}{%- assign spare_parts_price_guide_root = spare_parts_price_guide_root.parent -%}{%- endif -%}
+{%- if _depth > 3 -%}{%- assign spare_parts_price_guide_root = spare_parts_price_guide_root.parent -%}{%- endif -%}
+
+{%- assign init_cat = null -%}
+{%- assign init_prod = null -%}
+
+{%- if _depth == 1 -%}
+  {%- for cat in page.children -%}
+    {%- assign first_prod = cat.children | first -%}
+    {%- if first_prod -%}
+      {%- assign init_cat = cat -%}
+      {%- assign init_prod = first_prod -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+{%- elsif _depth == 2 -%}
+  {%- assign init_cat = page -%}
+  {%- assign init_prod = page.children | first -%}
+
+{%- elsif _depth == 3 -%}
+  {%- assign init_cat = page.parent -%}
+  {%- assign init_prod = page -%}
+{%- endif -%}
+
+{%- comment -%}
+  ─────────────── TURBO
+  FRAME 外壳 ───────────────
+  depth 1~2：frame 拉取首个产品页；depth 3：当前即产品页，不设 src
+{%- endcomment -%}
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  {% if _depth < 3 and init_prod %}
+    src="{{ init_prod.path }}"
+  {% endif %}
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  <div
+    class="catalog-index-page"
+    data-controller="catalog-index"
+    data-catalog-index-page-path-value="{{ page.path | escape }}"
+    data-catalog-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
+    data-catalog-index-init-product-path-value="{% if init_prod %}{{ init_prod.path | escape }}{% endif %}"
+  >
+    <div class="page-wrapper">
+      {%- comment -%} 面包屑导航 {%- endcomment -%}
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+        <span class="breadcrumb-separator">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="breadcrumb-current">{{ spare_parts_price_guide_root.settings.title }}</span>
+      </nav>
+
+      {%- comment -%} 主内容卡片：配套 catalog.css + catalog_index_controller {%- endcomment -%}
+      <div class="page-main">
+        <h1 class="page-title">{{ spare_parts_price_guide_root.settings.title }}</h1>
+
+        {%- render 'catalog_product_filter',
+          catalog_root: spare_parts_price_guide_root,
+          controller_name: 'catalog-index',
+          placeholder_label: 'Choose Product Model'
+        -%}
+
+        {%- comment -%} 产品正文由 turbo-frame 导航加载；可在此追加 spare_parts_price_guide 专用内容区 {%- endcomment -%}
+        <div class="page-main-content">
+          <article class="page-main-article">{{ page.settings.content }}</article>
+        </div>
+      </div>
+    </div>
+
+    {%- render 'catalog_product_sheet',
+      catalog_root: spare_parts_price_guide_root,
+      controller_name: 'catalog-index',
+      sheet_title: 'Choose Product Model'
+    -%}
+  </div>
+</turbo-frame>
+{% schema %}
+{
+  "name": "Spare Parts Price Guide",
+  "description": "Spare Parts Price Guide 统一模板，深度 1~3 为聚合页",
+  "sub_page_templates": ["spare_parts_price_guide", "page"],
+  "settings": [
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
+}
+{% endschema %}
