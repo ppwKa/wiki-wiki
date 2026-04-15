@@ -136,7 +136,7 @@
 }
 
 .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content {
-    padding: 30px 48px 60px;
+    padding: 30px 48px 10px;
     text-align: left;
 }
 
@@ -203,7 +203,7 @@
     }
 
     .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content {
-        padding: 20px 0 40px;
+        padding: 20px 0 10px;
     }
 
     .product-warranty-period-page .page-wrapper .page-main .page-main-container .page-main-wrapper .page-item .page-warranty-period-content article h1,
