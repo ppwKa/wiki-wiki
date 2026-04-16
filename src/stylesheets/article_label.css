@@ -12,6 +12,7 @@ article h1 {
     font-weight: 700;
     line-height: 120%;
     letter-spacing: -0.96px;
+    overflow: hidden;
     margin-bottom: 24px
 }
 
@@ -22,6 +23,7 @@ article h2 {
     font-weight: 500;
     line-height: 125%;
     letter-spacing: -0.84px;
+    overflow: hidden;
     margin-bottom: 20px
 }
 
@@ -32,6 +34,7 @@ article h3 {
     font-weight: 500;
     line-height: 130%;
     letter-spacing: -0.72px;
+    overflow: hidden;
     margin-bottom: 16px
 }
 
@@ -42,6 +45,7 @@ article h4 {
     font-weight: 500;
     line-height: 130%;
     letter-spacing: -0.6px;
+    overflow: hidden;
     margin-bottom: 12px
 }
 
@@ -52,6 +56,7 @@ article h5 {
     font-weight: 400;
     line-height: 140%;
     letter-spacing: -0.54px;
+    overflow: hidden;
     margin-bottom: 8px
 }
 
@@ -62,6 +67,7 @@ article h6 {
     font-weight: 500;
     line-height: 150%;
     letter-spacing: -.42px;
+    overflow: hidden;
     margin-bottom: 8px
 }
 
@@ -72,6 +78,7 @@ article [bke-role="paragraph"] {
     font-weight: 400;
     line-height: 140%;
     letter-spacing: -.36px;
+    overflow: hidden;
     margin-bottom: 10px
 }
 
@@ -79,7 +86,8 @@ article img {
     max-width: 100%;
     height: auto;
     display: block;
-    margin-bottom: 30px
+    margin-bottom: 30px;
+    overflow: hidden;
 }
 
 article hr {
@@ -88,7 +96,7 @@ article hr {
 
 article .bke-table-container {
     width: 100%;
-    max-width: calc(100vw - 32px);
+    max-width: 100%;
     overflow-x: auto;
 }
 
@@ -137,7 +145,7 @@ article table th ol li {
 }
 
 article table td {
-    min-width: 62px;
+    min-width: 150px;
     color: #6E6E73;
     font-family: "HarmonyOS Sans";
     font-size: 12px;
@@ -265,6 +273,10 @@ article ul li::marker {
         margin: 15px 0;
     }
 
+    article .bke-table-container {
+        max-width: calc(100vw - 32px);
+    }
+
     article table {
         margin-bottom: 30px
     }
@@ -286,6 +298,10 @@ article ul li::marker {
         line-height: 16px;
         letter-spacing: -.3px;
         padding: 12px 10px
+    }
+
+    article table td {
+        min-width: 62px;
     }
 
     article ul,
