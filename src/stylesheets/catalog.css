@@ -163,7 +163,15 @@
     width: 200px;
     flex-shrink: 0;
     position: relative;
-    padding-right: 16px
+    padding-right: 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none
+}
+
+.catalog-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list::-webkit-scrollbar {
+    display: none
 }
 
 .catalog-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list:after {
