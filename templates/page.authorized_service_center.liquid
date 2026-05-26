@@ -83,7 +83,7 @@
         <div class="page-main">
           <h1 class="page-title">{{ authorized_service_center_root.settings.title }}</h1>
 
-          {%- render '_catalog_product_filter',
+          {%- render 'catalog_product_filter',
             catalog_root: authorized_service_center_root,
             controller_name: 'catalog-index',
             placeholder_label: 'Choose Country',
@@ -138,7 +138,7 @@
         </div>
       </div>
 
-      {%- render '_catalog_product_sheet',
+      {%- render 'catalog_product_sheet',
         catalog_root: authorized_service_center_root,
         controller_name: 'catalog-index',
         sheet_title: 'Choose Country',
