@@ -5,6 +5,7 @@
   - catalog_root     — 必填。站点内目录树根页面对象；`.children` 为分类，分类的 `.children` 为产品页
   - controller_name  — 必填。与页面 `data-controller` 中的筛选控制器一致，如 `catalog-index`（用于 `data-action`）
   - placeholder_label — 可选。未选产品时触发器与标签占位文案，默认 "Choose Product Model"
+  - include_all_regions_first — 可选。为 true 时在第一列地区前增加「All」，右侧展示全部国家（data-cat-path="__all__"）
 
   配套：`src/stylesheets/catalog.css`（根节点 `.catalog-index-page` 或与 FAQ 共用 `:is(.catalog-index-page,.faq-index-page)`）
         + `catalog_index_controller.js`；FAQ 聚合页另叠 `max-height-accordion`（见 `page.faq.liquid`）
@@ -47,6 +48,16 @@
     {%- comment -%} PC 端两列下拉 {%- endcomment -%}
     <div class="pc-dropdown-menu hidden" id="pcDropdown">
       <div class="pc-category-list" id="pcCategoryList">
+        {%- if include_all_regions_first -%}
+          <div class="pc-category-item" data-cat-path="__all__">
+            All
+            <span class="pc-category-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        {%- endif -%}
         {%- for cat in catalog_root.children -%}
           <div class="pc-category-item" data-cat-path="{{ cat.path }}">
             {{ cat.settings.title }}

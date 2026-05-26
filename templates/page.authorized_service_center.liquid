@@ -1,0 +1,185 @@
+{%- comment -%}
+  Authorized Service Center 专用页面树模板
+
+  页面树约定：
+  /authorized_service_center                     → Root
+  /authorized_service_center/{region}            → 地区
+  /authorized_service_center/{region}/{country}  → 国家（聚合页）
+  /authorized_service_center/{region}/{country}/{article} → 文章（不独立落地，内容在集合页展示）
+
+  渲染规则：
+  depth 1~4
+
+  内容角色约定：
+  - Root：入口与地区容器
+  - 地区：国家分组
+  - 国家：服务中心文章聚合容器
+  - 文章：具体内容，但不渲染独立详情页
+
+  维护约束：
+  - 仅使用上述 URL 深度（1~4）
+  - 树内页面统一使用 authorized_service_center 模板
+{%- endcomment -%}
+
+{%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
+
+{%- assign authorized_service_center_root = page -%}
+{%- if _depth > 1 -%}{%- assign authorized_service_center_root = page.parent -%}{%- endif -%}
+{%- if _depth > 2 -%}{%- assign authorized_service_center_root = authorized_service_center_root.parent -%}{%- endif -%}
+{%- if _depth > 3 -%}{%- assign authorized_service_center_root = authorized_service_center_root.parent -%}{%- endif -%}
+
+{%- assign init_cat = null -%}
+{%- assign init_country = null -%}
+
+{%- if _depth == 1 -%}
+  {%- for cat in page.children -%}
+    {%- assign first_country = cat.children | first -%}
+    {%- if first_country -%}
+      {%- assign init_cat = '__all__' -%}
+      {%- assign init_country = first_country -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+{%- elsif _depth == 2 -%}
+  {%- assign init_cat = page -%}
+  {%- assign init_country = page.children | first -%}
+
+{%- elsif _depth == 3 -%}
+  {%- assign init_cat = page.parent -%}
+  {%- assign init_country = page -%}
+{%- elsif _depth == 4 -%}
+  {%- assign init_cat = page.parent.parent -%}
+  {%- assign init_country = page.parent -%}
+{%- endif -%}
+
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  {% if _depth > 1 and _depth < 3 and init_country %}
+    src="{{ init_country.path }}"
+  {% endif %}
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  {%- if _depth < 5 -%}
+    <div
+      class="catalog-index-page authorized-service-center-page"
+      data-controller="catalog-index"
+      data-catalog-index-page-path-value="{{ page.path | escape }}"
+      data-catalog-index-init-cat-path-value="{% if _depth == 1 %}__all__{% elsif init_cat %}{{ init_cat.path | escape }}{% endif %}"
+      data-catalog-index-init-product-path-value="{% if init_country %}{{ init_country.path | escape }}{% endif %}"
+    >
+      <div class="page-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+          <span class="breadcrumb-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="breadcrumb-current">{{ authorized_service_center_root.settings.title }}</span>
+        </nav>
+
+        <div class="page-main">
+          <h1 class="page-title">{{ authorized_service_center_root.settings.title }}</h1>
+
+          {%- render '_catalog_product_filter',
+            catalog_root: authorized_service_center_root,
+            controller_name: 'catalog-index',
+            placeholder_label: 'Choose Country',
+            include_all_regions_first: true
+          -%}
+
+          <div class="authorized-service-center-content-wrapper">
+            <div class="authorized-service-center-skeleton" data-catalog-skeleton>
+              <div class="authorized-service-center-skeleton-item"></div>
+              <div class="authorized-service-center-skeleton-item"></div>
+              <div class="authorized-service-center-skeleton-item"></div>
+              <div class="authorized-service-center-skeleton-item"></div>
+            </div>
+
+            <div class="authorized-service-center-content" data-catalog-content style="display:none">
+              {%- if _depth == 1 -%}
+                <div class="authorized-service-center-card-list">
+                  {%- for cat in authorized_service_center_root.children -%}
+                    {%- for country in cat.children -%}
+                      {%- for article in country.children -%}
+                        <div class="authorized-service-center-card">
+                          <div class="authorized-service-center-card-title">
+                            {{ article.settings.title }}
+                          </div>
+                          <div class="authorized-service-center-card-content">
+                            {{ article.settings.content }}
+                          </div>
+                        </div>
+                      {%- endfor -%}
+                    {%- endfor -%}
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                {%- assign render_country = init_country -%}
+                <div class="authorized-service-center-card-list">
+                  {%- if render_country and render_country.children -%}
+                    {%- for article in render_country.children -%}
+                      <div class="authorized-service-center-card">
+                        <div class="authorized-service-center-card-title">
+                          {{ article.settings.title }}
+                        </div>
+                        <div class="authorized-service-center-card-content">
+                          {{ article.settings.content }}
+                        </div>
+                      </div>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- render '_catalog_product_sheet',
+        catalog_root: authorized_service_center_root,
+        controller_name: 'catalog-index',
+        sheet_title: 'Choose Country',
+        include_all_regions_first: true
+      -%}
+    </div>
+  {%- endif -%}
+</turbo-frame>
+{% schema %}
+{
+  "name": "Authorized Service Center",
+  "description": "Authorized Service Center",
+  "sub_page_templates": ["authorized_service_center", "page"],
+  "settings": [
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
+}
+{% endschema %}

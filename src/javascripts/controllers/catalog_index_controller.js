@@ -164,8 +164,9 @@ export default class extends Controller {
   }
 
   _showProductsForCategory(catPath) {
+    const showAll = catPath === "__all__"
     this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
-      el.style.display = (el.dataset.catPath || "") === catPath ? "" : "none"
+      el.style.display = showAll || (el.dataset.catPath || "") === catPath ? "" : "none"
     })
 
     this._pcCategoryList?.querySelectorAll(".pc-category-item").forEach((el) => {
@@ -242,6 +243,13 @@ export default class extends Controller {
   }
 
   _toggleMobileCategoryContent(header) {
+    const wrapper = header.closest(".mobile-accordion-item")
+    if ((wrapper?.dataset.catPath || "") === "__all__") {
+      const openAll = !this._allMobileCategoriesOpen()
+      this._setAllMobileCategoriesOpen(openAll)
+      return
+    }
+
     const content = header.nextElementSibling
     const icon = header.querySelector(".mobile-accordion-arrow")
     if (!content) return
@@ -250,9 +258,45 @@ export default class extends Controller {
     icon?.classList.toggle("rotated", !isOpen)
   }
 
+  _allMobileCategoriesOpen() {
+    const sections = [
+      ...(this._mobileAccordion?.querySelectorAll('.mobile-accordion-item[data-cat-path]:not([data-cat-path="__all__"])') || []),
+    ]
+    if (!sections.length) return false
+    return sections.every((section) => section.querySelector(".mobile-accordion-content")?.classList.contains("open"))
+  }
+
+  _setAllMobileCategoriesOpen(open) {
+    const sections = this._mobileAccordion?.querySelectorAll(
+      '.mobile-accordion-item[data-cat-path]:not([data-cat-path="__all__"])'
+    )
+    sections?.forEach((section) => {
+      const content = section.querySelector(".mobile-accordion-content")
+      const icon = section.querySelector(".mobile-accordion-arrow")
+      content?.classList.toggle("open", open)
+      icon?.classList.toggle("rotated", open)
+    })
+
+    const allIcon = this._mobileAccordion?.querySelector(
+      '.mobile-accordion-item[data-cat-path="__all__"] .mobile-accordion-arrow'
+    )
+    allIcon?.classList.toggle("rotated", open)
+  }
+
   _initDefaultSelection() {
     let match = null
     const items = [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])]
+    const initCatIsAll = this.initCatPathValue === "__all__"
+
+    if (initCatIsAll) {
+      this._currentCategoryPath = "__all__"
+      this._hoverCategoryPath = "__all__"
+      this._selectedProductPath = ""
+      this._showProductsForCategory("__all__")
+      this._highlightSelectedProduct()
+      this._setHeaderDisplay("All", "")
+      return
+    }
 
     if (this.initProductPathValue) {
       match = items.find((el) => el.dataset.path === this.initProductPathValue)
