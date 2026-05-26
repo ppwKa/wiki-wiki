@@ -3,6 +3,15 @@
   margin-top: 20px;
 }
 
+.authorized-service-center-page .filter-trigger-btn {
+  min-height: 50px;
+  padding: 0 0 0 20px;
+}
+
+.authorized-service-center-page .filter-trigger-content {
+  min-height: 64px;
+}
+
 .authorized-service-center-page .authorized-service-center-card-list {
   display: flex;
   flex-direction: column;

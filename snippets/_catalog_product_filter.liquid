@@ -6,6 +6,7 @@
   - controller_name  — 必填。与页面 `data-controller` 中的筛选控制器一致，如 `catalog-index`（用于 `data-action`）
   - placeholder_label — 可选。未选产品时触发器与标签占位文案，默认 "Choose Product Model"
   - include_all_regions_first — 可选。为 true 时在第一列地区前增加「All」，右侧展示全部国家（data-cat-path="__all__"）
+  - hide_filter_thumbnail — 可选。为 true 时隐藏触发器左侧缩略图/占位图
 
   配套：`src/stylesheets/catalog.css`（根节点 `.catalog-index-page` 或与 FAQ 共用 `:is(.catalog-index-page,.faq-index-page)`）
         + `catalog_index_controller.js`；FAQ 聚合页另叠 `max-height-accordion`（见 `page.faq.liquid`）
@@ -24,12 +25,14 @@
   <div class="filter-container" id="filterContainer">
     <div class="filter-trigger-btn" id="filterHeader">
       <div class="filter-trigger-content">
-        <div class="filter-trigger-icon" id="thumbBox">
-          <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
-            <rect width="100" height="100" fill="#F5F5F7"/>
-            <rect x="10" y="10" width="80" height="80" fill="white"/>
-          </svg>
-        </div>
+        {%- unless hide_filter_thumbnail -%}
+          <div class="filter-trigger-icon" id="thumbBox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
+              <rect width="100" height="100" fill="#F5F5F7"/>
+              <rect x="10" y="10" width="80" height="80" fill="white"/>
+            </svg>
+          </div>
+        {%- endunless -%}
         <span class="filter-trigger-text" id="selectedName">{{ _placeholder }}</span>
       </div>
       <svg
