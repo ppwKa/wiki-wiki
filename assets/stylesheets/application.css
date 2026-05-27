@@ -7618,7 +7618,7 @@ article ul li::marker {
   text-underline-position: from-font;
 }
 .authorized-service-center-page .authorized-service-center-skeleton-item {
-  height: 120px;
+  height: 140px;
   border-radius: 6px;
   margin-bottom: 10px;
   background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
