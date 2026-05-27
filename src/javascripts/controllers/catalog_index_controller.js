@@ -46,6 +46,7 @@ export default class extends Controller {
         e.stopPropagation()
         if (this._isMobile()) {
           this._openMobileSheet()
+          if (this._arrowIcon) this._arrowIcon.style.transform = "rotate(180deg)"
         } else {
           this._pcDropdown?.classList.toggle("hidden")
           if (this._arrowIcon) {
@@ -240,6 +241,7 @@ export default class extends Controller {
     this._mobileOverlay?.classList.remove("open")
     this._mobileSheet?.classList.remove("open")
     document.body.classList.remove("modal-open")
+    if (this._arrowIcon) this._arrowIcon.style.transform = "rotate(0deg)"
   }
 
   _toggleMobileCategoryContent(header) {

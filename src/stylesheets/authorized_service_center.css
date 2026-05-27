@@ -26,6 +26,8 @@
 }
 
 .authorized-service-center-page .authorized-service-center-card-title {
+  width: calc(50% - 1px);
+  flex-shrink: 0;
   padding: 12px 20px;
   background: #F5F5F7;
   word-break: break-word;
@@ -40,6 +42,8 @@
 }
 
 .authorized-service-center-page .authorized-service-center-card-content {
+  width: calc(50% - 1px);
+  flex-shrink: 0;
   padding: 20px;
   background: #F5F5F7;
   color: #6E6E73;
@@ -83,9 +87,35 @@
 }
 
 @media (max-width: 767px) {
+  .authorized-service-center-page .authorized-service-center-content-wrapper {
+    padding-top: 40px;
+  }
+
+  .authorized-service-center-page .filter-trigger-btn {
+    padding: 0 0 0 20px;
+  }
+
+  .authorized-service-center-page .filter-trigger-content {
+    min-height: 56px;
+  }
+
+  .authorized-service-center-page .authorized-service-center-card-list {
+    gap: 10px;
+  }
+
   .authorized-service-center-page .authorized-service-center-card {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 14px 12px;
+    flex-direction: column;
+  }
+
+  .authorized-service-center-page .authorized-service-center-card-title {
+    width: 100%;
+  }
+
+  .authorized-service-center-page .authorized-service-center-card-content {
+    width: 100%;
+  }
+
+  .authorized-service-center-page .authorized-service-center-skeleton-item {
+    height: 60px;
   }
 }
