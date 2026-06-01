@@ -1,10 +1,10 @@
 /* Repair Support ????Quick Answer / Visual Guides / ????????? catalog.css? */
 .repair-support-index-page .page-wrapper .page-main .repair-support-content-wrapper {
     border-top: 1px solid #D2D2D7;
+    padding-top: 50px;
 }
 
 .repair-support-index-page .page-wrapper .page-main .repair-support-section {
-    padding-top: 50px;
     overflow: hidden
 }
 
@@ -92,6 +92,10 @@
     overflow: hidden
 }
 
+.repair-support-index-page .page-wrapper .page-main .repair-support-content > .repair-support-guides-section:first-child {
+    padding-top: 0
+}
+
 .repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list {
     display: flex;
     flex-direction: column;
@@ -130,7 +134,7 @@
     flex-shrink: 0
 }
 
-/* FAQ ???????????????????*/
+/* Repair Support ?????????????????? */
 .repair-support-index-page .repair-support-content-placeholder {
     min-height: 200px
 }
@@ -187,12 +191,12 @@
 }
 
 @media (max-width: 767px) {
-    .repair-support-index-page .page-wrapper .page-main .filter-section .repair-support-list {
-        margin-top: 16px
+    .repair-support-index-page .page-wrapper .page-main .repair-support-content-wrapper {
+        padding-top: 40px
     }
 
-    .repair-support-index-page .page-wrapper .page-main .repair-support-section {
-        padding-top: 40px
+    .repair-support-index-page .page-wrapper .page-main .filter-section .repair-support-list {
+        margin-top: 16px
     }
 
     .repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-btn {
