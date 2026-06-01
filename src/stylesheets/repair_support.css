@@ -1,0 +1,209 @@
+/* Repair Support ????Quick Answer / Visual Guides / ????????? catalog.css? */
+.repair-support-index-page .page-wrapper .page-main .repair-support-content-wrapper {
+    border-top: 1px solid #D2D2D7;
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section {
+    padding-top: 50px;
+    overflow: hidden
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item {
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid #F5F5F7;
+    background-color: #f5f5f7
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 20px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-question {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    color: #343436;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -.42px
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    transition: transform .4s cubic-bezier(.4, 0, .2, 1)
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-icon.rotated {
+    transform: rotate(180deg)
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-container {
+    transition: max-height .4s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    background-color: #fff
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-container.open {
+    opacity: 1
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content {
+    padding: 30px 20px;
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article,
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article * {
+    font-size: 12px;
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article ul li::marker,
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article ol li::marker {
+    font-size: 8px;
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article a {
+    color: #0071e3;
+    text-decoration: underline;
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section {
+    padding-top: 50px;
+    overflow: hidden
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    background: #f5f5f7;
+    padding: 13px 20px;
+    text-align: left;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: #343436
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card .repair-support-guide-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    color: #343436;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: -.42px
+}
+
+.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card .repair-support-guide-arrow {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0
+}
+
+/* FAQ ???????????????????*/
+.repair-support-index-page .repair-support-content-placeholder {
+    min-height: 200px
+}
+
+.repair-support-index-page .repair-support-select-hint {
+    color: #6e6e73;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 20px
+}
+
+.repair-support-index-page .repair-support-skeleton-section {
+    margin-bottom: 40px
+}
+
+.repair-support-index-page .repair-support-skeleton-section:first-child {
+    margin-top: 0
+}
+
+.repair-support-index-page .repair-support-skeleton-title {
+    height: 24px;
+    background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
+    background-size: 200% 100%;
+    animation: repair-support-skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: 180px
+}
+
+.repair-support-index-page .repair-support-skeleton-item {
+    height: 42px;
+    background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
+    background-size: 200% 100%;
+    animation: repair-support-skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 10px
+}
+
+@keyframes repair-support-skeleton-shimmer {
+    0% {
+        background-position: 200% 0
+    }
+
+    100% {
+        background-position: -200% 0
+    }
+}
+
+.repair-support-index-page .repair-support-empty-state {
+    color: #6e6e73;
+    font-size: 14px;
+    padding: 40px 0;
+    text-align: center
+}
+
+@media (max-width: 767px) {
+    .repair-support-index-page .page-wrapper .page-main .filter-section .repair-support-list {
+        margin-top: 16px
+    }
+
+    .repair-support-index-page .page-wrapper .page-main .repair-support-section {
+        padding-top: 40px
+    }
+
+    .repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-btn {
+        padding: 17px 12px
+    }
+
+    .repair-support-index-page .page-wrapper .page-main .repair-support-guides-section {
+        padding-top: 40px
+    }
+
+    .repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card {
+        padding: 17px 12px
+    }
+}

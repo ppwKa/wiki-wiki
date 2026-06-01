@@ -1,0 +1,340 @@
+{%- comment -%}
+  Repair Support 专用页面树模板
+
+  页面树约定：
+  /repair_support                           → Repair Support Root
+  /repair_support/{category}                → 分类页
+  /repair_support/{category}/{product}      → 产品聚合页
+  /repair_support/{category}/{product}/{article} → 文章详情页
+
+  渲染规则：
+  depth 1~3 → 聚合页（catalog-index + max-height-accordion）
+  depth 4   → 文章页（repair-support-detail）
+  depth > 4 → 非法层级，不渲染
+
+  内容角色约定：
+  - Root：Repair Support 入口与分类容器
+  - Category：仅作为产品分类容器
+  - Product：用于承载 Quick Answer / Visual Guides 的聚合内容来源
+  - Article：具体文章内容页
+
+  维护约束：
+  - 只允许使用上述 4 层结构
+  - 不要跳层建页，例如 /repair_support/{category}/{article}
+  - 不要超过 4 层
+  - Repair Support 树内页面统一使用 repair_support 模板
+  - `is_hide_as_article` 仅对 article 层有效：
+    true  → Quick Answer
+    false → Visual Guide
+{%- endcomment -%}
+
+{%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
+
+{%- assign repair_support_root = page -%}
+{%- if _depth > 1 -%}{%- assign repair_support_root = page.parent -%}{%- endif -%}
+{%- if _depth > 2 -%}{%- assign repair_support_root = repair_support_root.parent -%}{%- endif -%}
+{%- if _depth > 3 -%}{%- assign repair_support_root = repair_support_root.parent -%}{%- endif -%}
+
+{%- assign init_cat = null -%}
+{%- assign init_prod = null -%}
+
+{%- if _depth == 1 -%}
+  {%- for cat in page.children -%}
+    {%- assign first_prod = cat.children | first -%}
+    {%- if first_prod -%}
+      {%- assign init_cat = cat -%}
+      {%- assign init_prod = first_prod -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+{%- elsif _depth == 2 -%}
+  {%- assign init_cat = page -%}
+  {%- assign init_prod = page.children | first -%}
+
+{%- elsif _depth == 3 -%}
+  {%- assign init_cat = page.parent -%}
+  {%- assign init_prod = page -%}
+{%- endif -%}
+
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  {% if _depth < 3 and init_prod %}
+    src="{{ init_prod.path }}"
+  {% endif %}
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  {%- if _depth < 4 -%}
+    <div
+      class="catalog-index-page repair-support-index-page"
+      data-controller="catalog-index max-height-accordion"
+      data-catalog-index-page-path-value="{{ page.path | escape }}"
+      data-catalog-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
+      data-catalog-index-init-product-path-value="{% if init_prod %}{{ init_prod.path | escape }}{% endif %}"
+      data-max-height-accordion-trigger-selector-value=".repair-support-trigger-btn"
+      data-max-height-accordion-item-selector-value=".repair-support-item"
+      data-max-height-accordion-content-selector-value=".repair-support-answer-container"
+      data-max-height-accordion-icon-selector-value=".repair-support-trigger-icon"
+    >
+      <div class="page-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+          <span class="breadcrumb-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="breadcrumb-current">{{ repair_support_root.settings.title }}</span>
+        </nav>
+
+        <div class="page-main">
+          <h1 class="page-title">{{ repair_support_root.settings.title }}</h1>
+
+          {%- render 'catalog_product_filter',
+            catalog_root: repair_support_root,
+            controller_name: 'catalog-index'
+          -%}
+
+          <div class="repair-support-content-wrapper" id="repairSupportContentWrapper">
+            <div class="repair-support-skeleton" id="repairSupportSkeleton" data-catalog-skeleton>
+              <div class="repair-support-skeleton-section">
+                <div class="repair-support-skeleton-title"></div>
+                <div class="repair-support-skeleton-item"></div>
+                <div class="repair-support-skeleton-item"></div>
+                <div class="repair-support-skeleton-item"></div>
+                <div class="repair-support-skeleton-item"></div>
+              </div>
+              <div class="repair-support-skeleton-section">
+                <div class="repair-support-skeleton-title"></div>
+                <div class="repair-support-skeleton-item"></div>
+                <div class="repair-support-skeleton-item"></div>
+                <div class="repair-support-skeleton-item"></div>
+                <div class="repair-support-skeleton-item"></div>
+              </div>
+            </div>
+
+            <div class="repair-support-content" id="repairSupportContent" data-catalog-content style="display:none">
+              <div class="repair-support-section">
+                <h2 class="section-title">Quick Answer</h2>
+                <div class="repair-support-list" id="quickAnswerContainer">
+                  {%- assign qa_index = 0 -%}
+                  {%- if init_prod -%}
+                  {%- for p in init_prod.children -%}
+                    {%- if p.settings.is_hide_as_article -%}
+                      {%- assign qa_index = qa_index | plus: 1 -%}
+                      <div
+                        class="repair-support-item"
+                        data-type="qna"
+                        data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
+                        data-product="{{ init_prod.settings.title }}"
+                        data-q="{{ p.settings.title }}"
+                      >
+                        <button class="repair-support-trigger-btn" type="button">
+                          <div class="repair-support-question">
+                            <span>{{ qa_index }}.</span>
+                            <span>{{ p.settings.title }}</span>
+                          </div>
+                          <svg
+                            class="repair-support-trigger-icon"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="36"
+                            height="36"
+                            viewBox="0 0 36 36"
+                            fill="none"
+                          >
+                            <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+                        <div class="repair-support-answer-container">
+                          <div class="repair-support-answer-content">
+                            <article class="page-main-article">{{ p.settings.content }}</article>
+                          </div>
+                        </div>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- endif -%}
+                </div>
+              </div>
+
+              <div class="repair-support-guides-section">
+                <h2 class="section-title">Visual Guides</h2>
+                <div class="repair-support-guides-list" id="visualGuidesContainer">
+                  {%- assign guide_index = 0 -%}
+                  {%- if init_prod -%}
+                  {%- for p in init_prod.children -%}
+                    {%- unless p.settings.is_hide_as_article -%}
+                      {%- assign guide_index = guide_index | plus: 1 -%}
+                      <a
+                        href="{{ p.path }}"
+                        class="repair-support-guide-card"
+                        data-turbo-frame="main-content-frame"
+                        data-turbo-action="advance"
+                        data-type="guide"
+                        data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
+                        data-product="{{ init_prod.settings.title }}"
+                      >
+                        <div class="repair-support-guide-title">
+                          <span>{{ guide_index }}.</span>
+                          <span>{{ p.settings.title }}</span>
+                        </div>
+                        <svg
+                          class="repair-support-guide-arrow"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="36"
+                          height="36"
+                          viewBox="0 0 36 36"
+                          fill="none"
+                        >
+                          <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    {%- endunless -%}
+                  {%- endfor -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- render 'catalog_product_sheet',
+        catalog_root: repair_support_root,
+        controller_name: 'catalog-index',
+        sheet_title: 'Choose Product Model'
+      -%}
+    </div>
+  {%- elsif _depth == 4 -%}
+    <div class="article-toc-page repair-support-detail-page" data-controller="repair-support-detail">
+      <div class="page-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+          <span class="breadcrumb-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+
+          {%- if repair_support_root -%}
+            <a
+              href="{{ repair_support_root.path }}"
+              class="breadcrumb-link"
+              data-turbo-frame="main-content-frame"
+              data-turbo-action="advance"
+            >
+              {{ repair_support_root.settings.title }}
+            </a>
+            <span class="breadcrumb-separator">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          {%- endif -%}
+
+          <span class="breadcrumb-current">{{ page.settings.title }}</span>
+        </nav>
+
+        <div class="page-main">
+          <div class="page-main-container">
+            <h1 class="page-title">Visual Guide</h1>
+
+            <div class="page-main-wrapper">
+              <button
+                class="contents-trigger-btn"
+                id="contentsTrigger"
+                aria-label="Open contents"
+                type="button"
+                data-action="click->repair-support-detail#toggleSheet"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M7 9C7.55228 9 8 8.5523 8 8C8 7.44771 7.55228 7 7 7C6.44771 7 6 7.44771 6 8C6 8.5523 6.44771 9 7 9Z"
+                    fill="#0071E3" />
+                  <path
+                    d="M7 13C7.55228 13 8 12.5523 8 12C8 11.4477 7.55228 11 7 11C6.44771 11 6 11.4477 6 12C6 12.5523 6.44771 13 7 13Z"
+                    fill="#0071E3" />
+                  <path
+                    d="M7 17C7.55228 17 8 16.5523 8 16C8 15.4477 7.55228 15 7 15C6.44771 15 6 15.4477 6 16C6 16.5523 6.44771 17 7 17Z"
+                    fill="#0071E3" />
+                  <path d="M11 12H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M11 16H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M11 8H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <span>Contents</span>
+              </button>
+
+              {%- render 'tree_article_toc_aside',
+                tree_root: repair_support_root,
+                toc_subtitle: 'Visual Guide',
+                toc_levels: 3,
+                toc_filter_hide_as_article: true,
+                stimulus_controller: 'repair-support-detail'
+              -%}
+
+              <div class="page-main-content">
+                <h1 class="page-main-title">{{ page.settings.title }}</h1>
+                <article class="page-main-article">{{ page.settings.content }}</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- render 'tree_article_toc_sheet',
+        tree_root: repair_support_root,
+        title: 'Visual Guide Contents',
+        toc_levels: 3,
+        toc_filter_hide_as_article: true,
+        stimulus_controller: 'repair-support-detail'
+      -%}
+    </div>
+  {%- endif -%}
+</turbo-frame>
+{% schema %}
+{
+  "name": "Repair Support",
+  "description": "Repair Support 统一模板，深度 <4 为聚合页，深度=4 为文章页",
+  "sub_page_templates": ["repair_support", "page"],
+  "settings": [
+    {
+      "id": "is_hide_as_article",
+      "type": "checkbox",
+      "label": "是否在Visual Guide列表中隐藏",
+      "info": "勾选后在 Repair Support 聚合页做为 quick answer 展示, 不勾选则作为 visual guide 展示",
+      "default": false
+    },
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
+}
+{% endschema %}
