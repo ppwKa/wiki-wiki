@@ -67,16 +67,6 @@
 
 .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content {
     padding: 30px 20px;
-    color: #6e6e73;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    letter-spacing: -.36px
-}
-
-.faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content a{
-    color: #0071e3;
-    text-decoration: underline;
 }
 
 .faq-index-page .page-wrapper .page-main .guides-section {
