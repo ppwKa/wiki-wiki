@@ -96,15 +96,26 @@
             controller_name: 'catalog-index'
           -%}
 
+          {%- assign qa_count = 0 -%}
+          {%- if init_prod -%}
+            {%- for p in init_prod.children -%}
+              {%- if p.settings.is_hide_as_article -%}
+                {%- assign qa_count = qa_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+
           <div class="repair-support-content-wrapper" id="repairSupportContentWrapper">
             <div class="repair-support-skeleton" id="repairSupportSkeleton" data-catalog-skeleton>
-              <div class="repair-support-skeleton-section">
-                <div class="repair-support-skeleton-title"></div>
-                <div class="repair-support-skeleton-item"></div>
-                <div class="repair-support-skeleton-item"></div>
-                <div class="repair-support-skeleton-item"></div>
-                <div class="repair-support-skeleton-item"></div>
-              </div>
+              {%- if qa_count > 0 -%}
+                <div class="repair-support-skeleton-section">
+                  <div class="repair-support-skeleton-title"></div>
+                  <div class="repair-support-skeleton-item"></div>
+                  <div class="repair-support-skeleton-item"></div>
+                  <div class="repair-support-skeleton-item"></div>
+                  <div class="repair-support-skeleton-item"></div>
+                </div>
+              {%- endif -%}
               <div class="repair-support-skeleton-section">
                 <div class="repair-support-skeleton-title"></div>
                 <div class="repair-support-skeleton-item"></div>
@@ -115,48 +126,48 @@
             </div>
 
             <div class="repair-support-content" id="repairSupportContent" data-catalog-content style="display:none">
-              <div class="repair-support-section">
-                <h2 class="section-title">Quick Answer</h2>
-                <div class="repair-support-list" id="quickAnswerContainer">
-                  {%- assign qa_index = 0 -%}
-                  {%- if init_prod -%}
-                  {%- for p in init_prod.children -%}
-                    {%- if p.settings.is_hide_as_article -%}
-                      {%- assign qa_index = qa_index | plus: 1 -%}
-                      <div
-                        class="repair-support-item"
-                        data-type="qna"
-                        data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
-                        data-product="{{ init_prod.settings.title }}"
-                        data-q="{{ p.settings.title }}"
-                      >
-                        <button class="repair-support-trigger-btn" type="button">
-                          <div class="repair-support-question">
-                            <span>{{ qa_index }}.</span>
-                            <span>{{ p.settings.title }}</span>
-                          </div>
-                          <svg
-                            class="repair-support-trigger-icon"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="36"
-                            height="36"
-                            viewBox="0 0 36 36"
-                            fill="none"
-                          >
-                            <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
-                          </svg>
-                        </button>
-                        <div class="repair-support-answer-container">
-                          <div class="repair-support-answer-content">
-                            <article class="page-main-article">{{ p.settings.content }}</article>
+              {%- if qa_count > 0 -%}
+                <div class="repair-support-section">
+                  <h2 class="section-title">Quick Answer</h2>
+                  <div class="repair-support-list" id="quickAnswerContainer">
+                    {%- assign qa_index = 0 -%}
+                    {%- for p in init_prod.children -%}
+                      {%- if p.settings.is_hide_as_article -%}
+                        {%- assign qa_index = qa_index | plus: 1 -%}
+                        <div
+                          class="repair-support-item"
+                          data-type="qna"
+                          data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
+                          data-product="{{ init_prod.settings.title }}"
+                          data-q="{{ p.settings.title }}"
+                        >
+                          <button class="repair-support-trigger-btn" type="button">
+                            <div class="repair-support-question">
+                              <span>{{ qa_index }}.</span>
+                              <span>{{ p.settings.title }}</span>
+                            </div>
+                            <svg
+                              class="repair-support-trigger-icon"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="36"
+                              height="36"
+                              viewBox="0 0 36 36"
+                              fill="none"
+                            >
+                              <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </button>
+                          <div class="repair-support-answer-container">
+                            <div class="repair-support-answer-content">
+                              <article class="page-main-article">{{ p.settings.content }}</article>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    {%- endif -%}
-                  {%- endfor -%}
-                  {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
                 </div>
-              </div>
+              {%- endif -%}
 
               <div class="repair-support-guides-section">
                 <h2 class="section-title">Visual Guides</h2>
