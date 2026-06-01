@@ -1,0 +1,79 @@
+{%- comment -%}
+  单层文章模板：独立文章页，无子页面、无侧栏目录。依赖全局 `page`。
+
+  版式：与双层文章正文区一致（article-toc-page），不含 tree_article_toc_* 与 Contents。
+  正文：直接展示当前页标题与内容。
+
+  约束：页面树仅 1 层；请勿添加子页。
+{%- endcomment -%}
+
+{%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
+
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  {%- if _depth == 1 -%}
+    <div class="article-toc-page single-level-articles-page">
+      <div class="page-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+          <span class="breadcrumb-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="breadcrumb-current">{{ page.settings.title }}</span>
+        </nav>
+
+        <div class="page-main">
+          <div class="page-main-container">
+            <h1 class="page-title">{{ page.settings.title }}</h1>
+
+            <div class="page-main-wrapper">
+              <div class="page-main-content">
+                <article class="page-main-article">{{ page.settings.content }}</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</turbo-frame>
+{% schema %}
+{
+  "name": "Single-level articles",
+  "description": "单层文章模板：独立文章页，无子页面、无侧栏目录",
+  "sub_page_templates": [],
+  "settings": [
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
+}
+{% endschema %}
