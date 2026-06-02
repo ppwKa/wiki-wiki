@@ -7437,7 +7437,7 @@ article ul li::marker {
   height: 32px;
   flex-shrink: 0;
 }
-.two-level-articles-index .page-wrapper .page-main .page-main-container .page-main-wrapper {
+.two-level-articles-page .page-wrapper .page-main .page-main-container .page-main-wrapper {
   margin-top: 0 !important;
   border: none !important;
   padding-top: 0 !important;
