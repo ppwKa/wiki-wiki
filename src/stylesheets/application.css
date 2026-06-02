@@ -372,6 +372,7 @@ body.modal-open {
 
 /* custom styles*/
 @import "./common.css";
+@import "./breadcrumb.css";
 @import "./catalog.css";
 @import "./article_label.css";
 @import "./article_toc.css";

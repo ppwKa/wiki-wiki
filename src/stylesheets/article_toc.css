@@ -507,12 +507,6 @@
         margin-right: 0
     }
 
-    .article-toc-page .page-wrapper .breadcrumb-nav .breadcrumb-current {
-        max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
     .article-toc-page .page-wrapper .page-main {
         min-height: calc(100vh - 54px)
     }
