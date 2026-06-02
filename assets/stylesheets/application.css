@@ -6268,19 +6268,21 @@ turbo-frame#main-content-frame[busy]::before {
     opacity: 0;
   }
 }
-.breadcrumb-nav > .breadcrumb-link:first-of-type {
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-.breadcrumb-nav > .breadcrumb-link:not(:first-of-type), .breadcrumb-nav > .breadcrumb-current {
-  width: 120px;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.breadcrumb-separator {
-  flex-shrink: 0;
+@media (max-width: 767px) {
+  .breadcrumb-nav > .breadcrumb-link:first-of-type {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .breadcrumb-nav > .breadcrumb-link:not(:first-of-type), .breadcrumb-nav > .breadcrumb-current {
+    width: 120px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .breadcrumb-separator {
+    flex-shrink: 0;
+  }
 }
 .catalog-index-page {
   min-height: 100vh;
