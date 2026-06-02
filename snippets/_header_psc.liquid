@@ -2,10 +2,13 @@
   Product Support Center 顶栏（FAQ 栏目树 /faq/* 使用）
 {%- endcomment -%}
 
+{%- assign _psc_page = page -%}
 {%- assign _on_faq = false -%}
-{%- assign _path_norm = page.path | default: '' -%}
-{%- if _path_norm == '/faq' or _path_norm contains '/faq/' -%}
-  {%- assign _on_faq = true -%}
+{%- if _psc_page != blank -%}
+  {%- assign _path_norm = _psc_page.path | default: '' -%}
+  {%- if _path_norm == '/faq' or _path_norm contains '/faq/' or _psc_page.template_style == 'faq' -%}
+    {%- assign _on_faq = true -%}
+  {%- endif -%}
 {%- endif -%}
 
 <style>

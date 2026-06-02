@@ -1,11 +1,21 @@
-{%- assign _path_norm = page.path | default: '' -%}
+{%- comment -%}
+  PSC 顶栏：须从 layout 传入 page（render 独立作用域，见 https://dev.baklib.cn/theme/snippets）
+  命中条件：路径 /faq* 或模板 style 为 faq
+{%- endcomment -%}
+{%- assign _header_page = page -%}
+{%- assign _path_norm = _header_page.path | default: '' -%}
 {%- assign _use_psc_header = false -%}
-{%- if _path_norm == '/faq' or _path_norm contains '/faq/' -%}
-  {%- assign _use_psc_header = true -%}
+{%- if _header_page != blank -%}
+  {%- if _path_norm == '/faq' or _path_norm contains '/faq/' -%}
+    {%- assign _use_psc_header = true -%}
+  {%- endif -%}
+  {%- if _header_page.template_style == 'faq' -%}
+    {%- assign _use_psc_header = true -%}
+  {%- endif -%}
 {%- endif -%}
 
 {%- if _use_psc_header -%}
-  {%- render 'header_psc' -%}
+  {%- render 'header_psc', page: _header_page -%}
 {%- else -%}
   {% if site.settings.header_type.value == '0' %}
   {% else %}

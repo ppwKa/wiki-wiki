@@ -34,7 +34,7 @@
     {% weixin_share_tag app_id: site.settings.weixin_app_id, app_secret: site.settings.weixin_app_secret, debug: site.settings.weixin_debug, enabled: site.settings.weixin_enabled %}
   </head>
   <body id="js--body" class="grid grid-rows-[auto_1fr_auto] min-h-screen tracking-wide" x-data="{ isHomePage: false }" x-init="isHomePage = location.pathname === '{{ site.index_path }}'">
-    {% render 'header' %}
+    {% render 'header', page: page %}
     {{ content_for_layout }}
     {% render 'footer' %}
   </body>
