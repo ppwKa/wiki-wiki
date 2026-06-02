@@ -72,24 +72,28 @@ export default class extends Controller {
   }
 
   #updateIcons(mode) {
+    // PSC 等页面无顶栏主题切换 UI 时不渲染对应 target，仅更新 html 的 dark class
+    if (!this.hasCurrentIconTarget) return
+
     let icon = null
-    // 显示对应模式的图标
     switch (mode) {
       case "light":
-        icon = this.lightIconTarget;
-        break;
+        if (!this.hasLightIconTarget) return
+        icon = this.lightIconTarget
+        break
       case "dark":
-        icon = this.darkIconTarget;
-        break;
+        if (!this.hasDarkIconTarget) return
+        icon = this.darkIconTarget
+        break
       case "auto":
       default:
-        icon = this.autoIconTarget;
-        break;
+        if (!this.hasAutoIconTarget) return
+        icon = this.autoIconTarget
+        break
     }
-    // clone icon
-    icon = icon.cloneNode(true);
-    icon.setAttribute("data-theme-target", this.currentIconTarget.dataset.themeTarget);
-    icon.setAttribute("class", this.currentIconTarget.classList);
-    this.currentIconTarget.outerHTML = icon.outerHTML;
+    icon = icon.cloneNode(true)
+    icon.setAttribute("data-theme-target", this.currentIconTarget.dataset.themeTarget)
+    icon.setAttribute("class", this.currentIconTarget.classList)
+    this.currentIconTarget.outerHTML = icon.outerHTML
   }
 }

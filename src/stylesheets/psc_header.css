@@ -409,12 +409,12 @@
 }
 
 .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-title {
-    color: #6e6e73;
-    font-family: HarmonyOS Sans, system-ui, sans-serif;
-    font-size: 12px;
-    font-weight: 400;
+    color: #151413;
+    font-family: "HarmonyOS Sans";
+    font-size: 16px;
+    font-weight: 500;
     line-height: 16px;
-    letter-spacing: -.36px
+    letter-spacing: -0.32px;
 }
 
 .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-arrow {
@@ -438,24 +438,25 @@
     max-height: 1000px
 }
 
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content > .mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
     display: block;
     padding: 12px 8px 12px 24px;
-    color: #6e6e73;
-    font-family: HarmonyOS Sans, system-ui, sans-serif;
-    font-size: 12px;
+    color: #343436;
+    font-family: "HarmonyOS Sans";
+    font-size: 14px;
     font-weight: 400;
     line-height: 16px;
-    letter-spacing: -.36px;
+    letter-spacing: -0.28px;
     transition: color .2s ease;
     text-decoration: none
 }
 
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content > .mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item.active {
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item.active {
     color: #0071e3
 }
 
 @media (min-width: 768px) {
+
     .psc-header .mobile-overlay,
     .psc-header .mobile-sheet {
         display: none !important
