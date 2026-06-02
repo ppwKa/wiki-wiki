@@ -376,6 +376,7 @@ body.modal-open {
 @import "./catalog.css";
 @import "./article_label.css";
 @import "./article_toc.css";
+@import "./two_level_articles.css";
 @import "./faq.css";
 @import "./repair_support.css";
 @import "./authorized_service_center.css";

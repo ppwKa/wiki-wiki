@@ -6274,7 +6274,7 @@ turbo-frame#main-content-frame[busy]::before {
     white-space: nowrap;
   }
   .breadcrumb-nav > .breadcrumb-link:not(:first-of-type), .breadcrumb-nav > .breadcrumb-current {
-    width: 120px;
+    width: 80px;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -7396,6 +7396,56 @@ article ul li::marker {
     font-size: 28px;
     line-height: 125%;
     letter-spacing: -0.84px;
+  }
+}
+.two-level-articles-index .page-wrapper .page-main .page-main-container .guides-section {
+  margin-top: 50px;
+  border-top: 1px solid #D2D2D7;
+  padding-top: 50px;
+  overflow: hidden;
+  text-align: left;
+}
+.two-level-articles-index .page-wrapper .page-main .guides-section .guides-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 0;
+}
+.two-level-articles-index .page-wrapper .page-main .guides-section .guides-list .guide-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  background: #f5f5f7;
+  padding: 13px 20px;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #343436;
+}
+.two-level-articles-index .page-wrapper .page-main .guides-section .guides-list .guide-card .guide-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  color: #343436;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -.42px;
+}
+.two-level-articles-index .page-wrapper .page-main .guides-section .guides-list .guide-card .guide-arrow {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+@media (max-width: 767px) {
+  .two-level-articles-index .page-wrapper .page-main .page-main-container .guides-section {
+    margin-top: 30px;
+    padding-top: 12px;
+  }
+  .two-level-articles-index .page-wrapper .page-main .guides-section .guides-list .guide-card {
+    padding: 17px 12px;
   }
 }
 .faq-index-page .page-wrapper .page-main .faq-content-wrapper {

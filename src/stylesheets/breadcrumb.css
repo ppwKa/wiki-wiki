@@ -7,7 +7,7 @@
 
     .breadcrumb-nav > .breadcrumb-link:not(:first-of-type),
     .breadcrumb-nav > .breadcrumb-current {
-        width: 120px;
+        width: 80px;
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
