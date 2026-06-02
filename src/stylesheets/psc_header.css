@@ -1,0 +1,463 @@
+/* Product Support Center 顶栏（FAQ 等栏目专用） */
+.psc-header {
+    width: 100%;
+    height: 44px;
+    font-family: HarmonyOS Sans, system-ui, sans-serif;
+    background-color: #fff;
+    position: relative;
+    z-index: 100;
+    overflow: visible;
+    box-shadow: 0 1px #0000000f
+}
+
+.psc-header .psc-header-inner {
+    width: 87.5%;
+    max-width: 996px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center
+}
+
+.psc-header .psc-header-inner .psc-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    min-width: 0
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-logo {
+    display: block;
+    flex-shrink: 0;
+    line-height: 0
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-logo svg {
+    display: block
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-logo--icon {
+    display: none;
+    width: 32px;
+    height: 32px
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-logo--wordmark {
+    width: 80px;
+    height: 20px
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-logo--wordmark svg {
+    width: 100%;
+    height: 100%
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-divider {
+    width: 1px;
+    height: 14px;
+    background-color: #151413;
+    flex-shrink: 0
+}
+
+.psc-header .psc-header-inner .psc-header-brand .psc-header-subtitle {
+    white-space: nowrap;
+    color: #151413;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.27px;
+    margin-bottom: 2px
+}
+
+.psc-header .psc-header-inner .psc-header-nav {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: auto;
+    flex-shrink: 0
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    list-style: none
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    color: #151413;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -.3px;
+    list-style: none
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item .psc-header-nav-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    text-align: left
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item .psc-header-nav-link:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: #008cff;
+    transform: scaleX(0);
+    transform-origin: center center;
+    transition: transform .25s cubic-bezier(.4, 0, .2, 1)
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item.is-active .psc-header-nav-link:after,
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item:hover .psc-header-nav-link:after,
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item:focus-within .psc-header-nav-link:after {
+    transform: scaleX(1)
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item--has-dropdown .psc-header-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 10px 0;
+    list-style: none;
+    min-width: 200px;
+    max-width: 240px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px #00000029;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity .25s cubic-bezier(.4, 0, .2, 1), transform .25s cubic-bezier(.4, 0, .2, 1), visibility .25s cubic-bezier(.4, 0, .2, 1)
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item--has-dropdown .psc-header-dropdown:before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 0;
+    right: 0;
+    height: 6px
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item--has-dropdown:hover .psc-header-dropdown,
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item--has-dropdown:focus-within .psc-header-dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0)
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item .psc-header-dropdown-item {
+    margin: 0
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item .psc-header-dropdown-link {
+    display: block;
+    padding: 12px 20px;
+    color: #151413;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: -.3px;
+    text-decoration: none;
+    white-space: normal;
+    transition: color .15s ease
+}
+
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item .psc-header-dropdown-link:hover,
+.psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list .psc-header-nav-item .psc-header-dropdown-link.is-active {
+    color: #008cff
+}
+
+.psc-header .psc-header-inner .psc-header-actions {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex-shrink: 0;
+    margin-left: 80px
+}
+
+.psc-header .psc-header-inner .psc-header-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: inherit;
+    text-decoration: none
+}
+
+.psc-header .psc-header-inner .psc-header-search svg {
+    display: block
+}
+
+.psc-header .psc-header-inner .psc-header-menu-toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0
+}
+
+.psc-header .psc-header-inner .psc-header-menu {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0
+}
+
+.psc-header .psc-header-inner .psc-header-menu-icon {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 18px
+}
+
+.psc-header .psc-header-inner .psc-header-menu-line {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 18px;
+    height: 2px;
+    margin-top: -1px;
+    background-color: #151413;
+    border-radius: 1px;
+    transition: transform .25s cubic-bezier(.4, 0, .2, 1), opacity .2s ease
+}
+
+.psc-header .psc-header-inner .psc-header-menu-line:nth-child(1) {
+    transform: translateY(-6px)
+}
+
+.psc-header .psc-header-inner .psc-header-menu-line:nth-child(2) {
+    transform: translateY(0)
+}
+
+.psc-header .psc-header-inner .psc-header-menu-line:nth-child(3) {
+    transform: translateY(6px)
+}
+
+.psc-header .psc-header-inner .psc-header-menu-toggle:checked+.psc-header-menu .psc-header-menu-line:nth-child(1) {
+    transform: translateY(0) rotate(45deg)
+}
+
+.psc-header .psc-header-inner .psc-header-menu-toggle:checked+.psc-header-menu .psc-header-menu-line:nth-child(2) {
+    opacity: 0
+}
+
+.psc-header .psc-header-inner .psc-header-menu-toggle:checked+.psc-header-menu .psc-header-menu-line:nth-child(3) {
+    transform: translateY(0) rotate(-45deg)
+}
+
+@media (max-width: 991px) {
+    .psc-header .psc-header-inner .psc-header-actions {
+        margin-left: 20px
+    }
+
+    .psc-header .psc-header-inner .psc-header-nav .psc-header-nav-list {
+        gap: 30px
+    }
+}
+
+@media (max-width: 767px) {
+    .psc-header .psc-header-inner .psc-header-nav {
+        display: none
+    }
+
+    .psc-header .psc-header-inner .psc-header-actions {
+        margin-left: auto
+    }
+
+    .psc-header .psc-header-inner .psc-header-menu {
+        display: flex
+    }
+
+    .psc-header .psc-header-inner .psc-header-menu-icon {
+        margin-top: 1px
+    }
+}
+
+/* 移动端导航底部弹层（同 tree_article_toc_sheet / catalog 结构） */
+.psc-header .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background-color: #00000080;
+    transition: opacity .3s ease;
+    opacity: 0;
+    pointer-events: none
+}
+
+.psc-header .mobile-overlay.open {
+    opacity: 1;
+    pointer-events: auto
+}
+
+.psc-header .mobile-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0 -8px 30px 0 rgba(0, 0, 0, 0.15);
+    transform: translateY(100%)
+}
+
+.psc-header .mobile-sheet.open {
+    transform: translateY(0)
+}
+
+.psc-header .mobile-sheet .mobile-sheet-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #D2D2D7;
+    background-color: #fff;
+    padding: 16px 24px
+}
+
+.psc-header .mobile-sheet .mobile-sheet-header .mobile-sheet-title {
+    color: #343436;
+    font-family: HarmonyOS Sans, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: -.36px
+}
+
+.psc-header .mobile-sheet .mobile-sheet-header .mobile-sheet-close-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    line-height: 0;
+    color: #343436
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    text-align: left
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 8px
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header--leaf {
+    cursor: default
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-title {
+    color: #6e6e73;
+    font-family: HarmonyOS Sans, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.36px
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-arrow {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    transition: transform .3s ease-out
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header .mobile-accordion-arrow.rotated {
+    transform: rotate(180deg)
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content {
+    transition: max-height .3s ease-out;
+    max-height: 0;
+    overflow: hidden
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open {
+    max-height: 1000px
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content > .mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
+    display: block;
+    padding: 12px 8px 12px 24px;
+    color: #6e6e73;
+    font-family: HarmonyOS Sans, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.36px;
+    transition: color .2s ease;
+    text-decoration: none
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content > .mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item.active {
+    color: #0071e3
+}
+
+@media (min-width: 768px) {
+    .psc-header .mobile-overlay,
+    .psc-header .mobile-sheet {
+        display: none !important
+    }
+}

@@ -12,6 +12,7 @@ import AiSearchCompletionController from './ai_search_completion_controller'
 import CatalogIndexController from './catalog_index_controller'
 import MaxHeightAccordionController from './max_height_accordion_controller'
 import ArticleTocController from './article_toc_controller'
+import PscHeaderController from './psc_header_controller.js'
 
 if (!window.Stimulus) {
   window.Stimulus = Application.start()
@@ -33,3 +34,4 @@ application.register('max-height-accordion', MaxHeightAccordionController)
 application.register('article-toc', ArticleTocController)
 application.register('faq-detail', ArticleTocController)
 application.register('repair-support-detail', ArticleTocController)
+application.register('psc-header', PscHeaderController)

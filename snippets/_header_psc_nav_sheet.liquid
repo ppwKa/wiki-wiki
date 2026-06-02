@@ -1,0 +1,183 @@
+{%- comment -%}
+  PSC 顶栏移动端导航弹层（与 PC 主导航项一致）
+  参数：on_faq — 是否在 FAQ 栏目（高亮 FAQ 链接）
+{%- endcomment -%}
+
+<div class="mobile-overlay" data-psc-header-target="overlay" data-action="click->psc-header#closeMenu"></div>
+<div class="mobile-sheet" data-psc-header-target="sheet">
+  <div class="mobile-sheet-header">
+    <span class="mobile-sheet-title">Product Support</span>
+    <button class="mobile-sheet-close-btn" type="button" data-action="click->psc-header#closeMenu" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M7.00049 7L15.0005 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.00049 15L15.0005 7" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-sheet-content">
+    <div class="mobile-accordion-item">
+      <div class="mobile-accordion-header" data-action="click->psc-header#toggleSheetCategory">
+        <span class="mobile-accordion-title">Self-Service Center</span>
+        <svg class="mobile-accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="mobile-accordion-content">
+        <div class="mobile-accordion-article-list mobile-accordion-article-list--section">
+          <a
+            href="/faq"
+            class="mobile-accordion-article-item{% if on_faq %} active{% endif %}"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >FAQ</a>
+          <a
+            href="/firmware-download"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Firmware Download</a>
+          <a
+            href="/compatibility"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Compatibility</a>
+          <a
+            href="/care-service-activation"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Care Service Activation</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-accordion-item">
+      <div class="mobile-accordion-header" data-action="click->psc-header#toggleSheetCategory">
+        <span class="mobile-accordion-title">Warranty &amp; Policy</span>
+        <svg class="mobile-accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="mobile-accordion-content">
+        <div class="mobile-accordion-article-list mobile-accordion-article-list--section">
+          <a
+            href="/after-sales-policy"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >After-Sales Policy</a>
+          <a
+            href="/product-warranty-period"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Product Warranty Period</a>
+          <a
+            href="/spare-parts-price"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Spare Parts Price</a>
+          <a
+            href="/latest-news"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Latest News</a>
+          <a
+            href="/privacy-policy"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-accordion-item">
+      <div class="mobile-accordion-header" data-action="click->psc-header#toggleSheetCategory">
+        <span class="mobile-accordion-title">Repair Service</span>
+        <svg class="mobile-accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="mobile-accordion-content">
+        <div class="mobile-accordion-article-list mobile-accordion-article-list--section">
+          <a
+            href="/authorized-service-center"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Authorized Service Center</a>
+          <a
+            href="/after-sales-process"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >After-Sales Process</a>
+          <a
+            href="/progress-inquiry"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Progress Inquiry</a>
+          <a
+            href="/where-to-find-your-sn"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Where to Find Your SN</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-accordion-item">
+      <div class="mobile-accordion-header" data-action="click->psc-header#toggleSheetCategory">
+        <span class="mobile-accordion-title">Authorized Partner Portal</span>
+        <svg class="mobile-accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="mobile-accordion-content">
+        <div class="mobile-accordion-article-list mobile-accordion-article-list--section">
+          <a
+            href="/service-system-manual"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Service System Manual</a>
+          <a
+            href="/spare-parts-management-specifications"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Spare Parts Management Specifications</a>
+          <a
+            href="/product-troubleshooting-repair-support"
+            class="mobile-accordion-article-item"
+            data-turbo-frame="main-content-frame"
+            data-turbo-action="advance"
+            data-action="click->psc-header#closeMenu"
+          >Product Troubleshooting &amp; Repair Support</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
