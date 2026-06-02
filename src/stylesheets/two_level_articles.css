@@ -1,7 +1,5 @@
 /* 双层文章：depth 1 列表页（guides-list 风格，与 FAQ Visual Guides 一致） */
 .two-level-articles-index .page-wrapper .page-main .page-main-container .guides-section {
-    margin-top: 50px;
-    border-top: 1px solid #D2D2D7;
     padding-top: 50px;
     overflow: hidden;
     text-align: left
@@ -45,13 +43,32 @@
     flex-shrink: 0
 }
 
+.two-level-articles-index .page-wrapper .page-main .page-main-container .page-main-wrapper{
+    margin-top: 0 !important;
+    border: none !important;
+    padding-top: 0 !important;
+}
+
 @media (max-width: 767px) {
+
+    .two-level-articles-index,
+    .two-level-articles-index .page-wrapper .page-main {
+        min-height: auto;
+    }
+
+    .two-level-articles-index .page-wrapper .page-main .page-main-container .page-title {
+        font-size: 24px;
+        line-height: 28px;
+        letter-spacing: -.72px;
+        text-align: left;
+        padding: 0 6px;
+    }
+
     .two-level-articles-index .page-wrapper .page-main .page-main-container .guides-section {
-        margin-top: 30px;
-        padding-top: 12px
+        padding-top: 35px
     }
 
     .two-level-articles-index .page-wrapper .page-main .guides-section .guides-list .guide-card {
-        padding: 17px 12px
+        padding: 8px 12px 8px 20px;
     }
 }
