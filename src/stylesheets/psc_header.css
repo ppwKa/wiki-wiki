@@ -454,6 +454,73 @@
     color: #0071e3
 }
 
+/* 手风琴展开：子链接逐个入场 */
+@keyframes psc-header-nav-item-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(10px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content:not(.open)>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
+    opacity: 0;
+    transform: translateY(10px)
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
+    animation: psc-header-nav-item-reveal .28s ease forwards
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(1) {
+    animation-delay: .04s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(2) {
+    animation-delay: .08s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(3) {
+    animation-delay: .12s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(4) {
+    animation-delay: .16s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(5) {
+    animation-delay: .2s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(6) {
+    animation-delay: .24s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(7) {
+    animation-delay: .28s
+}
+
+.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(8) {
+    animation-delay: .32s
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content:not(.open)>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
+        opacity: 1;
+        transform: none
+    }
+
+    .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
+        animation: none;
+        opacity: 1;
+        transform: none
+    }
+}
+
 @media (min-width: 768px) {
 
     .psc-header .mobile-overlay,
