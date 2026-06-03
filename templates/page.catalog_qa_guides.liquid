@@ -1,0 +1,230 @@
+{%- comment -%}
+  通用 4 层目录树模板（原 repair_support / where_to_find_your_sn 合并）
+
+  页面树约定（根路径由站点页面决定，例如 /repair_support、/where-to-find-your-sn）：
+  /{root}                           → Root
+  /{root}/{category}                → 分类页
+  /{root}/{category}/{product}      → 产品聚合页
+  /{root}/{category}/{product}/{article} → 文章详情页
+
+  渲染规则：
+  depth 1~3 → 聚合页（catalog-index + max-height-accordion）
+  depth 4   → 文章页（catalog-qa-guides-detail）
+  depth > 4 → 非法层级，不渲染
+
+  `is_hide_as_article` 仅对 article 层有效：
+  true  → Quick Answer；false → Visual Guide
+
+  迁移：Baklib 后台将原 repair_support / where_to_find_your_sn 模板改为 catalog_qa_guides。
+{%- endcomment -%}
+
+{%- assign _depth = page.path | remove_first: '/' | split: '/' | size -%}
+
+{%- assign tree_root = page -%}
+{%- if _depth > 1 -%}{%- assign tree_root = page.parent -%}{%- endif -%}
+{%- if _depth > 2 -%}{%- assign tree_root = tree_root.parent -%}{%- endif -%}
+{%- if _depth > 3 -%}{%- assign tree_root = tree_root.parent -%}{%- endif -%}
+
+{%- assign init_cat = null -%}
+{%- assign init_prod = null -%}
+
+{%- if _depth == 1 -%}
+  {%- for cat in page.children -%}
+    {%- assign first_prod = cat.children | first -%}
+    {%- if first_prod -%}
+      {%- assign init_cat = cat -%}
+      {%- assign init_prod = first_prod -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+{%- elsif _depth == 2 -%}
+  {%- assign init_cat = page -%}
+  {%- assign init_prod = page.children | first -%}
+
+{%- elsif _depth == 3 -%}
+  {%- assign init_cat = page.parent -%}
+  {%- assign init_prod = page -%}
+{%- endif -%}
+
+<turbo-frame
+  id="main-content-frame"
+  class="block w-full"
+  {% if _depth < 3 and init_prod %}
+    src="{{ init_prod.path }}"
+  {% endif %}
+  x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
+>
+  {%- if _depth < 4 -%}
+    <div
+      class="catalog-index-page catalog-qa-guides-index-page"
+      data-controller="catalog-index max-height-accordion"
+      data-catalog-index-page-path-value="{{ page.path | escape }}"
+      data-catalog-index-init-cat-path-value="{% if init_cat %}{{ init_cat.path | escape }}{% endif %}"
+      data-catalog-index-init-product-path-value="{% if init_prod %}{{ init_prod.path | escape }}{% endif %}"
+      data-max-height-accordion-trigger-selector-value=".catalog-qa-guides-trigger-btn"
+      data-max-height-accordion-item-selector-value=".catalog-qa-guides-item"
+      data-max-height-accordion-content-selector-value=".catalog-qa-guides-answer-container"
+      data-max-height-accordion-icon-selector-value=".catalog-qa-guides-trigger-icon"
+    >
+      <div class="page-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+          <span class="breadcrumb-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="breadcrumb-current">{{ tree_root.settings.title }}</span>
+        </nav>
+
+        <div class="page-main">
+          <h1 class="page-title">{{ tree_root.settings.title }}</h1>
+
+          {%- render 'catalog_product_filter',
+            catalog_root: tree_root,
+            controller_name: 'catalog-index'
+          -%}
+
+          {%- render 'catalog_qa_guides_content_area', init_prod: init_prod, init_cat: init_cat -%}
+        </div>
+      </div>
+
+      {%- render 'catalog_product_sheet',
+        catalog_root: tree_root,
+        controller_name: 'catalog-index',
+        sheet_title: 'Choose Product Model'
+      -%}
+    </div>
+  {%- elsif _depth == 4 -%}
+    <div class="article-toc-page catalog-qa-guides-detail-page" data-controller="catalog-qa-guides-detail">
+      <div class="page-wrapper">
+        <nav class="breadcrumb-nav">
+          <a href="/" class="breadcrumb-link" data-turbo-frame="_top">{{ site.name }}</a>
+          <span class="breadcrumb-separator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+
+          {%- if tree_root -%}
+            <a
+              href="{{ tree_root.path }}"
+              class="breadcrumb-link"
+              data-turbo-frame="main-content-frame"
+              data-turbo-action="advance"
+            >
+              {{ tree_root.settings.title }}
+            </a>
+            <span class="breadcrumb-separator">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          {%- endif -%}
+
+          <span class="breadcrumb-current">{{ page.settings.title }}</span>
+        </nav>
+
+        <div class="page-main">
+          <div class="page-main-container">
+            <h1 class="page-title">Visual Guide</h1>
+
+            <div class="page-main-wrapper">
+              <button
+                class="contents-trigger-btn"
+                id="contentsTrigger"
+                aria-label="Open contents"
+                type="button"
+                data-action="click->catalog-qa-guides-detail#toggleSheet"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M7 9C7.55228 9 8 8.5523 8 8C8 7.44771 7.55228 7 7 7C6.44771 7 6 7.44771 6 8C6 8.5523 6.44771 9 7 9Z"
+                    fill="#0071E3" />
+                  <path
+                    d="M7 13C7.55228 13 8 12.5523 8 12C8 11.4477 7.55228 11 7 11C6.44771 11 6 11.4477 6 12C6 12.5523 6.44771 13 7 13Z"
+                    fill="#0071E3" />
+                  <path
+                    d="M7 17C7.55228 17 8 16.5523 8 16C8 15.4477 7.55228 15 7 15C6.44771 15 6 15.4477 6 16C6 16.5523 6.44771 17 7 17Z"
+                    fill="#0071E3" />
+                  <path d="M11 12H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M11 16H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M11 8H18" stroke="#0071E3" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <span>Contents</span>
+              </button>
+
+              {%- render 'tree_article_toc_aside',
+                tree_root: tree_root,
+                toc_subtitle: 'Visual Guide',
+                toc_levels: 3,
+                toc_filter_hide_as_article: true,
+                stimulus_controller: 'catalog-qa-guides-detail'
+              -%}
+
+              <div class="page-main-content">
+                <h1 class="page-main-title">{{ page.settings.title }}</h1>
+                <article class="page-main-article">{{ page.settings.content }}</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- render 'tree_article_toc_sheet',
+        tree_root: tree_root,
+        title: 'Visual Guide Contents',
+        toc_levels: 3,
+        toc_filter_hide_as_article: true,
+        stimulus_controller: 'catalog-qa-guides-detail'
+      -%}
+    </div>
+  {%- endif -%}
+</turbo-frame>
+{% schema %}
+{
+  "name": "Catalog QA & Guides",
+  "description": "4 层目录树 + Quick Answer / Visual Guides（Repair Support、Where to Find SN 等共用）",
+  "sub_page_templates": ["catalog_qa_guides", "page"],
+  "settings": [
+    {
+      "id": "is_hide_as_article",
+      "type": "checkbox",
+      "label": "是否在Visual Guide列表中隐藏",
+      "info": "勾选后在聚合页做为 quick answer 展示, 不勾选则作为 visual guide 展示",
+      "default": false
+    },
+    {
+      "id": "thumbnail",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 100,
+      "label": "t:schema.templates.page.settings.icon.label",
+      "info": "t:schema.templates.page.settings.icon.info"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "readonly": true,
+      "label": "t:schema.templates.page.settings.title.label",
+      "info": "t:schema.templates.page.settings.title.info"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "t:schema.templates.page.settings.description.label"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "t:schema.templates.page.settings.content.label",
+      "readonly": true,
+      "info": "t:schema.templates.page.settings.content.info"
+    }
+  ]
+}
+{% endschema %}

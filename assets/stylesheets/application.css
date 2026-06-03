@@ -6676,58 +6676,6 @@ turbo-frame#main-content-frame[busy]::before {
 .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item.active {
   color: #0071e3;
 }
-@keyframes psc-header-nav-item-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content:not(.open)>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
-  animation: psc-header-nav-item-reveal .28s ease forwards;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(1) {
-  animation-delay: .04s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(2) {
-  animation-delay: .08s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(3) {
-  animation-delay: .12s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(4) {
-  animation-delay: .16s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(5) {
-  animation-delay: .2s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(6) {
-  animation-delay: .24s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(7) {
-  animation-delay: .28s;
-}
-.psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item:nth-child(8) {
-  animation-delay: .32s;
-}
-@media (prefers-reduced-motion: reduce) {
-  .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content:not(.open)>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
-    opacity: 1;
-    transform: none;
-  }
-  .psc-header .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-content.open>.mobile-accordion-article-list.mobile-accordion-article-list--section .mobile-accordion-article-item {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
 @media (min-width: 768px) {
   .psc-header .mobile-overlay, .psc-header .mobile-sheet {
     display: none !important;
@@ -8082,26 +8030,26 @@ article ul li::marker {
     padding: 17px 12px;
   }
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-content-wrapper {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-content-wrapper {
   border-top: 1px solid #D2D2D7;
   padding-top: 50px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section {
   overflow: hidden;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item {
   overflow: hidden;
   border-radius: 4px;
   border: 1px solid #F5F5F7;
   background-color: #f5f5f7;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-btn {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-btn {
   display: flex;
   width: 100%;
   align-items: center;
@@ -8112,7 +8060,7 @@ article ul li::marker {
   border: none;
   cursor: pointer;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-question {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-question {
   display: flex;
   align-items: flex-start;
   gap: 4px;
@@ -8122,52 +8070,52 @@ article ul li::marker {
   line-height: 150%;
   letter-spacing: -.42px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-icon {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-icon {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
   transition: transform .4s cubic-bezier(.4, 0, .2, 1);
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-icon.rotated {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-icon.rotated {
   transform: rotate(180deg);
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-container {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-container {
   transition: max-height .4s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
   background-color: #fff;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-container.open {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-container.open {
   opacity: 1;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content {
   padding: 30px 20px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article, .repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article * {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article, .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article * {
   font-size: 12px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article ul li::marker, .repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article ol li::marker {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article ul li::marker, .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article ol li::marker {
   font-size: 8px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-answer-content article a {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article a {
   color: #0071e3;
   text-decoration: underline;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section {
   padding-top: 50px;
   overflow: hidden;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-content > .repair-support-guides-section:first-child {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-content > .catalog-qa-guides-guides-section:first-child {
   padding-top: 0;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8180,7 +8128,7 @@ article ul li::marker {
   text-decoration: none;
   color: #343436;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card .repair-support-guide-title {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card .catalog-qa-guides-guide-title {
   display: flex;
   align-items: flex-start;
   gap: 4px;
@@ -8190,44 +8138,44 @@ article ul li::marker {
   line-height: 18px;
   letter-spacing: -.42px;
 }
-.repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card .repair-support-guide-arrow {
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card .catalog-qa-guides-guide-arrow {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
 }
-.repair-support-index-page .repair-support-content-placeholder {
+.catalog-qa-guides-index-page .catalog-qa-guides-content-placeholder {
   min-height: 200px;
 }
-.repair-support-index-page .repair-support-select-hint {
+.catalog-qa-guides-index-page .catalog-qa-guides-select-hint {
   color: #6e6e73;
   font-size: 14px;
   line-height: 1.5;
   margin-top: 20px;
 }
-.repair-support-index-page .repair-support-skeleton-section {
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-section {
   margin-bottom: 40px;
 }
-.repair-support-index-page .repair-support-skeleton-section:first-child {
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-section:first-child {
   margin-top: 0;
 }
-.repair-support-index-page .repair-support-skeleton-title {
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-title {
   height: 24px;
   background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
   background-size: 200% 100%;
-  animation: repair-support-skeleton-shimmer 1.5s infinite;
+  animation: catalog-qa-guides-skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
   margin-bottom: 20px;
   width: 180px;
 }
-.repair-support-index-page .repair-support-skeleton-item {
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-item {
   height: 42px;
   background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
   background-size: 200% 100%;
-  animation: repair-support-skeleton-shimmer 1.5s infinite;
+  animation: catalog-qa-guides-skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
   margin-bottom: 10px;
 }
-@keyframes repair-support-skeleton-shimmer {
+@keyframes catalog-qa-guides-skeleton-shimmer {
   0% {
     background-position: 200% 0;
   }
@@ -8235,26 +8183,26 @@ article ul li::marker {
     background-position: -200% 0;
   }
 }
-.repair-support-index-page .repair-support-empty-state {
+.catalog-qa-guides-index-page .catalog-qa-guides-empty-state {
   color: #6e6e73;
   font-size: 14px;
   padding: 40px 0;
   text-align: center;
 }
 @media (max-width: 767px) {
-  .repair-support-index-page .page-wrapper .page-main .repair-support-content-wrapper {
+  .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-content-wrapper {
     padding-top: 40px;
   }
-  .repair-support-index-page .page-wrapper .page-main .filter-section .repair-support-list {
+  .catalog-qa-guides-index-page .page-wrapper .page-main .filter-section .catalog-qa-guides-list {
     margin-top: 16px;
   }
-  .repair-support-index-page .page-wrapper .page-main .repair-support-section .repair-support-list .repair-support-item .repair-support-trigger-btn {
+  .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-btn {
     padding: 17px 12px;
   }
-  .repair-support-index-page .page-wrapper .page-main .repair-support-guides-section {
+  .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section {
     padding-top: 40px;
   }
-  .repair-support-index-page .page-wrapper .page-main .repair-support-guides-section .repair-support-guides-list .repair-support-guide-card {
+  .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card {
     padding: 17px 12px;
   }
 }

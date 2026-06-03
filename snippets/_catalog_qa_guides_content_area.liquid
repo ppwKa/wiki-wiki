@@ -1,0 +1,117 @@
+{%- comment -%}
+  通用内容区：骨架屏 + Quick Answer + Visual Guides
+  参数：init_prod、init_cat
+{%- endcomment -%}
+
+{%- assign qa_count = 0 -%}
+{%- if init_prod -%}
+  {%- for p in init_prod.children -%}
+    {%- if p.settings.is_hide_as_article -%}
+      {%- assign qa_count = qa_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<div class="catalog-qa-guides-content-wrapper" id="catalogQaGuidesContentWrapper">
+  <div class="catalog-qa-guides-skeleton" id="catalogQaGuidesSkeleton" data-catalog-skeleton>
+    {%- if qa_count > 0 -%}
+      <div class="catalog-qa-guides-skeleton-section">
+        <div class="catalog-qa-guides-skeleton-title"></div>
+        <div class="catalog-qa-guides-skeleton-item"></div>
+        <div class="catalog-qa-guides-skeleton-item"></div>
+        <div class="catalog-qa-guides-skeleton-item"></div>
+        <div class="catalog-qa-guides-skeleton-item"></div>
+      </div>
+    {%- endif -%}
+    <div class="catalog-qa-guides-skeleton-section">
+      <div class="catalog-qa-guides-skeleton-title"></div>
+      <div class="catalog-qa-guides-skeleton-item"></div>
+      <div class="catalog-qa-guides-skeleton-item"></div>
+      <div class="catalog-qa-guides-skeleton-item"></div>
+      <div class="catalog-qa-guides-skeleton-item"></div>
+    </div>
+  </div>
+
+  <div class="catalog-qa-guides-content" id="catalogQaGuidesContent" data-catalog-content style="display:none">
+    {%- if qa_count > 0 -%}
+      <div class="catalog-qa-guides-section">
+        <h2 class="section-title">Quick Answer</h2>
+        <div class="catalog-qa-guides-list" id="quickAnswerContainer">
+          {%- assign qa_index = 0 -%}
+          {%- for p in init_prod.children -%}
+            {%- if p.settings.is_hide_as_article -%}
+              {%- assign qa_index = qa_index | plus: 1 -%}
+              <div
+                class="catalog-qa-guides-item"
+                data-type="qna"
+                data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
+                data-product="{{ init_prod.settings.title }}"
+                data-q="{{ p.settings.title }}"
+              >
+                <button class="catalog-qa-guides-trigger-btn" type="button">
+                  <div class="catalog-qa-guides-question">
+                    <span>{{ qa_index }}.</span>
+                    <span>{{ p.settings.title }}</span>
+                  </div>
+                  <svg
+                    class="catalog-qa-guides-trigger-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                    fill="none"
+                  >
+                    <path d="M23.5 15L18 21L12.5 15" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="catalog-qa-guides-answer-container">
+                  <div class="catalog-qa-guides-answer-content">
+                    <article class="page-main-article">{{ p.settings.content }}</article>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="catalog-qa-guides-guides-section">
+      <h2 class="section-title">Visual Guides</h2>
+      <div class="catalog-qa-guides-guides-list" id="visualGuidesContainer">
+        {%- assign guide_index = 0 -%}
+        {%- if init_prod -%}
+          {%- for p in init_prod.children -%}
+            {%- unless p.settings.is_hide_as_article -%}
+              {%- assign guide_index = guide_index | plus: 1 -%}
+              <a
+                href="{{ p.path }}"
+                class="catalog-qa-guides-guide-card"
+                data-turbo-frame="main-content-frame"
+                data-turbo-action="advance"
+                data-type="guide"
+                data-cat="{% if init_cat %}{{ init_cat.settings.title }}{% endif %}"
+                data-product="{{ init_prod.settings.title }}"
+              >
+                <div class="catalog-qa-guides-guide-title">
+                  <span>{{ guide_index }}.</span>
+                  <span>{{ p.settings.title }}</span>
+                </div>
+                <svg
+                  class="catalog-qa-guides-guide-arrow"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="36"
+                  height="36"
+                  viewBox="0 0 36 36"
+                  fill="none"
+                >
+                  <path d="M16 12.5L22 18L16 23.5" stroke="#343436" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

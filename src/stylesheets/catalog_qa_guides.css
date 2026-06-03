@@ -1,0 +1,214 @@
+/* 通用：4 层目录树 + Quick Answer / Visual Guides（repair_support、where_to_find_your_sn 等共用） */
+/* Repair Support ????Quick Answer / Visual Guides / ????????? catalog.css? */
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-content-wrapper {
+    border-top: 1px solid #D2D2D7;
+    padding-top: 50px;
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section {
+    overflow: hidden
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item {
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid #F5F5F7;
+    background-color: #f5f5f7
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 20px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-question {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    color: #343436;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -.42px
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    transition: transform .4s cubic-bezier(.4, 0, .2, 1)
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-icon.rotated {
+    transform: rotate(180deg)
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-container {
+    transition: max-height .4s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    background-color: #fff
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-container.open {
+    opacity: 1
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content {
+    padding: 30px 20px;
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article,
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article * {
+    font-size: 12px;
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article ul li::marker,
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article ol li::marker {
+    font-size: 8px;
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-answer-content article a {
+    color: #0071e3;
+    text-decoration: underline;
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section {
+    padding-top: 50px;
+    overflow: hidden
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-content > .catalog-qa-guides-guides-section:first-child {
+    padding-top: 0
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    background: #f5f5f7;
+    padding: 13px 20px;
+    text-align: left;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: #343436
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card .catalog-qa-guides-guide-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    color: #343436;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: -.42px
+}
+
+.catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card .catalog-qa-guides-guide-arrow {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0
+}
+
+/* Repair Support ?????????????????? */
+.catalog-qa-guides-index-page .catalog-qa-guides-content-placeholder {
+    min-height: 200px
+}
+
+.catalog-qa-guides-index-page .catalog-qa-guides-select-hint {
+    color: #6e6e73;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 20px
+}
+
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-section {
+    margin-bottom: 40px
+}
+
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-section:first-child {
+    margin-top: 0
+}
+
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-title {
+    height: 24px;
+    background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
+    background-size: 200% 100%;
+    animation: catalog-qa-guides-skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: 180px
+}
+
+.catalog-qa-guides-index-page .catalog-qa-guides-skeleton-item {
+    height: 42px;
+    background: linear-gradient(90deg, #e5e5e7 25%, #f5f5f7 50%, #e5e5e7 75%);
+    background-size: 200% 100%;
+    animation: catalog-qa-guides-skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 10px
+}
+
+@keyframes catalog-qa-guides-skeleton-shimmer {
+    0% {
+        background-position: 200% 0
+    }
+
+    100% {
+        background-position: -200% 0
+    }
+}
+
+.catalog-qa-guides-index-page .catalog-qa-guides-empty-state {
+    color: #6e6e73;
+    font-size: 14px;
+    padding: 40px 0;
+    text-align: center
+}
+
+@media (max-width: 767px) {
+    .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-content-wrapper {
+        padding-top: 40px
+    }
+
+    .catalog-qa-guides-index-page .page-wrapper .page-main .filter-section .catalog-qa-guides-list {
+        margin-top: 16px
+    }
+
+    .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-section .catalog-qa-guides-list .catalog-qa-guides-item .catalog-qa-guides-trigger-btn {
+        padding: 17px 12px
+    }
+
+    .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section {
+        padding-top: 40px
+    }
+
+    .catalog-qa-guides-index-page .page-wrapper .page-main .catalog-qa-guides-guides-section .catalog-qa-guides-guides-list .catalog-qa-guides-guide-card {
+        padding: 17px 12px
+    }
+}

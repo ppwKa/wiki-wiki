@@ -125,11 +125,15 @@ export default class extends Controller {
   }
 
   _skeletonEl() {
-    return this.element.querySelector("[data-catalog-skeleton], .catalog-skeleton, .faq-skeleton")
+    return this.element.querySelector(
+      "[data-catalog-skeleton], .catalog-skeleton, .faq-skeleton, .catalog-qa-guides-skeleton"
+    )
   }
 
   _contentEl() {
-    return this.element.querySelector("[data-catalog-content], .catalog-content, .faq-content")
+    return this.element.querySelector(
+      "[data-catalog-content], .catalog-content, .faq-content, .catalog-qa-guides-content"
+    )
   }
 
   _showSkeleton() {
