@@ -1,6 +1,6 @@
 {%- comment -%}
   HOLLYLAND Product Support Center 首页
-  搜索：{% form_tag 'search' %} + form.keywords_field_name，与 search 页一致
+  搜索：form_tag search + form.keywords_field_name，与 search 页一致
 {%- endcomment -%}
 
 {%- assign _title_line1 = page.settings.home_title_line1 | presence | default: 'HOLLYLAND' -%}
