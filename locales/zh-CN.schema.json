@@ -150,6 +150,34 @@
       "list": {
         "name": "产品手册",
         "description": "首页目录列表样式"
+      },
+      "psc": {
+        "name": "产品支持中心",
+        "description": "HOLLYLAND Product Support 首页样式",
+        "settings": {
+          "home_title_line1": {
+            "label": "主标题第一行",
+            "default": "HOLLYLAND"
+          },
+          "home_title_line2": {
+            "label": "主标题第二行",
+            "default": "Product Support"
+          },
+          "search_placeholder": {
+            "label": "搜索框占位文字",
+            "default": "Search..."
+          },
+          "search_hot_keywords": {
+            "label": "热门搜索",
+            "info": "换行设置多个关键词，链接格式与搜索页一致"
+          },
+          "technical_support_qr": {
+            "label": "技术支持二维码"
+          },
+          "repair_request_qr": {
+            "label": "报修二维码"
+          }
+        }
       }
     },
     "page": {

@@ -12,6 +12,9 @@
   {%- if _header_page.template_style == 'faq' -%}
     {%- assign _use_psc_header = true -%}
   {%- endif -%}
+  {%- if _header_page.template_style == 'psc' -%}
+    {%- assign _use_psc_header = true -%}
+  {%- endif -%}
 {%- endif -%}
 
 {%- if _use_psc_header -%}

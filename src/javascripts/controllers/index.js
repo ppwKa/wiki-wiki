@@ -13,6 +13,7 @@ import CatalogIndexController from './catalog_index_controller'
 import MaxHeightAccordionController from './max_height_accordion_controller'
 import ArticleTocController from './article_toc_controller'
 import PscHeaderController from './psc_header_controller.js'
+import PscHomeController from './psc_home_controller.js'
 
 if (!window.Stimulus) {
   window.Stimulus = Application.start()
@@ -35,3 +36,4 @@ application.register('article-toc', ArticleTocController)
 application.register('faq-detail', ArticleTocController)
 application.register('catalog-qa-guides-detail', ArticleTocController)
 application.register('psc-header', PscHeaderController)
+application.register('psc-home', PscHomeController)

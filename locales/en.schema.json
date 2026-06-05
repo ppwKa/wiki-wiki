@@ -150,6 +150,34 @@
       "list": {
         "name": "Product Manual",
         "description": "Homepage directory list style"
+      },
+      "psc": {
+        "name": "Product Support Center",
+        "description": "HOLLYLAND Product Support homepage layout",
+        "settings": {
+          "home_title_line1": {
+            "label": "Title line 1",
+            "default": "HOLLYLAND"
+          },
+          "home_title_line2": {
+            "label": "Title line 2",
+            "default": "Product Support"
+          },
+          "search_placeholder": {
+            "label": "Search placeholder",
+            "default": "Search..."
+          },
+          "search_hot_keywords": {
+            "label": "Popular searches",
+            "info": "One keyword per line; links match the search page"
+          },
+          "technical_support_qr": {
+            "label": "Technical support QR code"
+          },
+          "repair_request_qr": {
+            "label": "Repair request QR code"
+          }
+        }
       }
     },
     "page": {

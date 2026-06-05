@@ -1,0 +1,209 @@
+{%- comment -%}
+  HOLLYLAND Product Support Center 首页
+  搜索：{% form_tag 'search' %} + form.keywords_field_name，与 search 页一致
+{%- endcomment -%}
+
+{%- assign _title_line1 = page.settings.home_title_line1 | presence | default: 'HOLLYLAND' -%}
+{%- assign _title_line2 = page.settings.home_title_line2 | presence | default: 'Product Support' -%}
+
+{%- assign search_placeholder = page.settings.search_placeholder | presence -%}
+{%- unless search_placeholder -%}
+  {%- assign search_placeholder = 'layout.theme.search_input_placeholder' | t | presence -%}
+{%- endunless -%}
+{%- unless search_placeholder -%}
+  {%- assign search_placeholder = 'Search...' -%}
+{%- endunless -%}
+
+{%- assign _tech_qr = page.settings.technical_support_qr | escape_once -%}
+{%- assign _repair_qr = page.settings.repair_request_qr | escape_once -%}
+
+<div class="psc-home" data-controller="psc-home">
+  <div class="psc-container">
+    <div class="psc-title">
+      <h1>
+        {{ _title_line1 -}}
+        <br>
+        {{ _title_line2 }}
+      </h1>
+    </div>
+
+    <div class="psc-search-block">
+    <div class="search-bar">
+      {% form_tag 'search', class: 'search-wrapper' %}
+        <div class="search-input-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M12.4583 21.6667C17.5439 21.6667 21.6667 17.5439 21.6667 12.4583C21.6667 7.37273 17.5439 3.25 12.4583 3.25C7.37273 3.25 3.25 7.37273 3.25 12.4583C3.25 17.5439 7.37273 21.6667 12.4583 21.6667Z" stroke="#D2D2D7" stroke-linejoin="round"/>
+            <path d="M19.0781 19.0781L23.6743 23.6743" stroke="#D2D2D7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input
+            type="search"
+            class="search-input"
+            name="{{ form.keywords_field_name }}"
+            value="{{ search.keywords | escape_once }}"
+            placeholder="{{ search_placeholder }}"
+            autocomplete="off"
+            data-psc-home-target="searchInput"
+            data-action="input->psc-home#searchInputChanged"
+          >
+          <button
+            type="button"
+            class="clear-btn"
+            aria-label="Clear search"
+            data-psc-home-target="clearBtn"
+            data-action="click->psc-home#clearSearch"
+            {% unless search.keywords %}hidden{% endunless %}
+          >
+            <svg class="clear-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 22C17.5229 22 22 17.5229 22 12C22 6.47715 17.5229 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5229 6.47715 22 12 22Z" fill="#6E6E73"/>
+              <path d="M14.8282 9.17188L9.17139 14.8287" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9.17188 9.17188L14.8287 14.8287" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <button type="submit" class="search-btn">{{ 'layout.theme.search_button' | t: 'Search' }}</button>
+      {% endform_tag %}
+    </div>
+
+    {%- assign hot_keywords = page.settings.search_hot_keywords | reg_split: '/\n/' -%}
+    {%- if hot_keywords.size > 0 -%}
+      <div class="psc-hot-keywords">
+        <span>{{ 'layout.theme.search_keywords_label' | t: '热门搜索' }}:</span>
+        {%- for hot_keyword in hot_keywords -%}
+          <a href="{{ site.index_path }}-/search?q={{ hot_keyword }}">{{ hot_keyword }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+    </div>
+
+    {%- render 'psc_home_sections' -%}
+
+    <section class="psc-contact" aria-label="Contact & Service Support">
+      <h2 class="psc-contact-title">Contact &amp; Service Support</h2>
+      <div class="psc-contact-cards">
+        <div
+          class="psc-contact-card"
+          tabindex="0"
+          role="button"
+          aria-label="Request Technical Support, show QR code"
+          data-qr-label="Request Technical Support"
+          {% if _tech_qr %}data-qr-src="{{ _tech_qr }}"{% endif %}
+          data-action="click->psc-home#openQrModal keydown->psc-home#openQrModalKeydown"
+        >
+          <div class="psc-contact-card-qr">
+            {%- if _tech_qr -%}
+              <img src="{{ _tech_qr }}" decoding="async" alt="" width="100" height="100">
+            {%- endif -%}
+          </div>
+          <p class="psc-contact-card-label">Request Technical Support</p>
+          <span class="psc-contact-card-expand" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <path d="M21.5 7.5H28.5V14.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14.5 7.5H7.5V14.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21.5 28.5H28.5V21.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14.5 28.5H7.5V21.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M28.5003 7.5L20.917 15.0833" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.0833 20.918L7.5 28.5013" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+        <div
+          class="psc-contact-card"
+          tabindex="0"
+          role="button"
+          aria-label="Request a Repair, show QR code"
+          data-qr-label="Request a Repair"
+          {% if _repair_qr %}data-qr-src="{{ _repair_qr }}"{% endif %}
+          data-action="click->psc-home#openQrModal keydown->psc-home#openQrModalKeydown"
+        >
+          <div class="psc-contact-card-qr">
+            {%- if _repair_qr -%}
+              <img src="{{ _repair_qr }}" decoding="async" alt="" width="100" height="100">
+            {%- endif -%}
+          </div>
+          <p class="psc-contact-card-label">Request a Repair</p>
+          <span class="psc-contact-card-expand" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <path d="M21.5 7.5H28.5V14.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14.5 7.5H7.5V14.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21.5 28.5H28.5V21.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14.5 28.5H7.5V21.5" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M28.5003 7.5L20.917 15.0833" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.0833 20.918L7.5 28.5013" stroke="#343436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div
+    class="psc-qr-modal"
+    data-psc-home-target="qrModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="pscQrModalCaption"
+    hidden
+  >
+    <div class="psc-qr-modal-backdrop" data-action="click->psc-home#closeQrModal"></div>
+    <button type="button" class="psc-qr-modal-close" data-action="click->psc-home#closeQrModal" aria-label="Close QR code">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="psc-qr-modal-panel">
+      <img data-psc-home-target="qrModalImage" src="" width="280" height="280" alt="" decoding="async">
+      <p class="psc-qr-modal-caption" id="pscQrModalCaption" data-psc-home-target="qrModalCaption"></p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:schema.templates.index.psc.name",
+  "description": "t:schema.templates.index.psc.description",
+  "thumb_url": "images/schema/index-psc.png",
+  "preview_image_urls": ["images/schema/index-psc.png"],
+  "sub_page_templates": ["page", "faq", "catalog_qa_guides"],
+  "settings": [
+    {
+      "id": "home_title_line1",
+      "type": "text",
+      "label": "t:schema.templates.index.psc.settings.home_title_line1.label",
+      "default": "HOLLYLAND"
+    },
+    {
+      "id": "home_title_line2",
+      "type": "text",
+      "label": "t:schema.templates.index.psc.settings.home_title_line2.label",
+      "default": "Product Support"
+    },
+    {
+      "id": "search_placeholder",
+      "type": "text",
+      "label": "t:schema.templates.index.psc.settings.search_placeholder.label",
+      "default": "Search..."
+    },
+    {
+      "id": "search_hot_keywords",
+      "type": "textarea",
+      "label": "t:schema.templates.index.psc.settings.search_hot_keywords.label",
+      "info": "t:schema.templates.index.psc.settings.search_hot_keywords.info"
+    },
+    {
+      "id": "technical_support_qr",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 200,
+      "label": "t:schema.templates.index.psc.settings.technical_support_qr.label"
+    },
+    {
+      "id": "repair_request_qr",
+      "type": "image_picker",
+      "ratio": "1:1",
+      "width": 200,
+      "label": "t:schema.templates.index.psc.settings.repair_request_qr.label"
+    }
+  ]
+}
+{% endschema %}
