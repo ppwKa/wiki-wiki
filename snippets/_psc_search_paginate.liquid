@@ -1,0 +1,69 @@
+{%- comment -%}
+  PSC 搜索页分页，链接保持在 frame--search-results 内更新
+{%- endcomment -%}
+
+{%- if paginate.total_pages > 1 -%}
+  <nav class="pagination" aria-label="Search results pagination">
+    {%- if paginate.prev_page -%}
+      <a
+        href="{{ paginate.url_for[paginate.prev_page] }}"
+        class="page-btn"
+        data-turbo-frame="frame--search-results"
+        data-turbo-action="advance"
+        aria-label="Previous page"
+      >
+        <svg class="page-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </a>
+    {%- else -%}
+      <span class="page-btn is-disabled" aria-disabled="true">
+        <svg class="page-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </span>
+    {%- endif -%}
+
+    {%- for i in paginate.series -%}
+      {%- assign type = i | typeof -%}
+      {%- if type == 'string' -%}
+        {%- if i == 'gap' -%}
+          <span class="page-btn is-disabled" aria-hidden="true">…</span>
+        {%- else -%}
+          <span class="page-btn active" aria-current="page">{{ i }}</span>
+        {%- endif -%}
+      {%- else -%}
+        {%- if i == paginate.current_page -%}
+          <span class="page-btn active" aria-current="page">{{ i }}</span>
+        {%- else -%}
+          <a
+            href="{{ paginate.url_for[i] }}"
+            class="page-btn"
+            data-turbo-frame="frame--search-results"
+            data-turbo-action="advance"
+          >{{ i }}</a>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if paginate.next_page -%}
+      <a
+        href="{{ paginate.url_for[paginate.next_page] }}"
+        class="page-btn"
+        data-turbo-frame="frame--search-results"
+        data-turbo-action="advance"
+        aria-label="Next page"
+      >
+        <svg class="page-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    {%- else -%}
+      <span class="page-btn is-disabled" aria-disabled="true">
+        <svg class="page-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </span>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

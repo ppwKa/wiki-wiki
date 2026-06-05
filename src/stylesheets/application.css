@@ -375,6 +375,7 @@ body.modal-open {
 @import "./breadcrumb.css";
 @import "./psc_header.css";
 @import "./psc_home.css";
+@import "./psc_search.css";
 @import "./catalog.css";
 @import "./article_label.css";
 @import "./article_toc.css";
