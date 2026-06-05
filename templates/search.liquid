@@ -3,7 +3,7 @@
 
 {% assign empty_message = "templates.search.no_results" | t: '没有搜索到内容' %}
 
-<div class="psc-search-page" data-controller="psc-home">
+<div class="psc-search-page" data-controller="psc-home psc-search">
   <div class="psc-container">
     <div class="search-bar">
       {% form_tag 'search', class: 'search-wrapper', data-turbo-frame: 'frame--search-results', data-turbo-action: 'advance' %}
@@ -42,7 +42,10 @@
       {% endform_tag %}
     </div>
 
-    <turbo-frame id="frame--search-results">
+    <turbo-frame
+      id="frame--search-results"
+      data-action="turbo:before-fetch-request->psc-search#scrollToTop"
+    >
       {% if search.tag %}
         <span class="psc-search-tag" style="background-color: {{ search.tag.color }}">{{ search.tag.name }}</span>
       {% endif %}
