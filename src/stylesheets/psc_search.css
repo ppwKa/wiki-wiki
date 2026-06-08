@@ -247,6 +247,12 @@
         padding: 45px 16px 100px;
     }
 
+    .psc-search-page .search-results {
+        display: block;
+        width: 100%;
+        max-width: calc(100vw - 32px);
+    }
+
     .psc-search-page .search-bar {
         padding-left: 5px;
         padding-right: 5px;
