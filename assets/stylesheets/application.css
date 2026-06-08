@@ -6761,7 +6761,7 @@ body.psc-qr-modal-open {
   width: 87.5%;
   max-width: 996px;
   margin: 0 auto;
-  padding: 45px 0 100px;
+  padding: 70px 0 100px;
 }
 .psc-search-page .search-bar {
   display: flex;
@@ -6781,7 +6781,7 @@ body.psc-qr-modal-open {
   display: flex;
   align-items: center;
   flex: 1;
-  padding: 15px 20px;
+  padding: 12px 20px;
   border-radius: 8px 0 0 8px;
   border: 1px solid #D2D2D7;
   min-width: 0;
@@ -6864,8 +6864,8 @@ body.psc-qr-modal-open {
 }
 .psc-search-page .result-item {
   border-bottom: 1px solid #D2D2D7;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  padding-bottom: 25px;
+  margin-bottom: 25px;
 }
 .psc-search-page .result-item:last-child {
   border-bottom: none;
