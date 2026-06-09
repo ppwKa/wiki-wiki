@@ -52,7 +52,7 @@
     display: flex;
     align-items: center;
     flex: 1;
-    padding: 15px 20px;
+    padding: 0 20px;
     border-radius: 8px 0 0 8px;
     border: 1px solid #D2D2D7;
     min-width: 0;
@@ -73,9 +73,10 @@
     font-family: "HarmonyOS Sans", sans-serif;
     font-size: 14px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 20px;
     min-width: 0;
     background: transparent;
+    padding: 15px 0;
 }
 
 .psc-home .search-input::placeholder {
@@ -556,12 +557,16 @@ body.psc-qr-modal-open {
     }
 
     .psc-home .search-input-wrapper {
-        padding: 12px;
+        padding: 0 12px;
     }
 
     .psc-home .search-icon {
         width: 20px;
         height: 20px;
+    }
+
+    .psc-home .search-input {
+        padding: 10px 0;
     }
 
     .psc-section-cards {
