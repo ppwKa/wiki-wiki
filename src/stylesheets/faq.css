@@ -142,6 +142,10 @@
     margin-top: 20px
 }
 
+.faq-index-page .faq-skeleton {
+    padding-top: 50px;
+}
+
 .faq-index-page .faq-skeleton-section {
     margin-bottom: 40px
 }
@@ -187,6 +191,15 @@
 }
 
 @media (max-width: 767px) {
+
+    .faq-index-page .faq-skeleton{
+        padding-top: 40px;
+    }
+
+    .faq-index-page .page-wrapper .page-main .faq-section .faq-list .faq-item .faq-answer-content{
+        padding: 16px 12px;
+    }
+    
     .faq-index-page .page-wrapper .page-main .filter-section .faq-list {
         margin-top: 16px
     }

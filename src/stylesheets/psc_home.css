@@ -229,7 +229,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 12px;
     min-height: 120px;
     padding: 40px 37px 30px;
