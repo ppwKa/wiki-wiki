@@ -438,7 +438,7 @@ export default class extends Controller {
     this._showProductsForCategory(catPath)
     this._highlightSelectedProduct()
     this._setHeaderDisplay(displayName, "")
-    this._closeDropdowns()
+    this.closeDropdowns()
     if (updateUrl) this._updateServiceCenterUrl(catPath, productPath)
   }
 
