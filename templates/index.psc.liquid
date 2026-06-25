@@ -3,8 +3,8 @@
   搜索：form_tag search + form.keywords_field_name，与 search 页一致
 {%- endcomment -%}
 
-{%- assign _title_line1 = page.settings.home_title_line1 | presence | default: 'HOLLYLAND' -%}
-{%- assign _title_line2 = page.settings.home_title_line2 | presence | default: 'Product Support' -%}
+{%- assign _title_line1 = page.settings.home_title_line1 | presence | default: '' -%}
+{%- assign _title_line2 = page.settings.home_title_line2 | presence | default: '' -%}
 
 {%- assign search_placeholder = page.settings.search_placeholder | presence -%}
 {%- unless search_placeholder -%}
