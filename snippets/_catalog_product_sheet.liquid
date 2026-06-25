@@ -9,6 +9,7 @@
   - clickable_all_options — 可选。与 _catalog_product_filter 一致；「All」为直接可点击选项，各地区子级首项也为「All」
   - global_all_label — 可选。第一列「全部」选项文案，默认 "All"
   - region_all_label — 可选。各地区子级首项「全部」文案，默认 "All"
+  - region_all_with_cat_title — 可选。为 true 时各地区子级首项文案为 "All {地区名} Countries"
 
   配套：同 `_catalog_product_filter`（catalog.css + catalog_index_controller）
 {%- endcomment -%}
@@ -86,15 +87,20 @@
         <div class="mobile-accordion-content">
           <div class="mobile-accordion-list">
             {%- if clickable_all_options -%}
+              {%- if region_all_with_cat_title -%}
+                {%- assign _region_all_name = 'All ' | append: cat.settings.title | append: ' Countries' -%}
+              {%- else -%}
+                {%- assign _region_all_name = _region_all_label -%}
+              {%- endif -%}
               <button
                 type="button"
                 class="mobile-accordion-product mobile-accordion-product--all"
                 data-cat-path="{{ cat.path }}"
                 data-path="__region_all__"
-                data-name="{{ _region_all_label | escape }}"
+                data-name="{{ _region_all_name | escape }}"
                 data-action="click->{{ controller_name }}#selectRegionAll"
               >
-                {{ _region_all_label }}
+                {{ _region_all_name }}
               </button>
             {%- endif -%}
             {%- for prod in cat.children -%}

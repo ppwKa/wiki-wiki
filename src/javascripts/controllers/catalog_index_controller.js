@@ -122,7 +122,8 @@ export default class extends Controller {
     event?.stopPropagation()
     const el = event.currentTarget
     const catPath = el.dataset.catPath || ""
-    this._applyServiceCenterSelection(catPath, "__region_all__", this._regionAllLabel())
+    const displayName = el.dataset.name || this._regionAllDisplayName(catPath)
+    this._applyServiceCenterSelection(catPath, "__region_all__", displayName)
   }
 
   filterCardsBeforeNavigate(event) {
@@ -428,7 +429,12 @@ export default class extends Controller {
     }
 
     if (initProductPath === "__region_all__") {
-      this._applyServiceCenterSelection(this.initCatPathValue, "__region_all__", this._regionAllLabel(), false)
+      this._applyServiceCenterSelection(
+        this.initCatPathValue,
+        "__region_all__",
+        this._regionAllDisplayName(this.initCatPathValue),
+        false
+      )
       return
     }
 
@@ -459,6 +465,14 @@ export default class extends Controller {
 
   _regionAllLabel() {
     return this.hasRegionAllLabelValue && this.regionAllLabelValue ? this.regionAllLabelValue : "All"
+  }
+
+  _regionAllDisplayName(catPath) {
+    const normalized = this._normalizePath(catPath)
+    const match = [...(this._pcProductList?.querySelectorAll(".pc-product-item--all") || [])].find(
+      (el) => this._normalizePath(el.dataset.catPath) === normalized
+    )
+    return match?.dataset.name || this._regionAllLabel()
   }
 
   _applyServiceCenterSelection(catPath, productPath, displayName, updateUrl = true) {
@@ -527,7 +541,7 @@ export default class extends Controller {
 
     if (regionPaths.includes(path)) {
       const catPath = regionPaths.find((p) => p === path)
-      this._applyServiceCenterSelection(catPath, "__region_all__", this._regionAllLabel(), false)
+      this._applyServiceCenterSelection(catPath, "__region_all__", this._regionAllDisplayName(catPath), false)
       return
     }
 

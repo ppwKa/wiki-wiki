@@ -8563,7 +8563,7 @@ article ul li::marker {
 .authorized-service-center-page .mobile-accordion-header--direct-select {
   justify-content: flex-start;
 }
-.authorized-service-center-page .mobile-accordion-header.active .mobile-accordion-title {
+.catalog-index-page.authorized-service-center-page .mobile-sheet .mobile-sheet-content .mobile-accordion-item .mobile-accordion-header.active .mobile-accordion-title {
   color: #0071E3;
 }
 .authorized-service-center-page .authorized-service-center-card-list {
