@@ -17,6 +17,8 @@ export default class extends Controller {
     initProductPath: String,
     clickableAll: Boolean,
     rootPath: String,
+    globalAllLabel: String,
+    regionAllLabel: String,
   }
 
   connect() {
@@ -111,7 +113,7 @@ export default class extends Controller {
     if (!this.clickableAllValue) return
     event?.preventDefault()
     event?.stopPropagation()
-    this._applyServiceCenterSelection("__all__", "", "All")
+    this._applyServiceCenterSelection("__all__", "", this._globalAllLabel())
   }
 
   selectRegionAll(event) {
@@ -120,7 +122,7 @@ export default class extends Controller {
     event?.stopPropagation()
     const el = event.currentTarget
     const catPath = el.dataset.catPath || ""
-    this._applyServiceCenterSelection(catPath, "__region_all__", "All")
+    this._applyServiceCenterSelection(catPath, "__region_all__", this._regionAllLabel())
   }
 
   filterCardsBeforeNavigate(event) {
@@ -133,6 +135,7 @@ export default class extends Controller {
     this._selectedProductPath = productPath
     this._hoverCategoryPath = catPath
     this._setHeaderDisplay(el.dataset.name || "", el.dataset.thumb || "")
+    this._highlightSelectedCategory()
     this._highlightSelectedProduct()
   }
 
@@ -210,11 +213,7 @@ export default class extends Controller {
       this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
         el.style.display = "none"
       })
-      this._pcCategoryList?.querySelectorAll(".pc-category-item").forEach((el) => {
-        const active = (el.dataset.catPath || "") === this._currentCategoryPath
-        el.classList.toggle("active", active)
-        el.classList.toggle("inactive", !active)
-      })
+      this._highlightSelectedCategory()
       return
     }
 
@@ -223,28 +222,50 @@ export default class extends Controller {
       el.style.display = showAll || (el.dataset.catPath || "") === catPath ? "" : "none"
     })
 
+    this._highlightSelectedCategory()
+  }
+
+  _highlightSelectedCategory() {
     this._pcCategoryList?.querySelectorAll(".pc-category-item").forEach((el) => {
       const active = (el.dataset.catPath || "") === this._currentCategoryPath
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
+    })
+
+    if (!this.clickableAllValue) return
+
+    this._mobileAccordion?.querySelectorAll(".mobile-accordion-item[data-cat-path]").forEach((item) => {
+      const catPath = item.dataset.catPath || ""
+      const header = item.querySelector(".mobile-accordion-header")
+      const active = catPath === this._currentCategoryPath
+      header?.classList.toggle("active", active)
+      header?.classList.toggle("inactive", !active)
     })
   }
 
   _highlightSelectedProduct() {
     this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
       const path = el.dataset.path || ""
-      const active =
-        path === this._selectedProductPath ||
-        (this._selectedProductPath === "__region_all__" && el.classList.contains("pc-product-item--all") && (el.dataset.catPath || "") === this._currentCategoryPath)
+      const catPath = el.dataset.catPath || ""
+      let active = false
+      if (this._selectedProductPath === "__region_all__") {
+        active = el.classList.contains("pc-product-item--all") && catPath === this._currentCategoryPath
+      } else if (this._selectedProductPath) {
+        active = path === this._selectedProductPath
+      }
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
 
     this._mobileAccordion?.querySelectorAll(".mobile-accordion-product").forEach((el) => {
       const path = el.dataset.path || ""
-      const active =
-        path === this._selectedProductPath ||
-        (this._selectedProductPath === "__region_all__" && el.classList.contains("mobile-accordion-product--all") && (el.dataset.catPath || "") === this._currentCategoryPath)
+      const catPath = el.dataset.catPath || ""
+      let active = false
+      if (this._selectedProductPath === "__region_all__") {
+        active = el.classList.contains("mobile-accordion-product--all") && catPath === this._currentCategoryPath
+      } else if (this._selectedProductPath) {
+        active = path === this._selectedProductPath
+      }
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
@@ -294,6 +315,7 @@ export default class extends Controller {
     this._mobileSheet?.classList.add("open")
     document.body.classList.add("modal-open")
     if (this._currentCategoryPath) this._openMobileCategory(this._currentCategoryPath)
+    this._highlightSelectedCategory()
     this._highlightSelectedProduct()
   }
 
@@ -401,12 +423,12 @@ export default class extends Controller {
     const initProductPath = this.initProductPathValue || ""
 
     if (initCatIsAll) {
-      this._applyServiceCenterSelection("__all__", "", "All", false)
+      this._applyServiceCenterSelection("__all__", "", this._globalAllLabel(), false)
       return
     }
 
     if (initProductPath === "__region_all__") {
-      this._applyServiceCenterSelection(this.initCatPathValue, "__region_all__", "All", false)
+      this._applyServiceCenterSelection(this.initCatPathValue, "__region_all__", this._regionAllLabel(), false)
       return
     }
 
@@ -422,12 +444,21 @@ export default class extends Controller {
       this._filterServiceCenterCards(this._currentCategoryPath, this._selectedProductPath)
       this._setHeaderDisplay(match.dataset.name, match.dataset.thumb)
     } else {
-      this._applyServiceCenterSelection("__all__", "", "All", false)
+      this._applyServiceCenterSelection("__all__", "", this._globalAllLabel(), false)
       return
     }
 
     this._showProductsForCategory(this._currentCategoryPath || this._hoverCategoryPath)
+    this._highlightSelectedCategory()
     this._highlightSelectedProduct()
+  }
+
+  _globalAllLabel() {
+    return this.hasGlobalAllLabelValue && this.globalAllLabelValue ? this.globalAllLabelValue : "All"
+  }
+
+  _regionAllLabel() {
+    return this.hasRegionAllLabelValue && this.regionAllLabelValue ? this.regionAllLabelValue : "All"
   }
 
   _applyServiceCenterSelection(catPath, productPath, displayName, updateUrl = true) {
@@ -436,6 +467,7 @@ export default class extends Controller {
     this._hoverCategoryPath = catPath
     this._filterServiceCenterCards(catPath, productPath)
     this._showProductsForCategory(catPath)
+    this._highlightSelectedCategory()
     this._highlightSelectedProduct()
     this._setHeaderDisplay(displayName, "")
     this.closeDropdowns()
@@ -485,7 +517,7 @@ export default class extends Controller {
     const root = (this.rootPathValue || "/").replace(/\/$/, "") || "/"
 
     if (path === root) {
-      this._applyServiceCenterSelection("__all__", "", "All", false)
+      this._applyServiceCenterSelection("__all__", "", this._globalAllLabel(), false)
       return
     }
 
@@ -495,7 +527,7 @@ export default class extends Controller {
 
     if (regionPaths.includes(path)) {
       const catPath = regionPaths.find((p) => p === path)
-      this._applyServiceCenterSelection(catPath, "__region_all__", "All", false)
+      this._applyServiceCenterSelection(catPath, "__region_all__", this._regionAllLabel(), false)
       return
     }
 
@@ -505,6 +537,7 @@ export default class extends Controller {
       this._filterServiceCenterCards(this._currentCategoryPath, this._selectedProductPath)
       this._setHeaderDisplay(item.dataset.name, item.dataset.thumb)
       this._showProductsForCategory(this._currentCategoryPath)
+      this._highlightSelectedCategory()
       this._highlightSelectedProduct()
     }
   }

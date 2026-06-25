@@ -7,6 +7,8 @@
   - placeholder_label — 可选。未选产品时触发器与标签占位文案，默认 "Choose Product Model"
   - include_all_regions_first — 可选。为 true 时在第一列地区前增加「All」，右侧展示全部国家（data-cat-path="__all__"）
   - clickable_all_options — 可选。为 true 时「All」为直接可点击选项（非 hover 展开）；各地区的子级首项也为可点击「All」
+  - global_all_label — 可选。第一列「全部」选项文案，默认 "All"
+  - region_all_label — 可选。各地区子级首项「全部」文案，默认 "All"
   - hide_filter_thumbnail — 可选。为 true 时隐藏触发器左侧缩略图/占位图
 
   配套：`src/stylesheets/catalog.css`（根节点 `.catalog-index-page` 或与 FAQ 共用 `:is(.catalog-index-page,.faq-index-page)`）
@@ -19,6 +21,18 @@
   {%- assign _placeholder = 'Choose Product Model' -%}
 {%- else -%}
   {%- assign _placeholder = placeholder_label -%}
+{%- endif -%}
+
+{%- if global_all_label == blank -%}
+  {%- assign _global_all_label = 'All' -%}
+{%- else -%}
+  {%- assign _global_all_label = global_all_label -%}
+{%- endif -%}
+
+{%- if region_all_label == blank -%}
+  {%- assign _region_all_label = 'All' -%}
+{%- else -%}
+  {%- assign _region_all_label = region_all_label -%}
 {%- endif -%}
 
 <div class="filter-section">
@@ -56,11 +70,12 @@
           <div
             class="pc-category-item{% if clickable_all_options %} pc-category-item--direct-select{% endif %}"
             data-cat-path="__all__"
+            data-name="{{ _global_all_label | escape }}"
             {% if clickable_all_options -%}
               data-action="click->{{ controller_name }}#selectGlobalAll"
             {%- endif -%}
           >
-            All
+            {{ _global_all_label }}
             {%- unless clickable_all_options -%}
               <span class="pc-category-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -90,10 +105,10 @@
               class="pc-product-item pc-product-item--all"
               data-cat-path="{{ cat.path }}"
               data-path="__region_all__"
-              data-name="All"
+              data-name="{{ _region_all_label | escape }}"
               data-action="click->{{ controller_name }}#selectRegionAll"
             >
-              All
+              {{ _region_all_label }}
             </button>
           {%- endif -%}
           {%- for prod in cat.children -%}

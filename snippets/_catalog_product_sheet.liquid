@@ -7,6 +7,8 @@
   - sheet_title     — 可选。弹窗标题栏文案，默认 "Choose Product Model"
   - include_all_regions_first — 可选。与 _catalog_product_filter 一致；弹窗手风琴首项为「All」
   - clickable_all_options — 可选。与 _catalog_product_filter 一致；「All」为直接可点击选项，各地区子级首项也为「All」
+  - global_all_label — 可选。第一列「全部」选项文案，默认 "All"
+  - region_all_label — 可选。各地区子级首项「全部」文案，默认 "All"
 
   配套：同 `_catalog_product_filter`（catalog.css + catalog_index_controller）
 {%- endcomment -%}
@@ -15,6 +17,18 @@
   {%- assign _sheet_title = 'Choose Product Model' -%}
 {%- else -%}
   {%- assign _sheet_title = sheet_title -%}
+{%- endif -%}
+
+{%- if global_all_label == blank -%}
+  {%- assign _global_all_label = 'All' -%}
+{%- else -%}
+  {%- assign _global_all_label = global_all_label -%}
+{%- endif -%}
+
+{%- if region_all_label == blank -%}
+  {%- assign _region_all_label = 'All' -%}
+{%- else -%}
+  {%- assign _region_all_label = region_all_label -%}
 {%- endif -%}
 
 <div class="mobile-overlay" id="mobileOverlay"></div>
@@ -38,7 +52,7 @@
             data-action="click->{{ controller_name }}#selectGlobalAll"
           {%- endif -%}
         >
-          <span class="mobile-accordion-title">All</span>
+          <span class="mobile-accordion-title">{{ _global_all_label }}</span>
           {%- unless clickable_all_options -%}
             <svg
               class="mobile-accordion-arrow"
@@ -77,10 +91,10 @@
                 class="mobile-accordion-product mobile-accordion-product--all"
                 data-cat-path="{{ cat.path }}"
                 data-path="__region_all__"
-                data-name="All"
+                data-name="{{ _region_all_label | escape }}"
                 data-action="click->{{ controller_name }}#selectRegionAll"
               >
-                All
+                {{ _region_all_label }}
               </button>
             {%- endif -%}
             {%- for prod in cat.children -%}

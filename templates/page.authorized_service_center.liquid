@@ -61,6 +61,8 @@
       data-catalog-index-init-product-path-value="{% if init_country %}{{ init_country.path | escape }}{% elsif init_region_all %}__region_all__{% endif %}"
       data-catalog-index-clickable-all-value="true"
       data-catalog-index-root-path-value="{{ authorized_service_center_root.path | escape }}"
+      data-catalog-index-global-all-label-value="Countries"
+      data-catalog-index-region-all-label-value="All"
     >
       <div class="page-wrapper">
         <nav class="breadcrumb-nav">
@@ -82,6 +84,8 @@
             placeholder_label: 'Choose Country',
             include_all_regions_first: true,
             clickable_all_options: true,
+            global_all_label: 'Countries',
+            region_all_label: 'All',
             hide_filter_thumbnail: true
           -%}
 
@@ -124,7 +128,9 @@
         controller_name: 'catalog-index',
         sheet_title: 'Choose Country',
         include_all_regions_first: true,
-        clickable_all_options: true
+        clickable_all_options: true,
+        global_all_label: 'Countries',
+        region_all_label: 'All'
       -%}
     </div>
   {%- endif -%}
