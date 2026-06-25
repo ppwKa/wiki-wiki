@@ -73,9 +73,9 @@ export default class extends Controller {
       el.addEventListener(
         "mouseenter",
         () => {
-          if (this.clickableAllValue && (el.dataset.catPath || "") === "__all__") return
-          this._hoverCategoryPath = el.dataset.catPath || ""
-          this._showProductsForCategory(this._hoverCategoryPath)
+          const catPath = el.dataset.catPath || ""
+          this._hoverCategoryPath = catPath
+          this._showProductsForCategory(catPath)
           this._highlightSelectedProduct()
         },
         { signal }
