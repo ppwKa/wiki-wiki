@@ -7184,6 +7184,9 @@ body.psc-qr-modal-open {
 .catalog-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item:hover {
   background-color: #f5f5f7;
 }
+.catalog-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.is-showing {
+  background-color: #f5f5f7;
+}
 .catalog-index-page .page-wrapper .page-main .filter-section .pc-dropdown-menu .pc-category-list .pc-category-item.active {
   color: #0071e3;
 }

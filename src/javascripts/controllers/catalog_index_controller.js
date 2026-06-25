@@ -227,10 +227,14 @@ export default class extends Controller {
   }
 
   _highlightSelectedCategory() {
+    const showingPath = this._hoverCategoryPath
     this._pcCategoryList?.querySelectorAll(".pc-category-item").forEach((el) => {
-      const active = (el.dataset.catPath || "") === this._currentCategoryPath
+      const catPath = el.dataset.catPath || ""
+      const active = catPath === this._currentCategoryPath
+      const showing = Boolean(showingPath) && catPath === showingPath
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
+      el.classList.toggle("is-showing", showing)
     })
 
     if (!this.clickableAllValue) return
