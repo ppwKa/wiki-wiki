@@ -15,6 +15,8 @@ export default class extends Controller {
     pagePath: String,
     initCatPath: String,
     initProductPath: String,
+    clickableAll: Boolean,
+    rootPath: String,
   }
 
   connect() {
@@ -69,6 +71,7 @@ export default class extends Controller {
       el.addEventListener(
         "mouseenter",
         () => {
+          if (this.clickableAllValue && (el.dataset.catPath || "") === "__all__") return
           this._hoverCategoryPath = el.dataset.catPath || ""
           this._showProductsForCategory(this._hoverCategoryPath)
           this._highlightSelectedProduct()
@@ -104,7 +107,41 @@ export default class extends Controller {
     this._showSkeleton()
   }
 
+  selectGlobalAll(event) {
+    if (!this.clickableAllValue) return
+    event?.preventDefault()
+    event?.stopPropagation()
+    this._applyServiceCenterSelection("__all__", "", "All")
+  }
+
+  selectRegionAll(event) {
+    if (!this.clickableAllValue) return
+    event?.preventDefault()
+    event?.stopPropagation()
+    const el = event.currentTarget
+    const catPath = el.dataset.catPath || ""
+    this._applyServiceCenterSelection(catPath, "__region_all__", "All")
+  }
+
+  filterCardsBeforeNavigate(event) {
+    if (!this.clickableAllValue) return
+    const el = event.currentTarget
+    const catPath = el.dataset.catPath || ""
+    const productPath = el.dataset.path || ""
+    this._filterServiceCenterCards(catPath, productPath)
+    this._currentCategoryPath = catPath
+    this._selectedProductPath = productPath
+    this._hoverCategoryPath = catPath
+    this._setHeaderDisplay(el.dataset.name || "", el.dataset.thumb || "")
+    this._highlightSelectedProduct()
+  }
+
   _syncFromUrl() {
+    if (this.clickableAllValue) {
+      this._syncServiceCenterFromUrl()
+      return
+    }
+
     const path = window.location.pathname
     let item = this._getProductItemByPath(path)
     if (!item && this.pagePathValue && path === this.pagePathValue && this.initProductPathValue) {
@@ -169,6 +206,18 @@ export default class extends Controller {
   }
 
   _showProductsForCategory(catPath) {
+    if (this.clickableAllValue && catPath === "__all__") {
+      this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
+        el.style.display = "none"
+      })
+      this._pcCategoryList?.querySelectorAll(".pc-category-item").forEach((el) => {
+        const active = (el.dataset.catPath || "") === this._currentCategoryPath
+        el.classList.toggle("active", active)
+        el.classList.toggle("inactive", !active)
+      })
+      return
+    }
+
     const showAll = catPath === "__all__"
     this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
       el.style.display = showAll || (el.dataset.catPath || "") === catPath ? "" : "none"
@@ -183,21 +232,28 @@ export default class extends Controller {
 
   _highlightSelectedProduct() {
     this._pcProductList?.querySelectorAll(".pc-product-item").forEach((el) => {
-      const active = (el.dataset.path || "") === this._selectedProductPath
+      const path = el.dataset.path || ""
+      const active =
+        path === this._selectedProductPath ||
+        (this._selectedProductPath === "__region_all__" && el.classList.contains("pc-product-item--all") && (el.dataset.catPath || "") === this._currentCategoryPath)
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
 
     this._mobileAccordion?.querySelectorAll(".mobile-accordion-product").forEach((el) => {
-      const active = (el.dataset.path || "") === this._selectedProductPath
+      const path = el.dataset.path || ""
+      const active =
+        path === this._selectedProductPath ||
+        (this._selectedProductPath === "__region_all__" && el.classList.contains("mobile-accordion-product--all") && (el.dataset.catPath || "") === this._currentCategoryPath)
       el.classList.toggle("active", active)
       el.classList.toggle("inactive", !active)
     })
   }
 
   _getProductItemByPath(path) {
+    const normalized = this._normalizePath(path)
     return [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])].find(
-      (el) => (el.dataset.path || "") === path
+      (el) => this._normalizePath(el.dataset.path) === normalized
     )
   }
 
@@ -251,6 +307,7 @@ export default class extends Controller {
   _toggleMobileCategoryContent(header) {
     const wrapper = header.closest(".mobile-accordion-item")
     if ((wrapper?.dataset.catPath || "") === "__all__") {
+      if (this.clickableAllValue) return
       const openAll = !this._allMobileCategoriesOpen()
       this._setAllMobileCategoriesOpen(openAll)
       return
@@ -290,6 +347,11 @@ export default class extends Controller {
   }
 
   _initDefaultSelection() {
+    if (this.clickableAllValue) {
+      this._initServiceCenterSelection()
+      return
+    }
+
     let match = null
     const items = [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])]
     const initCatIsAll = this.initCatPathValue === "__all__"
@@ -331,6 +393,119 @@ export default class extends Controller {
       this._setHeaderDisplay(match.dataset.name, match.dataset.thumb)
     } else {
       this._setHeaderDisplay(DEFAULT_PLACEHOLDER, "")
+    }
+  }
+
+  _initServiceCenterSelection() {
+    const initCatIsAll = this.initCatPathValue === "__all__"
+    const initProductPath = this.initProductPathValue || ""
+
+    if (initCatIsAll) {
+      this._applyServiceCenterSelection("__all__", "", "All", false)
+      return
+    }
+
+    if (initProductPath === "__region_all__") {
+      this._applyServiceCenterSelection(this.initCatPathValue, "__region_all__", "All", false)
+      return
+    }
+
+    let match = null
+    const items = [...(this._pcProductList?.querySelectorAll(".pc-product-item") || [])]
+
+    if (initProductPath) {
+      match = items.find((el) => el.dataset.path === initProductPath)
+    }
+
+    if (match) {
+      this._syncSelectionFromItem(match)
+      this._filterServiceCenterCards(this._currentCategoryPath, this._selectedProductPath)
+      this._setHeaderDisplay(match.dataset.name, match.dataset.thumb)
+    } else {
+      this._applyServiceCenterSelection("__all__", "", "All", false)
+      return
+    }
+
+    this._showProductsForCategory(this._currentCategoryPath || this._hoverCategoryPath)
+    this._highlightSelectedProduct()
+  }
+
+  _applyServiceCenterSelection(catPath, productPath, displayName, updateUrl = true) {
+    this._currentCategoryPath = catPath
+    this._selectedProductPath = productPath
+    this._hoverCategoryPath = catPath
+    this._filterServiceCenterCards(catPath, productPath)
+    this._showProductsForCategory(catPath)
+    this._highlightSelectedProduct()
+    this._setHeaderDisplay(displayName, "")
+    this._closeDropdowns()
+    if (updateUrl) this._updateServiceCenterUrl(catPath, productPath)
+  }
+
+  _filterServiceCenterCards(catPath, productPath) {
+    const normCat = this._normalizePath(catPath)
+    const normProduct = this._normalizePath(productPath)
+    const cards = this.element.querySelectorAll(".authorized-service-center-card")
+    cards.forEach((card) => {
+      const region = this._normalizePath(card.dataset.regionPath)
+      const country = this._normalizePath(card.dataset.countryPath)
+      let show = false
+      if (catPath === "__all__") {
+        show = true
+      } else if (productPath === "__region_all__") {
+        show = region === normCat
+      } else {
+        show = country === normProduct
+      }
+      card.style.display = show ? "" : "none"
+    })
+  }
+
+  _normalizePath(path) {
+    return (path || "").replace(/\/$/, "") || "/"
+  }
+
+  _updateServiceCenterUrl(catPath, productPath) {
+    let url = this.rootPathValue || "/"
+    if (catPath && catPath !== "__all__") {
+      url = catPath
+      if (productPath && productPath !== "__region_all__") {
+        url = productPath
+      }
+    }
+    const normalized = url.replace(/\/$/, "") || "/"
+    const current = window.location.pathname.replace(/\/$/, "") || "/"
+    if (current !== normalized) {
+      history.pushState({}, "", url)
+    }
+  }
+
+  _syncServiceCenterFromUrl() {
+    const path = window.location.pathname.replace(/\/$/, "") || "/"
+    const root = (this.rootPathValue || "/").replace(/\/$/, "") || "/"
+
+    if (path === root) {
+      this._applyServiceCenterSelection("__all__", "", "All", false)
+      return
+    }
+
+    const regionPaths = [
+      ...(this._pcCategoryList?.querySelectorAll('.pc-category-item[data-cat-path]:not([data-cat-path="__all__"])') || []),
+    ].map((el) => (el.dataset.catPath || "").replace(/\/$/, ""))
+
+    if (regionPaths.includes(path)) {
+      const catPath = regionPaths.find((p) => p === path)
+      this._applyServiceCenterSelection(catPath, "__region_all__", "All", false)
+      return
+    }
+
+    const item = this._getProductItemByPath(window.location.pathname)
+    if (item) {
+      this._syncSelectionFromItem(item)
+      this._filterServiceCenterCards(this._currentCategoryPath, this._selectedProductPath)
+      this._setHeaderDisplay(item.dataset.name, item.dataset.thumb)
+      this._showProductsForCategory(this._currentCategoryPath)
+      this._highlightSelectedProduct()
     }
   }
 }

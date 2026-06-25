@@ -30,20 +30,14 @@
 
 {%- assign init_cat = null -%}
 {%- assign init_country = null -%}
+{%- assign init_region_all = false -%}
 
 {%- if _depth == 1 -%}
-  {%- for cat in page.children -%}
-    {%- assign first_country = cat.children | first -%}
-    {%- if first_country -%}
-      {%- assign init_cat = '__all__' -%}
-      {%- assign init_country = first_country -%}
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
+  {%- assign init_cat = '__all__' -%}
 
 {%- elsif _depth == 2 -%}
   {%- assign init_cat = page -%}
-  {%- assign init_country = page.children | first -%}
+  {%- assign init_region_all = true -%}
 
 {%- elsif _depth == 3 -%}
   {%- assign init_cat = page.parent -%}
@@ -56,9 +50,6 @@
 <turbo-frame
   id="main-content-frame"
   class="block w-full"
-  {% if _depth > 1 and _depth < 3 and init_country %}
-    src="{{ init_country.path }}"
-  {% endif %}
   x-init="$el.addEventListener('turbo:before-fetch-request', () => { window.scrollTo({ top: 0, behavior: 'auto' }) })"
 >
   {%- if _depth < 5 -%}
@@ -67,7 +58,9 @@
       data-controller="catalog-index"
       data-catalog-index-page-path-value="{{ page.path | escape }}"
       data-catalog-index-init-cat-path-value="{% if _depth == 1 %}__all__{% elsif init_cat %}{{ init_cat.path | escape }}{% endif %}"
-      data-catalog-index-init-product-path-value="{% if init_country %}{{ init_country.path | escape }}{% endif %}"
+      data-catalog-index-init-product-path-value="{% if init_country %}{{ init_country.path | escape }}{% elsif init_region_all %}__region_all__{% endif %}"
+      data-catalog-index-clickable-all-value="true"
+      data-catalog-index-root-path-value="{{ authorized_service_center_root.path | escape }}"
     >
       <div class="page-wrapper">
         <nav class="breadcrumb-nav">
@@ -88,6 +81,7 @@
             controller_name: 'catalog-index',
             placeholder_label: 'Choose Country',
             include_all_regions_first: true,
+            clickable_all_options: true,
             hide_filter_thumbnail: true
           -%}
 
@@ -100,29 +94,15 @@
             </div>
 
             <div class="authorized-service-center-content" data-catalog-content style="display:none">
-              {%- if _depth == 1 -%}
-                <div class="authorized-service-center-card-list">
-                  {%- for cat in authorized_service_center_root.children -%}
-                    {%- for country in cat.children -%}
-                      {%- for article in country.children -%}
-                        <div class="authorized-service-center-card">
-                          <div class="authorized-service-center-card-title">
-                            {{ article.settings.title }}
-                          </div>
-                          <div class="authorized-service-center-card-content">
-                            {{ article.settings.content }}
-                          </div>
-                        </div>
-                      {%- endfor -%}
-                    {%- endfor -%}
-                  {%- endfor -%}
-                </div>
-              {%- else -%}
-                {%- assign render_country = init_country -%}
-                <div class="authorized-service-center-card-list">
-                  {%- if render_country and render_country.children -%}
-                    {%- for article in render_country.children -%}
-                      <div class="authorized-service-center-card">
+              <div class="authorized-service-center-card-list">
+                {%- for cat in authorized_service_center_root.children -%}
+                  {%- for country in cat.children -%}
+                    {%- for article in country.children -%}
+                      <div
+                        class="authorized-service-center-card"
+                        data-region-path="{{ cat.path | escape }}"
+                        data-country-path="{{ country.path | escape }}"
+                      >
                         <div class="authorized-service-center-card-title">
                           {{ article.settings.title }}
                         </div>
@@ -131,9 +111,9 @@
                         </div>
                       </div>
                     {%- endfor -%}
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
+                  {%- endfor -%}
+                {%- endfor -%}
+              </div>
             </div>
           </div>
         </div>
@@ -143,7 +123,8 @@
         catalog_root: authorized_service_center_root,
         controller_name: 'catalog-index',
         sheet_title: 'Choose Country',
-        include_all_regions_first: true
+        include_all_regions_first: true,
+        clickable_all_options: true
       -%}
     </div>
   {%- endif -%}

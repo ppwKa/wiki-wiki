@@ -6,6 +6,7 @@
   - controller_name  — 必填。与页面 `data-controller` 中的筛选控制器一致，如 `catalog-index`（用于 `data-action`）
   - placeholder_label — 可选。未选产品时触发器与标签占位文案，默认 "Choose Product Model"
   - include_all_regions_first — 可选。为 true 时在第一列地区前增加「All」，右侧展示全部国家（data-cat-path="__all__"）
+  - clickable_all_options — 可选。为 true 时「All」为直接可点击选项（非 hover 展开）；各地区的子级首项也为可点击「All」
   - hide_filter_thumbnail — 可选。为 true 时隐藏触发器左侧缩略图/占位图
 
   配套：`src/stylesheets/catalog.css`（根节点 `.catalog-index-page` 或与 FAQ 共用 `:is(.catalog-index-page,.faq-index-page)`）
@@ -52,13 +53,21 @@
     <div class="pc-dropdown-menu hidden" id="pcDropdown">
       <div class="pc-category-list" id="pcCategoryList">
         {%- if include_all_regions_first -%}
-          <div class="pc-category-item" data-cat-path="__all__">
+          <div
+            class="pc-category-item{% if clickable_all_options %} pc-category-item--direct-select{% endif %}"
+            data-cat-path="__all__"
+            {% if clickable_all_options -%}
+              data-action="click->{{ controller_name }}#selectGlobalAll"
+            {%- endif -%}
+          >
             All
-            <span class="pc-category-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
+            {%- unless clickable_all_options -%}
+              <span class="pc-category-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path d="M9 7L13 11L9 15" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            {%- endunless -%}
           </div>
         {%- endif -%}
         {%- for cat in catalog_root.children -%}
@@ -75,6 +84,18 @@
 
       <div class="pc-product-list" id="pcProductList">
         {%- for cat in catalog_root.children -%}
+          {%- if clickable_all_options -%}
+            <button
+              type="button"
+              class="pc-product-item pc-product-item--all"
+              data-cat-path="{{ cat.path }}"
+              data-path="__region_all__"
+              data-name="All"
+              data-action="click->{{ controller_name }}#selectRegionAll"
+            >
+              All
+            </button>
+          {%- endif -%}
           {%- for prod in cat.children -%}
             <a
               href="{{ prod.path }}"
@@ -85,7 +106,7 @@
               data-name="{{ prod.settings.title }}"
               data-thumb="{{ prod.settings.thumbnail | default: '' }}"
               data-path="{{ prod.path }}"
-              data-action="click->{{ controller_name }}#closeDropdowns click->{{ controller_name }}#showSkeletonBeforeNavigate"
+              data-action="click->{{ controller_name }}#closeDropdowns click->{{ controller_name }}#showSkeletonBeforeNavigate{% if clickable_all_options %} click->{{ controller_name }}#filterCardsBeforeNavigate{% endif %}"
             >
               {{ prod.settings.title }}
             </a>

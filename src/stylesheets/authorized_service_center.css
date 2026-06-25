@@ -13,6 +13,23 @@
   min-height: 64px;
 }
 
+.authorized-service-center-page .pc-product-item--all,
+.authorized-service-center-page .mobile-accordion-product--all {
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+}
+
+.authorized-service-center-page .pc-category-item--direct-select {
+  justify-content: flex-start;
+}
+
+.authorized-service-center-page .mobile-accordion-header--direct-select {
+  justify-content: flex-start;
+}
+
 .authorized-service-center-page .authorized-service-center-card-list {
   display: flex;
   flex-direction: column;

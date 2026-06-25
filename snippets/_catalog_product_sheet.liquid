@@ -5,7 +5,8 @@
   - catalog_root    — 必填。站点内目录树根页面对象；`.children` 为分类，分类的 `.children` 为产品页
   - controller_name — 必填。与页面 `data-controller` 中的筛选控制器一致（如 `catalog-index`）
   - sheet_title     — 可选。弹窗标题栏文案，默认 "Choose Product Model"
-  - include_all_regions_first — 可选。与 _catalog_product_filter 一致；弹窗手风琴首项为「All」，用于统一展开/收起全部地区
+  - include_all_regions_first — 可选。与 _catalog_product_filter 一致；弹窗手风琴首项为「All」
+  - clickable_all_options — 可选。与 _catalog_product_filter 一致；「All」为直接可点击选项，各地区子级首项也为「All」
 
   配套：同 `_catalog_product_filter`（catalog.css + catalog_index_controller）
 {%- endcomment -%}
@@ -31,18 +32,25 @@
   <div class="mobile-sheet-content" id="mobileAccordion">
     {%- if include_all_regions_first -%}
       <div class="mobile-accordion-item" data-cat-path="__all__">
-        <div class="mobile-accordion-header">
+        <div
+          class="mobile-accordion-header{% if clickable_all_options %} mobile-accordion-header--direct-select{% endif %}"
+          {% if clickable_all_options -%}
+            data-action="click->{{ controller_name }}#selectGlobalAll"
+          {%- endif -%}
+        >
           <span class="mobile-accordion-title">All</span>
-          <svg
-            class="mobile-accordion-arrow"
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-          >
-            <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          {%- unless clickable_all_options -%}
+            <svg
+              class="mobile-accordion-arrow"
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+            >
+              <path d="M15 9L11 13L7 9" stroke="#6E6E73" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          {%- endunless -%}
         </div>
       </div>
     {%- endif -%}
@@ -63,6 +71,18 @@
         </div>
         <div class="mobile-accordion-content">
           <div class="mobile-accordion-list">
+            {%- if clickable_all_options -%}
+              <button
+                type="button"
+                class="mobile-accordion-product mobile-accordion-product--all"
+                data-cat-path="{{ cat.path }}"
+                data-path="__region_all__"
+                data-name="All"
+                data-action="click->{{ controller_name }}#selectRegionAll"
+              >
+                All
+              </button>
+            {%- endif -%}
             {%- for prod in cat.children -%}
               <a
                 href="{{ prod.path }}"
@@ -73,7 +93,7 @@
                 data-name="{{ prod.settings.title }}"
                 data-thumb="{{ prod.settings.thumbnail | default: '' }}"
                 data-path="{{ prod.path }}"
-                data-action="click->{{ controller_name }}#closeDropdowns click->{{ controller_name }}#showSkeletonBeforeNavigate"
+                data-action="click->{{ controller_name }}#closeDropdowns click->{{ controller_name }}#showSkeletonBeforeNavigate{% if clickable_all_options %} click->{{ controller_name }}#filterCardsBeforeNavigate{% endif %}"
               >
                 {{ prod.settings.title }}
               </a>
