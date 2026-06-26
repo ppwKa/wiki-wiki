@@ -65,7 +65,7 @@
 .authorized-service-center-page .authorized-service-center-card-content {
   width: calc(50% - 1px);
   flex-shrink: 0;
-  padding: 20px;
+  padding: 20px 20px 4px;
   background: #F5F5F7;
   color: #6E6E73;
   font-family: "HarmonyOS Sans";
@@ -79,7 +79,7 @@
 }
 
 .authorized-service-center-page .authorized-service-center-card-content [bke-role="paragraph"]{
-  margin-bottom: 16px;
+  padding-bottom: 16px;
 }
 
 .authorized-service-center-page .authorized-service-center-card-content a {
@@ -138,6 +138,11 @@
 
   .authorized-service-center-page .authorized-service-center-card-content {
     width: 100%;
+    padding: 12px 20px 0;
+  }
+
+  .authorized-service-center-page .authorized-service-center-card-content [bke-role="paragraph"]{
+    padding-bottom: 12px;
   }
 
   .authorized-service-center-page .authorized-service-center-skeleton-item {
