@@ -8606,8 +8606,11 @@ article ul li::marker {
   line-height: 16px;
   letter-spacing: -0.36px;
   display: flex;
-  gap: 16px;
   flex-direction: column;
+  word-break: break-word;
+}
+.authorized-service-center-page .authorized-service-center-card-content [bke-role="paragraph"] {
+  margin-bottom: 16px;
 }
 .authorized-service-center-page .authorized-service-center-card-content a {
   color: #0071E3;
